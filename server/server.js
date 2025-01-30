@@ -6,6 +6,7 @@ const pool  = require("./db");
 //middleware
 app.use(express.json());
 app.use(cors());
+const PORT = process.env.PORT || 5000;
 
 //ROUTES//
 //blocks
@@ -614,8 +615,8 @@ app.delete("/jobTitle/:jobTitleID", async (req,res) => {
 })
 
 //server starting
-app.listen(5000, () =>{
-    console.log("server started on port 5000")
+app.listen(PORT, () =>{
+    console.log(`server started on port -> ${PORT}`)
 });
 
 

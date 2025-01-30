@@ -9,6 +9,12 @@ app.use(cors());
 const PORT = process.env.PORT || 5000;
 
 //ROUTES//
+
+// Handling get request to backend
+app.get("/", (req, res) => {
+    res.send("Hello from the backend");
+});
+
 //blocks
 //create item
 app.post("/blocks", async (req, res) => {

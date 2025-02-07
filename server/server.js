@@ -537,8 +537,6 @@ app.delete("/services/:serviceID", async (req,res) => {
     }
 })
 
-
-//we are here
 //adding job titles
 app.post("/jobTitle", async (req, res) => {
     try {
@@ -613,9 +611,57 @@ app.delete("/jobTitle/:jobTitleID", async (req,res) => {
     }
 })
 
+//we are working here
+//add guests
+app.post("/guests", async (req, res) => {
+    try {
+      console.log("Request Body:", req.body); // Debug log
+  
+      const { guestName,guestType } = req.body;
+      console.log("guestName:", guestName); // Debug log
+      console.log("price:",guestType);
+  
+      if (!guestName && !guestType) {
+        return res.status(400).json({ message: "Guest name and profile are required" });
+      }
+  
+      const newGuest = await pool.query(
+        "INSERT INTO public.guests (guestName, guestProfile) VALUES($1 , $2);",
+        [guestName,guestType]
+      );
+  
+      res.json(newGuest.rows[0]);
+    } catch (error) {
+      console.error("Database Error:", error.message);
+      res.status(500).send("Server Error");
+    }
+  });
+
+//get all items
+app.get("/guests", async (req, res) => {
+    try {
+        const allGuests = await pool.query("SELECT * FROM public.guests");
+        res.json(allGuests.rows)
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send("server error");
+    }
+});
+
+//delete item
+app.delete("/guests/:guestID", async (req,res) => {
+    try {
+        const { guestID } = req.params;
+        const deleteGuest = await pool.query("DELETE FROM public.guests WHERE guestID=$1",[guestID]);
+        res.json("guest Deleted");
+
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send("server error");
+    }
+})
+
 //server starting
 app.listen(5000, () =>{
     console.log("server started on port 5000")
 });
-
-

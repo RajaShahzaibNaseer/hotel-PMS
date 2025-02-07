@@ -9,6 +9,7 @@ import MealPlans from "./components/DB-pages/MealPlans/MealPlans";
 import PaxRates from "./components/DB-pages/PaxRates/PaxRates";
 import AuxServices from "./components/DB-pages/AuxServices/AuxServices";
 import JobTitles from "./components/DB-pages/JobTitles/JobTitles";
+import Guests from "./components/DB-pages/Guests/Guests";
 
 const App = () => {
   return (
@@ -22,6 +23,7 @@ const App = () => {
       <Route path="/paxrates" element={<PaxRates />} />
       <Route path="/services" element={<AuxServices />} />
       <Route path="/jobs" element ={<JobTitles />} />
+      <Route path="/guests" element = {<Guests></Guests>} />
     </Routes>
   );
 };

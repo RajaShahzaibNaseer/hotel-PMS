@@ -94,6 +94,8 @@ const Floors = () => {
         <button onClick={() => navigate("/services")}>Services</button>
         <button onClick={() => navigate("/paxrates")}>Pax Rates</button>
         <button onClick={() => navigate("/mealplanrates")}>Meal Plans</button>
+        <button onClick={() => navigate("/guests")}>guests</button>
+
       </nav>
       <div className="table-container">
         <table>

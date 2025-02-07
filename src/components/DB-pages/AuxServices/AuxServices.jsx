@@ -72,6 +72,7 @@ const AuxServices = () => {
         <button onClick={() => navigate("/paxrates")}>Pax Rates</button>
         <button onClick={() => navigate("/admin")}>Blocks</button>
         <button onClick={() => navigate("/mealplanrates")}>Meal Plan Rates</button>
+        <button onClick={() => navigate("/guests")}>guests</button>
       </nav>
       <div className="table-container">
         <table>

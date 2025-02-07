@@ -94,6 +94,8 @@ const JobTitles = () => {
         <button onClick={() => navigate("/paxrates")}>Pax Rates</button>
         <button onClick={() => navigate("/mealplanrates")}>Meal Plans</button>
         <button onClick={() => navigate("/guests")}>guests</button>
+        <button onClick={() => navigate("/rooms")}>Rooms</button>
+        <button onClick={() => navigate("/roomtypes")}>Room Types</button>
 
       </nav>
       <div className="table-container">

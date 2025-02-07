@@ -10,6 +10,8 @@ import PaxRates from "./components/DB-pages/PaxRates/PaxRates";
 import AuxServices from "./components/DB-pages/AuxServices/AuxServices";
 import JobTitles from "./components/DB-pages/JobTitles/JobTitles";
 import Guests from "./components/DB-pages/Guests/Guests";
+import Rooms from "./components/DB-pages/Rooms/Rooms";
+import RoomTypes from "./components/DB-pages/RoomTypes/RoomTypes";
 
 const App = () => {
   return (
@@ -24,6 +26,8 @@ const App = () => {
       <Route path="/services" element={<AuxServices />} />
       <Route path="/jobs" element ={<JobTitles />} />
       <Route path="/guests" element = {<Guests></Guests>} />
+      <Route path="/rooms" element = {<Rooms></Rooms>} />
+      <Route path="/roomtypes" element = {<RoomTypes></RoomTypes>} />
     </Routes>
   );
 };

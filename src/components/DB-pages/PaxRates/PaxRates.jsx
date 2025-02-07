@@ -73,6 +73,8 @@ const PaxRates = () => {
         <button onClick={() => navigate("/paxrates")}>Pax Rates</button>
         <button onClick={() => navigate("/admin")}>Blocks</button>
         <button onClick={() => navigate("/guests")}>guests</button>
+        <button onClick={() => navigate("/rooms")}>Rooms</button>
+        <button onClick={() => navigate("/roomtypes")}>Room Types</button>
 
       </nav>
       <div className="table-container">

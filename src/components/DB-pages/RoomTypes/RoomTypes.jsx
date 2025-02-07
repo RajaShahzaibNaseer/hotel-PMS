@@ -1,21 +1,21 @@
 import { useState, useEffect } from "react";
-import "./AdminPage.css";
+import "./RoomTypes.css";
 import { toFormData } from "axios";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-const AdminPage = () => {
+const RoomTypes = () => {
 
-  const [blocks, setBlocks] = useState([]);
-  const [blockname, SetBlockName] = useState("")
+  const [roomTypes, setRoomTypes] = useState([]);
+  const [roomTypeName, setRoomTypeName] = useState("");
+  const [roomTypePrice, setRoomTypePrice] = useState();
   const navigate = useNavigate();
-
 
   //adding blocks
   const onSubmitForm = async e => {
     e.preventDefault();
     try {
-      const body = { blockname };
-      const response = await fetch("http://localhost:5000/blocks", {
+      const body = { roomTypeName, roomTypePrice };
+      const response = await fetch("http://localhost:5000/roomtypes", {
         method: "POST",
         headers: {"Content-Type" : "application/json"},
         body: JSON.stringify(body),
@@ -26,33 +26,34 @@ const AdminPage = () => {
     }
   }
   
-  //delete blocks function
-  const deleteBlock = async id =>{
+  //delete meal plan function
+  const deleteRoomType = async id =>{
     try {
-      const deleteBlock = await fetch(`http://localhost:5000/blocks/${id}` , {
+
+      const deleteRoomType = await fetch(`http://localhost:5000/roomtypes/${id}` , {
         method: "DELETE"
       });
 
-      setBlocks(blocks.filter(block => block.blockid !== id));
-    } catch (error) {
+      setRoomTypes(roomTypes.filter(roomType => roomType.roomtypeid !== id));
 
+    } catch (error) {
       console.error(error.message);
     }
   }
 
-  const getBlocks = async () => {
+  const getRoomTypes = async () => {
     try {
-      const response = await await fetch("http://localhost:5000/blocks");
+      const response = await fetch("http://localhost:5000/roomtypes");
       const jsonData = await response.json();
 
-      setBlocks(jsonData);
+      setRoomTypes(jsonData);
     } catch (error) {
       console.error(error.message);
     }
   }
 
   useEffect(() => {
-    getBlocks();
+    getRoomTypes();
   });
 
   return (
@@ -60,7 +61,8 @@ const AdminPage = () => {
       <nav className="vertical-navbar">
         <h2>Welcome, Admin</h2>
         <form onSubmit={onSubmitForm}>
-          <input type="text" name="blockname" value={blockname} onChange={e => SetBlockName(e.target.value)} />
+          <input type="text" name="roomTypeName" value={roomTypeName} onChange={e => setRoomTypeName(e.target.value)} />
+          <input type="text" name="roomTypePrice" value={roomTypePrice} onChange={e => setRoomTypePrice(e.target.value)} />
           <button type="submit">Add Data</button>
         </form>
         <button onClick={() => navigate("/floors")}>Floors</button>
@@ -69,26 +71,28 @@ const AdminPage = () => {
         <button onClick={() => navigate("/jobs")}>Jobs</button>
         <button onClick={() => navigate("/services")}>Services</button>
         <button onClick={() => navigate("/paxrates")}>Pax Rates</button>
-        <button onClick={() => navigate("/mealplanrates")}>Meal Plans</button>
+        <button onClick={() => navigate("/admin")}>Blocks</button>
         <button onClick={() => navigate("/guests")}>guests</button>
+        <button onClick={() => navigate("/mealplanrates")}>Meal Plans</button>
         <button onClick={() => navigate("/rooms")}>Rooms</button>
-        <button onClick={() => navigate("/roomtypes")}>Room Types</button>
       </nav>
       <div className="table-container">
         <table>
           <thead>
             <tr>
-              <th>BlockID</th>
-              <th>Block Name</th>
-              <th>options</th>
+              <th>Room Type ID</th>
+              <th>Room Type Name</th>
+              <th>Room Type Price</th>
+              <th>Options</th>
             </tr>
           </thead>
           <tbody>
-            {blocks.map(block => (
-              <tr key={block.blockid}>
-                <td>{block.blockid}</td>
-                <td>{block.blockname}</td>
-                <td><button onClick={() => deleteBlock(block.blockid)}>Delete</button></td>
+            {roomTypes.map(roomType => (
+              <tr key={roomType.roomtypeid}>
+                <td>{roomType.roomtypeid}</td>
+                <td>{roomType.roomtypename}</td>
+                <td>{roomType.price}</td>
+                <td><button onClick={() => deleteRoomType(roomType.roomtypeid)}>Delete</button></td>
               </tr>
             ))
             }
@@ -99,4 +103,4 @@ const AdminPage = () => {
   );
 };
 
-export default AdminPage;
+export default RoomTypes;

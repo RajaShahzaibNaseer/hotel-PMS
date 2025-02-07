@@ -15,7 +15,7 @@ const Guests = () => {
     e.preventDefault();
     try {
         const profiles = ["individual", "company", "group", "agent"];
-        if(profiles.some(w => w.toLowerCase() == guestName.toLowerCase))
+        if(profiles.some(w => w.toLowerCase() == guestProfile.toLowerCase()))
         {
             const body = { guestName, guestProfile };
             const response = await fetch("http://localhost:5000/guests", {
@@ -76,7 +76,9 @@ const Guests = () => {
         <button onClick={() => navigate("/services")}>Services</button>
         <button onClick={() => navigate("/paxrates")}>Pax Rates</button>
         <button onClick={() => navigate("/admin")}>Blocks</button>
-        <button onClick={() => navigate("/mealplanrates")}>meal plan rates</button>
+        <button onClick={() => navigate("/mealplanrates")}>Meal Plans</button>
+        <button onClick={() => navigate("/rooms")}>Rooms</button>
+        <button onClick={() => navigate("/roomtypes")}>Room Types</button>
       </nav>
       <div className="table-container">
         <table>
@@ -90,11 +92,11 @@ const Guests = () => {
           </thead>
           <tbody>
             {guests.map(Guest => (
-              <tr key={Guest.guestID}>
-                <td>{Guest.guestID}</td>
-                <td>{Guest.guestName}</td>
-                <td>{Guest.guestProfile}</td>
-                <td><button onClick={() => deleteGuest(Guest.Guestrateid)}>Delete</button></td>
+              <tr key={Guest.guestid}>
+                <td>{Guest.guestid}</td>
+                <td>{Guest.guestname}</td>
+                <td>{Guest.guestprofile}</td>
+                <td><button onClick={() => deleteGuest(Guest.guestid)}>Delete</button></td>
               </tr>
             ))
             }

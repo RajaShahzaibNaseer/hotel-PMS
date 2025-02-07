@@ -618,27 +618,27 @@ app.delete("/jobTitle/:jobTitleID", async (req,res) => {
     }
 })
 
-//we are working here
-//add guests
+//add roomtypes
 app.post("/guests", async (req, res) => {
     try {
       console.log("Request Body:", req.body); // Debug log
   
-      const { guestName,guestType } = req.body;
+      const { guestName,guestProfile} = req.body;
       console.log("guestName:", guestName); // Debug log
-      console.log("price:",guestType);
+      console.log("guestProfile:",guestProfile);
   
-      if (!guestName && !guestType) {
+      if (!guestName && !guestProfile) {
         return res.status(400).json({ message: "Guest name and profile are required" });
       }
   
       const newGuest = await pool.query(
-        "INSERT INTO public.guests (guestName, guestProfile) VALUES($1 , $2);",
-        [guestName,guestType]
+        "INSERT INTO public.guests (guestname, guestprofile) VALUES($1 , $2);",
+        [guestName,guestProfile]
       );
   
       res.json(newGuest.rows[0]);
     } catch (error) {
+
       console.error("Database Error:", error.message);
       res.status(500).send("Server Error");
     }
@@ -660,6 +660,111 @@ app.delete("/guests/:guestID", async (req,res) => {
     try {
         const { guestID } = req.params;
         const deleteGuest = await pool.query("DELETE FROM public.guests WHERE guestID=$1",[guestID]);
+        res.json("guest Deleted");
+
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send("server error");
+    }
+})
+
+//rooms
+//add guests
+app.post("/rooms", async (req, res) => {
+    try {
+      console.log("Request Body:", req.body); // Debug log
+  
+      const { roomNumber, floorID, roomTypeID, roomStatus, roomPrice} = req.body;
+      console.log("guestName:", roomNumber); // Debug log
+      console.log("floorID:",floorID);
+      console.log("guestProfile:",roomTypeID);
+      console.log("guestProfile:",roomStatus);
+
+      if (!roomNumber && !floorID && !roomTypeID && !roomStatus) {
+        return res.status(400).json({ message: "Guest name and profile are required" });
+      }
+  
+      const newRoom = await pool.query(
+        "INSERT INTO public.rooms (roomnumber, floorid, roomtypeid, status) VALUES($1, $2, $3, $4 );",
+        [roomNumber,floorID,roomTypeID,roomStatus]
+      );
+  
+      res.json(newRoom.rows[0]);
+    } catch (error) {
+
+      console.error("Database Error:", error.message);
+      res.status(500).send("Server Error");
+    }
+  });
+
+//get all items
+app.get("/rooms", async (req, res) => {
+    try {
+        const allRooms = await pool.query("SELECT * FROM public.rooms");
+        res.json(allRooms.rows)
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send("server error");
+    }
+});
+
+//delete item
+app.delete("/rooms/:roomID", async (req,res) => {
+    try {
+        const { roomID } = req.params;
+        const deleteRoom = await pool.query("DELETE FROM public.rooms WHERE roomid=$1",[roomID]);
+        res.json("guest Deleted");
+
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send("server error");
+    }
+})
+
+//we are working here
+//roomTypes
+//add roomtypes
+app.post("/roomtypes", async (req, res) => {
+    try {
+      console.log("Request Body:", req.body); // Debug log
+  
+      const { roomTypeName,roomTypePrice} = req.body;
+      console.log("guestName:", roomTypeName); // Debug log
+      console.log("guestProfile:",roomTypePrice);
+  
+      if (!roomTypeName && !roomTypePrice) {
+        return res.status(400).json({ message: "Guest name and profile are required" });
+      }
+  
+      const newRoomType = await pool.query(
+        "INSERT INTO public.roomtypes (roomtypename, price) VALUES($1 , $2);",
+        [roomTypeName,roomTypePrice]
+      );
+  
+      res.json(newRoomType.rows[0]);
+    } catch (error) {
+
+      console.error("Database Error:", error.message);
+      res.status(500).send("Server Error");
+    }
+  });
+
+//get all items
+app.get("/roomtypes", async (req, res) => {
+    try {
+        const allRoomTypes = await pool.query("SELECT * FROM public.roomtypes");
+        res.json(allRoomTypes.rows)
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send("server error");
+    }
+});
+
+//delete item
+app.delete("/roomtypes/:roomTypeID", async (req,res) => {
+    try {
+        const { roomTypeID } = req.params;
+        const deleteGuest = await pool.query("DELETE FROM public.roomtypes WHERE roomtypeid=$1",[roomTypeID]);
         res.json("guest Deleted");
 
     } catch (error) {

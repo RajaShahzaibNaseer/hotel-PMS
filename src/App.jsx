@@ -14,11 +14,13 @@ import Rooms from "./components/HotelSystem/Rooms/Rooms";
 import RoomTypes from "./components/HotelSystem/RoomTypes/RoomTypes";
 import Navigator from "./components/Navigator/Navigator";
 import ClientList from "./components/Clientele/Clientele-List/Client-List";
+import Company from "./components/Clientele/Company/Company";
 
 const App = () => {
   return (
     <Routes>
       <Route path="/" element={<LoginForm />} />
+      <Route path="/company" element={<Company></Company>} />
       <Route path="/clientlist" element={<ClientList></ClientList>} />
       <Route path="/navigator" element={<Navigator></Navigator>} />
       <Route path="/admin" element={<AdminPage />} />

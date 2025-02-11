@@ -12,20 +12,20 @@ const ClientList = () => {
     }, 1000);
   };
 
-  const goToClientele = (e) => {
+  const goToCompany = (e) => {
     e.preventDefault();
     setTimeout(() => {
-      navigate("/")
+      navigate("/company")
     }, 1000);
   };
   
 
   return (
-    <div className="login-container">
+    <div className="list-container">
       <div className="login-form">
         <h2>Navigator</h2>
         <button onClick={goToGuest}>Guest List</button>
-        <button onClick={goToClientele}>Clientele Management</button>
+        <button onClick={goToCompany}>Company List</button>
       </div>
     </div>
   );

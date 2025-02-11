@@ -755,7 +755,6 @@ app.delete("/rooms/:roomID", async (req,res) => {
     }
 })
 
-//we are working here
 //roomTypes
 //add roomtypes
 app.post("/roomtypes", async (req, res) => {
@@ -806,6 +805,93 @@ app.delete("/roomtypes/:roomTypeID", async (req,res) => {
         res.status(500).send("server error");
     }
 })
+
+//we are working here
+//companies
+//adding companies
+app.post("/company", async (req, res) => {
+    try {
+      console.log("Request Body:", req.body); // Debug log
+  
+      // Destructure all fields from formData
+      const {
+        companyName,
+        registrationNo,
+        taxIdentificationNo,
+        businessType,
+        physicalAddress,
+        billingAddress,
+        officePhoneNo,
+        officeEmail,
+        website,
+        fullName,
+        designation,
+        email,
+        phoneNo,
+      } = req.body;
+  
+      // Basic validation to ensure required fields are present
+      if (!companyName || !registrationNo || !taxIdentificationNo) {
+        return res.status(400).json({
+          message: "Company Name, Registration No, and Tax Identification No are required",
+        });
+      }
+  
+      // SQL query to insert data into the database
+      const newCompany = await pool.query(
+        `INSERT INTO public.companies 
+        (companyname, registrationno, taxidentificationno, businesstype, physicaladdress, 
+        billingaddress, officephoneno, officeemail, website, fullname, designation, email, phoneno) 
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13) 
+        RETURNING *;`,
+        [
+          companyName,
+          registrationNo,
+          taxIdentificationNo,
+          businessType,
+          physicalAddress,
+          billingAddress,
+          officePhoneNo,
+          officeEmail,
+          website,
+          fullName,
+          designation,
+          email,
+          phoneNo,
+        ]
+      );
+  
+      res.json(newCompany.rows[0]); // Send back the inserted record
+    } catch (error) {
+      console.error("Database Error:", error.message);
+      res.status(500).send("Server Error");
+    }
+  });
+  
+//get all items
+app.get("/roomtypes", async (req, res) => {
+    try {
+        const allRoomTypes = await pool.query("SELECT * FROM public.roomtypes");
+        res.json(allRoomTypes.rows)
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send("server error");
+    }
+});
+
+//delete item
+app.delete("/roomtypes/:roomTypeID", async (req,res) => {
+    try {
+        const { roomTypeID } = req.params;
+        const deleteGuest = await pool.query("DELETE FROM public.roomtypes WHERE roomtypeid=$1",[roomTypeID]);
+        res.json("guest Deleted");
+
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send("server error");
+    }
+})
+
 
 //server starting
 app.listen(PORT, () =>{

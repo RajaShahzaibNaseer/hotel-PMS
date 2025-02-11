@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./Guests.css"; // Import the dark theme CSS
+import "./Guests.css";
 import { useNavigate } from "react-router-dom";
 
 const Guests = () => {
@@ -25,6 +25,11 @@ const Guests = () => {
   });
 
   const navigate = useNavigate();
+
+
+  const goToList = () => {
+    navigate("/clientlist");
+  }
 
   const handleChange = (e) => {
     setFormData((prevData) => ({
@@ -295,6 +300,7 @@ const Guests = () => {
         </div>
 
         <button type="submit" onClick={handleSubmit}>Submit</button>
+        <button onClick={goToList}>Go Back</button>
       </form>
     </div>
   );

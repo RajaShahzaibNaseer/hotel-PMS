@@ -6,7 +6,7 @@ body {
   }
   
   /* Centering the form */
-  .login-container {
+  .list-container {
     display: flex;
     justify-content: center;
     align-items: center;

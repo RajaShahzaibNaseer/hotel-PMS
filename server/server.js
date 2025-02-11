@@ -618,31 +618,65 @@ app.delete("/jobTitle/:jobTitleID", async (req,res) => {
     }
 })
 
-//add roomtypes
+//add guests
 app.post("/guests", async (req, res) => {
-    try {
-      console.log("Request Body:", req.body); // Debug log
-  
-      const { guestName,guestProfile} = req.body;
-      console.log("guestName:", guestName); // Debug log
-      console.log("guestProfile:",guestProfile);
-  
-      if (!guestName && !guestProfile) {
-        return res.status(400).json({ message: "Guest name and profile are required" });
-      }
-  
-      const newGuest = await pool.query(
-        "INSERT INTO public.guests (guestname, guestprofile) VALUES($1 , $2);",
-        [guestName,guestProfile]
-      );
-  
-      res.json(newGuest.rows[0]);
-    } catch (error) {
+  try {
+    const {
+      fullName,
+      dateOfBirth,
+      gender,
+      nationality,
+      identificationNo,
+      expiryDate,
+      phoneNo,
+      email,
+      residentialAddress,
+      emergencyContact,
+      emergencyPhone,
+      emergencyRelationship,
+      preferredRoomType,
+      preferredMealPlan,
+      specialNeeds,
+      previousStays,
+      loyaltyProgram,
+      association
+    } = req.body;
 
-      console.error("Database Error:", error.message);
-      res.status(500).send("Server Error");
-    }
-  });
+    const newGuest = await pool.query(
+      `INSERT INTO guests 
+      (full_name, date_of_birth, gender, nationality, identification_no, expiry_date, phone_no, email, residential_address, 
+       emergency_contact, emergency_phone, emergency_relationship, preferred_room_type, preferred_meal_plan, special_needs, 
+       previous_stays, loyalty_program, association) 
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18) 
+      RETURNING *`,
+      [
+        fullName,
+        dateOfBirth,
+        gender,
+        nationality,
+        identificationNo,
+        expiryDate,
+        phoneNo,
+        email,
+        residentialAddress,
+        emergencyContact,
+        emergencyPhone,
+        emergencyRelationship,
+        preferredRoomType,
+        preferredMealPlan,
+        specialNeeds,
+        previousStays,
+        loyaltyProgram,
+        association
+      ]
+    );
+
+    res.json(newGuest.rows[0]);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ error: "Server Error" });
+  }
+});
 
 //get all items
 app.get("/guests", async (req, res) => {

@@ -18,7 +18,7 @@ const LoginForm = () => {
     {
       setMessage(`Welcome, Admin`);
       setTimeout(() => {
-        navigate("/admin")
+        navigate("/navigator")
       }, 1000);
 
     }

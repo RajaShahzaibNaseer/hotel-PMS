@@ -1,25 +1,29 @@
 import React, { useState } from "react";
-import "./Company.css"; // Import the dark theme CSS
+import "./Agents.css";
 import { useNavigate } from "react-router-dom";
 
-const Company = () => {
+const Agents = () => {
   const [formData, setFormData] = useState({
-    companyName: "",
+    agencyName: "",
+    agentFullName: "",
     registrationNo: "",
     taxIdentificationNo: "",
-    businessType: "",
     physicalAddress: "",
-    billingAddress: "",
-    officePhoneNo: "",
-    officeEmail: "",
+    agencyEmail: "",
+    agencyPhoneNo: "",
     website: "",
     fullName: "",
     designation: "",
     email: "",
-    phoneNo: ""
-    });
+    phoneNo: "",
+  });
 
   const navigate = useNavigate();
+
+
+  const goToList = () => {
+    navigate("/clientlist");
+  }
 
   const handleChange = (e) => {
     setFormData((prevData) => ({
@@ -32,7 +36,7 @@ const Company = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:5000/company", {
+      const response = await fetch("http://localhost:5000/agents", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData), 
@@ -47,27 +51,39 @@ const Company = () => {
   };
 
   return (
-    <div className="company-container">
+    <div className="agent-container">
       <form className="login-form" onSubmit={handleSubmit}>
-        <h2>Company Data</h2>
+        <h2>Agent Data</h2>
 
-        {/* Company Name */}
+        {/* Agency Name */}
         <div className="input-group">
-          <label>Company Name:</label>
+          <label>Agency Name:</label>
           <input
             type="text"
-            name="companyName"
-            value={formData.companyName}
+            name="agencyName"
+            value={formData.agencyName}
             onChange={handleChange}
             required
           />
         </div>
 
-        {/* registration no */}
+        {/* Agent Full Name */}
         <div className="input-group">
-          <label>Registration no:</label>
+          <label>Agent Full Name:</label>
           <input
-            type="number"
+            type="date"
+            name="agentFullName"
+            value={formData.agentFullName}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        {/* Registration No */}
+        <div className="input-group">
+          <label>Registration No:</label>
+          <input
+            type="text"
             name="registrationNo"
             value={formData.registrationNo}
             onChange={handleChange}
@@ -75,49 +91,13 @@ const Company = () => {
           />
         </div>
 
-        {/* tax identification number */}
+        {/* Tax Identification Number */}
         <div className="input-group">
-          <label>Tax identification number:</label>
-          <input
-            type="number"
-            name="taxIdentificationNo"
-            value={formData.taxIdentificationNo}
-            onChange={handleChange}
-            required
-          />
-        </div>
-
-        {/* Business Type */}
-        <div className="input-group">
-          <label>Business type:</label>
+          <label>Tax Identification Number:</label>
           <input
             type="text"
-            name="businessType"
-            value={formData.businessType}
-            onChange={handleChange}
-            required
-          />
-        </div>
-
-        {/* office phone no */}
-        <div className="input-group">
-          <label>Office phone No:</label>
-          <input
-            type="tel"
-            name="officePhoneNo"
-            value={formData.officePhoneNo}
-            onChange={handleChange}
-            required
-          />
-        </div>
-
-        {/* office Email */}
-        <div className="input-group">
-          <label>office Email:</label>
-          <input
-            type="email"
-            name="officeEmail"
-            value={formData.officeEmail}
+            name="taxIdentificationNo"
+            value={formData.taxIdentificationNo}
             onChange={handleChange}
             required
           />
@@ -135,20 +115,45 @@ const Company = () => {
           />
         </div>
 
-        {/* billing Address */}
+        {/* Agent Phone Number */}
         <div className="input-group">
-          <label>Billing Address:</label>
+          <label>Agent Phone No:</label>
           <input
-            type="text"
-            name="billingAddress"
-            value={formData.billingAddress}
+            type="tel"
+            name="phoneNo"
+            value={formData.agencyPhoneNo}
             onChange={handleChange}
             required
           />
         </div>
 
-        <h2>Primay contact person information</h2>
-        {/* full Name */}
+        {/* agent Email */}
+        <div className="input-group">
+          <label>Agent Email:</label>
+          <input
+            type="email"
+            name="email"
+            value={formData.agencyEmail}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        {/* website */}
+        <div className="input-group">
+          <label>Website:</label>
+          <input
+            type="text"
+            name="website"
+            value={formData.website}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        <h2>Primary Contact Person Information</h2>
+
+        {/* full name */}
         <div className="input-group">
           <label>Full Name:</label>
           <input
@@ -160,31 +165,7 @@ const Company = () => {
           />
         </div>
 
-        {/*Phone Number */}
-        <div className="input-group">
-          <label> Phone No:</label>
-          <input
-            type="tel"
-            name="phoneNo"
-            value={formData.phoneNo}
-            onChange={handleChange}
-            required
-          />
-        </div>
-
-        {/* email  */}
-        <div className="input-group">
-          <label>Email:</label>
-          <input
-            type="text"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
-        </div>
-
-        {/* designation */}
+        {/* Designation */}
         <div className="input-group">
           <label>Designation:</label>
           <input
@@ -195,11 +176,36 @@ const Company = () => {
             required
           />
         </div>
+
+        {/* email */}
+        <div className="input-group">
+          <label>Email:</label>
+          <input
+            type="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        {/* phoneNo */}
+        <div className="input-group">
+          <label>Phone No:</label>
+          <input
+            type="tel"
+            name="phoneNo"
+            value={formData.phoneNo}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
         <button type="submit" onClick={handleSubmit}>Submit</button>
-        <button onClick={() => navigate("/clientlist")}>Go back</button>
+        <button onClick={goToList}>Go Back</button>
       </form>
     </div>
   );
 };
 
-export default Company;
+export default Agents;

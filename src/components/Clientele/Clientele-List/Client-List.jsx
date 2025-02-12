@@ -9,16 +9,27 @@ const ClientList = () => {
     e.preventDefault();
     setTimeout(() => {
       navigate("/guests")
-    }, 1000);
+    });
   };
 
   const goToCompany = (e) => {
     e.preventDefault();
     setTimeout(() => {
       navigate("/company")
-    }, 1000);
+    });
   };
   
+  const goToAgents = () => {
+    setTimeout(() => {
+      navigate("/agents")
+    });
+  };
+
+  const goToGroups = () => {
+    setTimeout(() => {
+      navigate("/groups")
+    });
+  };
 
   return (
     <div className="list-container">
@@ -26,6 +37,7 @@ const ClientList = () => {
         <h2>Navigator</h2>
         <button onClick={goToGuest}>Guest List</button>
         <button onClick={goToCompany}>Company List</button>
+        <button onClick={goToAgents}>Agents List</button>
       </div>
     </div>
   );

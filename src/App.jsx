@@ -15,11 +15,15 @@ import RoomTypes from "./components/HotelSystem/RoomTypes/RoomTypes";
 import Navigator from "./components/Navigator/Navigator";
 import ClientList from "./components/Clientele/Clientele-List/Client-List";
 import Company from "./components/Clientele/Company/Company";
+import Agents from "./components/Clientele/Agents/Agents";
+import Groups from "./components/Clientele/Groups/Groups";
 
 const App = () => {
   return (
     <Routes>
       <Route path="/" element={<LoginForm />} />
+      <Route path="/groups" element={<Groups></Groups>} />
+      <Route path="/agents" element= {<Agents></Agents>} />
       <Route path="/company" element={<Company></Company>} />
       <Route path="/clientlist" element={<ClientList></ClientList>} />
       <Route path="/navigator" element={<Navigator></Navigator>} />

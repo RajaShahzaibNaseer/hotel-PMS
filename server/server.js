@@ -806,7 +806,6 @@ app.delete("/roomtypes/:roomTypeID", async (req,res) => {
     }
 })
 
-//we are working here
 //companies
 //adding companies
 app.post("/company", async (req, res) => {
@@ -891,6 +890,111 @@ app.delete("/roomtypes/:roomTypeID", async (req,res) => {
         res.status(500).send("server error");
     }
 })
+
+//we are working here
+//agents
+//adding agents
+app.post("/agents", async (req, res) => {
+  try {
+    console.log("Request Body:", req.body); // Debug log
+
+    // Destructure all fields from formData
+    const {
+      agencyName,
+      agentFullName,
+      registrationNo,
+      taxIdentificationNo,
+      physicalAddress,
+      agencyEmail,
+      agencyPhoneNo,
+      website,
+      fullName,
+      designation,
+      email,
+      phoneNo,
+    } = req.body;
+
+    // Basic validation to ensure required fields are present
+    if (!agencyName || !registrationNo || !taxIdentificationNo) {
+      return res.status(400).json({
+        message: "Agency Name, Registration No, and Tax Identification No are required",
+      });
+    }
+
+    // SQL query to insert data into the database
+    const newAgency = await pool.query(
+      `INSERT INTO public.agents 
+      (agencyname, agentfullname, registrationno, taxidentificationno, physicaladdress, 
+      agencyemail, agencyphoneno, website, fullname, designation, email, phoneno) 
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) 
+      RETURNING *;`,
+      [
+        agencyName,
+        agentFullName,
+        registrationNo,
+        taxIdentificationNo,
+        physicalAddress,
+        agencyEmail,
+        agencyPhoneNo,
+        website,
+        fullName,
+        designation,
+        email,
+        phoneNo,
+      ]
+    );
+
+    res.json(newAgency.rows[0]); // Send back the inserted record
+  } catch (error) {
+    console.error("Database Error:", error.message);
+    res.status(500).send("Server Error");
+  }
+});
+
+
+//we are working here
+//groups
+app.post("/groups", async (req, res) => {
+  try {
+    console.log("Request Body:", req.body); // Debug log
+
+    // Destructure all fields from formData
+    const {
+      groupName,
+      associatedWith,
+      fullName,
+      email,
+      phoneNo,
+    } = req.body;
+
+    // Basic validation to ensure required fields are present
+    if (!groupName || !associatedWith) {
+      return res.status(400).json({
+        message: "Group Name and Associated company or booking agent are required",
+      });
+    }
+
+    // SQL query to insert data into the database
+    const newGroup = await pool.query(
+      `INSERT INTO public.groups 
+      (groupname, associatedwith fullname, email, phoneno) 
+      VALUES ($1, $2, $3, $4, $5) 
+      RETURNING *;`,
+      [
+        groupName,
+        associatedWith,
+        fullName,
+        email,
+        phoneNo,
+      ]
+    );
+
+    res.json(newGroup.rows[0]); // Send back the inserted record
+  } catch (error) {
+    console.error("Database Error:", error.message);
+    res.status(500).send("Server Error");
+  }
+});
 
 
 //server starting

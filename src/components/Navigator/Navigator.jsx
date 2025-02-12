@@ -21,7 +21,7 @@ const Navigator = () => {
   
 
   return (
-    <div className="login-container">
+    <div className="nav-container">
       <div className="login-form">
         <h2>Navigator</h2>
         <button onClick={goToHotel}>Hotel System</button>

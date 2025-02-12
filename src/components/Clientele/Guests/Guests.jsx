@@ -57,7 +57,7 @@ const Guests = () => {
   };
 
   return (
-    <div className="login-container">
+    <div className="guest-container">
       <form className="login-form" onSubmit={handleSubmit}>
         <h2>Guest Data</h2>
 

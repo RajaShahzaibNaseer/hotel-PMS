@@ -19,6 +19,11 @@ const ClientList = () => {
     }, 1000);
   };
   
+  const goToAgents = () => {
+    setTimeout(() => {
+      navigate("/agents")
+    },1000);
+  };
 
   return (
     <div className="list-container">
@@ -26,6 +31,7 @@ const ClientList = () => {
         <h2>Navigator</h2>
         <button onClick={goToGuest}>Guest List</button>
         <button onClick={goToCompany}>Company List</button>
+        <button onClick={goToAgents}>Agents List</button>
       </div>
     </div>
   );

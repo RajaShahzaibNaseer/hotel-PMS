@@ -147,6 +147,18 @@ const Company = () => {
           />
         </div>
 
+         {/* website */}
+         <div className="input-group">
+          <label>Website:</label>
+          <input
+            type="text"
+            name="website"
+            value={formData.website}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
         <h2>Primay contact person information</h2>
         {/* full Name */}
         <div className="input-group">
@@ -196,7 +208,7 @@ const Company = () => {
           />
         </div>
         <button type="submit" onClick={handleSubmit}>Submit</button>
-        <button onClick={() => navigate("/clientlist")}>Go back</button>
+        <button onClick={() => navigate("/companylist")}>Go back</button>
       </form>
     </div>
   );

@@ -891,7 +891,6 @@ app.delete("/company/:companyID", async (req,res) => {
     }
 })
 
-//we are working here
 //agents
 //adding agents
 app.post("/agents", async (req, res) => {
@@ -951,7 +950,29 @@ app.post("/agents", async (req, res) => {
   }
 });
 
+//getting agents
+app.get("/agents", async (req, res) => {
+  try {
+      const allAgents = await pool.query("SELECT * FROM public.agents");
+      res.json(allAgents.rows)
+  } catch (error) {
+      console.error(error.message);
+      res.status(500).send("server error");
+  }
+});
 
+//deleting agents
+app.delete("/agents/:agentID", async (req,res) => {
+  try {
+      const { agentID } = req.params;
+      const deleteAgent = await pool.query("DELETE FROM public.agents WHERE id=$1",[agentID]);
+      res.json("agent Deleted");
+
+  } catch (error) {
+      console.error(error.message);
+      res.status(500).send("server error");
+  }
+})
 //we are working here
 //groups
 app.post("/groups", async (req, res) => {
@@ -977,7 +998,7 @@ app.post("/groups", async (req, res) => {
     // SQL query to insert data into the database
     const newGroup = await pool.query(
       `INSERT INTO public.groups 
-      (groupname, associatedwith fullname, email, phoneno) 
+      (groupname, associatedwith, fullname, email, phoneno) 
       VALUES ($1, $2, $3, $4, $5) 
       RETURNING *;`,
       [
@@ -996,6 +1017,29 @@ app.post("/groups", async (req, res) => {
   }
 });
 
+//getting groups
+app.get("/groups", async (req, res) => {
+  try {
+      const allGroups = await pool.query("SELECT * FROM public.groups");
+      res.json(allGroups.rows)
+  } catch (error) {
+      console.error(error.message);
+      res.status(500).send("server error");
+  }
+});
+
+//deleting groups
+app.delete("/groups/:groupID", async (req,res) => {
+  try {
+      const { groupID } = req.params;
+      const deleteGroup = await pool.query("DELETE FROM public.groups WHERE id=$1",[groupID]);
+      res.json("group Deleted");
+
+  } catch (error) {
+      console.error(error.message);
+      res.status(500).send("server error");
+  }
+})
 
 //server starting
 app.listen(PORT, () =>{

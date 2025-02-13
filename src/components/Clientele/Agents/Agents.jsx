@@ -22,7 +22,7 @@ const Agents = () => {
 
 
   const goToList = () => {
-    navigate("/clientlist");
+    navigate("/agentlist");
   }
 
   const handleChange = (e) => {
@@ -120,7 +120,7 @@ const Agents = () => {
           <label>Agent Phone No:</label>
           <input
             type="tel"
-            name="phoneNo"
+            name="agencyPhoneNo"
             value={formData.agencyPhoneNo}
             onChange={handleChange}
             required
@@ -132,7 +132,7 @@ const Agents = () => {
           <label>Agent Email:</label>
           <input
             type="email"
-            name="email"
+            name="agencyEmail"
             value={formData.agencyEmail}
             onChange={handleChange}
             required

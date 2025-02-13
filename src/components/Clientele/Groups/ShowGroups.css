@@ -1,6 +1,6 @@
-.guests-container {
+.grouplist-container {
     height: 100vh;
-    width: fit-content;
+    width: auto;
     background: linear-gradient(135deg, #1e1e1e, #282c34);
   }
   

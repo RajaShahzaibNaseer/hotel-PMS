@@ -21,15 +21,20 @@ const ClientList = () => {
   
   const goToAgents = () => {
     setTimeout(() => {
-      navigate("/agents")
+      navigate("/agentlist")
     });
   };
 
   const goToGroups = () => {
     setTimeout(() => {
-      navigate("/groups")
+      navigate("/grouplist")
     });
   };
+
+  const goToMain = () =>
+  {
+    navigate("/navigator")
+  }
 
   return (
     <div className="list-container">
@@ -39,6 +44,7 @@ const ClientList = () => {
         <button onClick={goToCompany}>Company List</button>
         <button onClick={goToAgents}>Agents List</button>
         <button onClick={goToGroups}>Groups List</button>
+        <button onClick={goToMain}>Main Menu</button>
       </div>
     </div>
   );

@@ -77,11 +77,11 @@ const ShowGuests = () => {
               <tr key={guest.id}>
                 <td>{guest.id}</td>
                 <td>{guest.full_name}</td>
-                <td>{guest.date_of_birth}</td>
+                <td>{new Date(guest.date_of_birth).toLocaleDateString()}</td>
                 <td>{guest.gender}</td>
                 <td>{guest.nationality}</td>
                 <td>{guest.identification_no}</td>
-                <td>{guest.expiry_date}</td>
+                <td>{new Date(guest.expiry_date).toLocaleDateString()}</td>
                 <td>{guest.phone_no}</td>
                 <td>{guest.email}</td>
                 <td>{guest.residential_address}</td>

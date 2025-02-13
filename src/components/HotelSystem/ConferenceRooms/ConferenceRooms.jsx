@@ -61,20 +61,20 @@ const ConferenceRooms = () => {
         <nav className="vertical-navbar">
             <h2>Welcome, Admin</h2>
             <form onSubmit={onSubmitForm}>
-            <input type="text" name="conferenceroomname" value={conferenceRoomName} onChange={e => setConferenceRoomName(e.target.value)} />
-            <input type="text" name="description" value={conferenceRoomDesc} onChange={e => setConferenceRoomDesc(e.target.value)} />
-            <button type="submit">Add Data</button>
+                <input type="text" name="conferenceroomname" value={conferenceRoomName} onChange={e => setConferenceRoomName(e.target.value)} />
+                <input type="text" name="description" value={conferenceRoomDesc} onChange={e => setConferenceRoomDesc(e.target.value)} />
+                <button type="submit">Add Data</button>
             </form>
-            <button onClick={() => navigate("/floors")}>Floors</button>
             <button onClick={() => navigate("/admin")}>Blocks</button>
-            <button onClick={() => navigate("/departments")}>Departments</button>
-            <button onClick={() => navigate("/users")}>Users</button>
-            <button onClick={() => navigate("/services")}>Services</button>
-            <button onClick={() => navigate("/paxrates")}>Pax Rates</button>
-            <button onClick={() => navigate("/mealplanrates")}>Meal Plans</button>
-            <button onClick={() => navigate("/guests")}>guests</button>
+            <button onClick={() => navigate("/floors")}>Floors</button>
             <button onClick={() => navigate("/rooms")}>Rooms</button>
             <button onClick={() => navigate("/roomtypes")}>Room Types</button>
+            <button onClick={() => navigate("/departments")}>Departments</button>
+            <button onClick={() => navigate("/jobs")}>jobs</button>
+            <button onClick={() => navigate("/services")}>Auxilary Services</button>
+            <button onClick={() => navigate("/mealplanrates")}>Meal Plans</button>
+            <button onClick={() => navigate("/paxrates")}>Pax Rates</button>
+            <button onClick={() => navigate("/navigator")}>Go Back</button>
         </nav>
         <div className="table-container">
             <table>

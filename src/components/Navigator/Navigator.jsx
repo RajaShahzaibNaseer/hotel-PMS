@@ -5,18 +5,12 @@ import { useNavigate } from "react-router-dom";
 const Navigator = () => {
   const navigate = useNavigate();
 
-  const goToHotel = (e) => {
-    e.preventDefault();
-    setTimeout(() => {
-      navigate("/admin")
-    }, 1000);
+  const goToHotel = () => {
+    navigate("/admin")
   };
 
-  const goToClientele = (e) => {
-    e.preventDefault();
-    setTimeout(() => {
-      navigate("/clientlist")
-    }, 1000);
+  const goToClientele = () => {
+    navigate("/clientlist")
   };
   
 

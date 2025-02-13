@@ -64,15 +64,15 @@ const AdminPage = () => {
           <button type="submit">Add Data</button>
         </form>
         <button onClick={() => navigate("/floors")}>Floors</button>
-        <button onClick={() => navigate("/conferenceRooms")}>Conference Rooms</button>
-        <button onClick={() => navigate("/departments")}>Departments</button>
-        <button onClick={() => navigate("/jobs")}>Jobs</button>
-        <button onClick={() => navigate("/services")}>Services</button>
-        <button onClick={() => navigate("/paxrates")}>Pax Rates</button>
-        <button onClick={() => navigate("/mealplanrates")}>Meal Plans</button>
-        <button onClick={() => navigate("/guests")}>guests</button>
         <button onClick={() => navigate("/rooms")}>Rooms</button>
         <button onClick={() => navigate("/roomtypes")}>Room Types</button>
+        <button onClick={() => navigate("/conferenceRooms")}>Conference Rooms</button>
+        <button onClick={() => navigate("/departments")}>Departments</button>
+        <button onClick={() => navigate("/jobs")}>jobs</button>
+        <button onClick={() => navigate("/services")}>Auxilary Services</button>
+        <button onClick={() => navigate("/mealplanrates")}>Meal Plans</button>
+        <button onClick={() => navigate("/paxrates")}>Pax Rates</button>
+        <button onClick={() => navigate("/navigator")}>Go Back</button>
       </nav>
       <div className="table-container">
         <table>

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./Agents.css";
+import "./Groups.css";
 import { useNavigate } from "react-router-dom";
 
 const Groups = () => {
@@ -64,7 +64,7 @@ const Groups = () => {
         <div className="input-group">
           <label>Associated With:</label>
           <input
-            type="date"
+            type="text"
             name="associatedWith"
             value={formData.associatedWith}
             onChange={handleChange}

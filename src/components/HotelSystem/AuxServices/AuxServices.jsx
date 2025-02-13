@@ -34,7 +34,7 @@ const AuxServices = () => {
         method: "DELETE"
       });
 
-      setservice(service.filter(service => service.servicerateid !== id));
+      setservice(service.filter(service => service.serviceid !== id));
 
     } catch (error) {
       console.error(error.message);

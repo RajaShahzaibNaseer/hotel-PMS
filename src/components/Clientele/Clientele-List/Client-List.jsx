@@ -8,7 +8,7 @@ const ClientList = () => {
   const goToGuest = (e) => {
     e.preventDefault();
     setTimeout(() => {
-      navigate("/guests")
+      navigate("/guestlist")
     });
   };
 
@@ -38,6 +38,7 @@ const ClientList = () => {
         <button onClick={goToGuest}>Guest List</button>
         <button onClick={goToCompany}>Company List</button>
         <button onClick={goToAgents}>Agents List</button>
+        <button onClick={goToGroups}>Groups List</button>
       </div>
     </div>
   );

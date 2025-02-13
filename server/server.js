@@ -693,7 +693,7 @@ app.get("/guests", async (req, res) => {
 app.delete("/guests/:guestID", async (req,res) => {
     try {
         const { guestID } = req.params;
-        const deleteGuest = await pool.query("DELETE FROM public.guests WHERE guestID=$1",[guestID]);
+        const deleteGuest = await pool.query("DELETE FROM public.guests WHERE id=$1",[guestID]);
         res.json("guest Deleted");
 
     } catch (error) {

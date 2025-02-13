@@ -28,7 +28,7 @@ const Guests = () => {
 
 
   const goToList = () => {
-    navigate("/clientlist");
+    navigate("/guestlist");
   }
 
   const handleChange = (e) => {

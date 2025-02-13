@@ -71,7 +71,7 @@ const Agents = () => {
         <div className="input-group">
           <label>Agent Full Name:</label>
           <input
-            type="date"
+            type="text"
             name="agentFullName"
             value={formData.agentFullName}
             onChange={handleChange}

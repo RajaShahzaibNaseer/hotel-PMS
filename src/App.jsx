@@ -18,6 +18,7 @@ import Company from "./components/Clientele/Company/Company";
 import Agents from "./components/Clientele/Agents/Agents";
 import Groups from "./components/Clientele/Groups/Groups";
 import ShowGuests from "./components/Clientele/Guests/ShowGuests";
+import ShowCompany from "./components/Clientele/Company/ShowCompany";
 
 const App = () => {
   return (
@@ -40,6 +41,7 @@ const App = () => {
       <Route path="/rooms" element = {<Rooms></Rooms>} />
       <Route path="/roomtypes" element = {<RoomTypes></RoomTypes>} />
       <Route path="/guestlist" element = {<ShowGuests></ShowGuests>} />
+      <Route path="/companylist" element = {<ShowCompany></ShowCompany>} />
     </Routes>
   );
 };

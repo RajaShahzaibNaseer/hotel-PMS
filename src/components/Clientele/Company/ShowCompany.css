@@ -1,0 +1,56 @@
+.companylist-container {
+  height: 100vh;
+  width: auto;
+  background: linear-gradient(135deg, #1e1e1e, #282c34);
+}
+
+.horizontal-navbar {
+  max-width: 100%;
+  background: #1e1e1e;
+  color: white;
+  padding: 20px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+  border-right: 3px solid black;
+}
+
+.horizontal-navbar h2 {
+  margin-bottom: 20px;
+}
+
+.horizontal-navbar button {
+  max-width: 200px;
+  padding: 10px;
+  margin: 5px 0;
+  border: none;
+  cursor: pointer;
+  background-color: #555;
+  color: white;
+}
+
+.horizontal-navbar button:hover {
+  background-color: #777;
+}
+
+.table-container {
+  flex-grow: 1;
+  padding: 20px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+th {
+  background-color: #f4f4f4;
+  color: black;
+}

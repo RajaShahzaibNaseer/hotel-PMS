@@ -868,10 +868,10 @@ app.post("/company", async (req, res) => {
   });
   
 //get all items
-app.get("/roomtypes", async (req, res) => {
+app.get("/company", async (req, res) => {
     try {
-        const allRoomTypes = await pool.query("SELECT * FROM public.roomtypes");
-        res.json(allRoomTypes.rows)
+        const allCompanies = await pool.query("SELECT * FROM public.companies");
+        res.json(allCompanies.rows)
     } catch (error) {
         console.error(error.message);
         res.status(500).send("server error");
@@ -879,10 +879,10 @@ app.get("/roomtypes", async (req, res) => {
 });
 
 //delete item
-app.delete("/roomtypes/:roomTypeID", async (req,res) => {
+app.delete("/company/:companyID", async (req,res) => {
     try {
-        const { roomTypeID } = req.params;
-        const deleteGuest = await pool.query("DELETE FROM public.roomtypes WHERE roomtypeid=$1",[roomTypeID]);
+        const { companyID } = req.params;
+        const deleteCompany = await pool.query("DELETE FROM public.companies WHERE id=$1",[companyID]);
         res.json("guest Deleted");
 
     } catch (error) {

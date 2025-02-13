@@ -69,6 +69,7 @@ const ShowGuests = () => {
                 <th>Loyalty Program</th>
                 <th>Association</th>
                 <th>Created At</th>
+                <th>Options</th>
             </tr>
           </thead>
           <tbody>
@@ -94,6 +95,7 @@ const ShowGuests = () => {
                 <td>{guest.loyalty_program}</td>
                 <td>{guest.association}</td>
                 <td>{guest.created_at}</td>
+                <td><button onClick={() => deleteGuests(guest.id)}>Delete</button></td>
               </tr>
             ))}
           </tbody>

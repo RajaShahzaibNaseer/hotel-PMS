@@ -15,7 +15,7 @@ const ClientList = () => {
   const goToCompany = (e) => {
     e.preventDefault();
     setTimeout(() => {
-      navigate("/company")
+      navigate("/companylist")
     });
   };
   

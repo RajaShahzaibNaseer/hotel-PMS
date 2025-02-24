@@ -49,7 +49,7 @@ const Blocks = () => {
   }, []);
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-gray-900 text-white rounded-lg shadow-lg">
+    <div className="min-h-screen mx-auto p-6 bg-gray-900 text-white shadow-lg">
       <h2 className="text-2xl font-semibold mb-4 text-center">Manage Blocks</h2>
 
       {/* Add Block Form */}
@@ -63,7 +63,7 @@ const Blocks = () => {
         />
         <button
           type="submit"
-          className="px-5 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-md transition"
+          className="px-5 py-2 bg-gray-800 hover:bg-gray-700 text-white rounded-md transition"
         >
           Add
         </button>

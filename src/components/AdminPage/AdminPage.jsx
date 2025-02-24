@@ -73,21 +73,6 @@ const AdminPage = () => {
       <nav className="w-64 p-5 flex flex-col items-center border-r border-gray-700 bg-gray-900 shadow-lg">
         <h2 className="mb-5 text-xl font-semibold">Welcome, Admin</h2>
         
-        {/* Add Block Form */}
-        <form onSubmit={onSubmitForm} className="w-full flex flex-col">
-          <input
-            className="p-2 bg-gray-800 border border-gray-700 rounded-md text-white text-lg outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
-            type="text"
-            name="blockname"
-            value={blockname}
-            placeholder="Enter Block Name"
-            onChange={(e) => setBlockName(e.target.value)}
-          />
-          <button className="mt-3 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-md transition">
-            Add Block
-          </button>
-        </form>
-        
         <hr className="border-gray-700 w-full my-4" />
         
         {/* Navigation Buttons */}

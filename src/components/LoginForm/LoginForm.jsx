@@ -24,10 +24,10 @@ const LoginForm = () => {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gradient-to-br from-[#1e1e1e] to-[#282c34]">
+    <div className="flex justify-center items-center h-screen bg-gradient-to-br from-[#1e1e1e] to-[#282c34] text-white">
       <form className="bg-[#222] p-8 rounded-[10px] shadow-[0_5px_15px_rgba(0,0,0,0.3)] w-[320px] text-center" onSubmit={handleSubmit}>
-        <h2>Login</h2>
-        <div className="mb-5 mr-5 text-left">
+        <h2 className="mb-4 text-xl">Login</h2>
+        <div className="mb-5 text-left">
           <label className="block font-bold mb-1 text-[#bbb]">Email:</label>
           <input
             className="w-full p-2 bg-[#333] border border-[#444] rounded-md text-white text-lg outline-none transition duration-300 focus:border-[#6e8efb] focus:shadow-[0_0_8px_rgba(110,142,251,0.6)]"
@@ -38,7 +38,7 @@ const LoginForm = () => {
             required
           />
         </div>
-        <div className="mb-5 mr-5 text-left">
+        <div className="mb-5 text-left">
           <label className="block font-bold mb-1 text-[#bbb]">Password:</label>
           <input
           className="w-full p-2 bg-[#333] border border-[#444] rounded-md text-white text-lg outline-none transition duration-300 focus:border-[#6e8efb] focus:shadow-[0_0_8px_rgba(110,142,251,0.6)]"

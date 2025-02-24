@@ -49,35 +49,8 @@ const Agents = () => {
     
   };
 
-  const Button = ({text, type, handler}) => (
-    <button 
-      className="w-[80%] p-[12px] bg-[#6e8efb] text-white border-none rounded-[5px] text-[18px] cursor-pointer 
-      transition duration-300 ease-in-out hover:bg-[#5a7dfb] hover:shadow-[0_0_12px_rgba(110,142,251,0.5)]"
-      type={type} 
-      onClick={handler}
-      >
-        {text}
-    </button>
-  )
-
-  const InputField = ({ label, name, type, value, onChange, required }) => (
-    <div className="mb-5 mr-5 text-left">
-      <label className="block font-bold mb-1.5 text-[#bbb]">{label}:</label>
-      <input
-        className="w-full p-[10px] bg-[#333] border border-[#444] rounded-s-md 
-        text-white text-[16px] outline-none transition duration-300 focus:border-[#6e8efb] 
-          focus:shadow-[0_0_8px_rgba(110,142,251,0.6)]"
-        type={type}
-        name={name}
-        value={value}
-        onChange={onChange}
-        required={required}
-      />
-    </div>
-  );
-
   return (
-    <div className="flex justify-center items-center bg-gradient-to-br from-[#1e1e1e] to-[#282c34]">
+    <div className="flex justify-center items-center bg-gradient-to-br from-[#1e1e1e] to-[#282c34] text-white">
       <form className="bg-[#222] p-8 rounded-[10px] shadow-[0_5px_15px_rgba(0,0,0,0.3)] 
         w-[320px] text-center" 
         onSubmit={handleSubmit}>
@@ -200,5 +173,30 @@ const Agents = () => {
     </div>
   );
 };
+
+const InputField = ({ label, name, type, value, onChange, required }) => (
+  <div className="mb-5 text-left">
+    <label className="block font-bold mb-[5px] text-[#bbb]">{label}:</label>
+    <input
+      className="w-full p-[10px] bg-[#333] border border-[#444] rounded-[5px] text-white text-[16px] outline-none transition duration-300 focus:border-[#6e8efb] focus:shadow-[0_0_8px_rgba(110,142,251,0.6)]"
+      type={type}
+      name={name}
+      value={value}
+      onChange={onChange}
+      required={required}
+    />
+  </div>
+);
+
+const Button = ({text, type, handler}) => (
+  <button 
+    className="w-full p-[12px] my-2 bg-[#6e8efb] text-white border-none rounded-[5px] text-[18px] cursor-pointer 
+    transition duration-300 ease-in-out hover:bg-[#5a7dfb] hover:shadow-[0_0_12px_rgba(110,142,251,0.5)]"
+    type={type} 
+    onClick={handler}
+    >
+      {text}
+  </button>
+)
 
 export default Agents;

@@ -35,13 +35,13 @@ const App = () => {
       <Route path="/admin" element={<AdminPage />} /> //Ported
       <Route path="/departments" element= {<Departments />} />
       <Route path="/conferenceRooms" element={<ConferenceRooms />} />
-      <Route path="/blocks" element={<Blocks />} />
+      <Route path="/blocks" element={<Blocks />} /> //Ported
       <Route path="/floors" element={<Floors />} />
       <Route path="/mealplanrates" element={<MealPlans />} />
       <Route path="/paxrates" element={<PaxRates />} />
       <Route path="/services" element={<AuxServices />} />
       <Route path="/jobs" element ={<JobTitles />} />
-      <Route path="/guests" element = {<Guests></Guests>} />
+      <Route path="/guests" element = {<Guests />} /> //Ported
       <Route path="/rooms" element = {<Rooms></Rooms>} />
       <Route path="/roomtypes" element = {<RoomTypes />} />
       <Route path="/guestlist" element = {<ShowGuests />} />

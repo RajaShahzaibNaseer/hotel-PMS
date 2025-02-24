@@ -24,9 +24,9 @@ const Navigator = () => {
   )
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-[#1e1e1e] to-[#282c34]">
+    <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-[#1e1e1e] to-[#282c34] text-white">
       <div className="bg-[#222] p-8 rounded-s-md shadow-[0_5px_15px_rgba(0,0,0,0.3)] w-[320px] text-center" >
-        <h2>Navigator</h2>
+        <h2 className="mb-4 text-xl">Navigator</h2>
         <Button text={'Hotel System'} type={'button'} handler={goToHotel} />
         <Button text={'Clientele Management'} type={'button'} handler={goToClientele} />
       </div>

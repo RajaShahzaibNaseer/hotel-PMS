@@ -26,26 +26,26 @@ const App = () => {
   return (
     <Routes>
       <Route path="/" element={<LoginForm />} /> // Ported
-      <Route path="/groups" element={<Groups></Groups>} /> //Ported
-      <Route path="/agents" element= {<Agents></Agents>} /> //Ported
-      <Route path="/company" element={<Company></Company>} /> //Ported
-      <Route path="/clientlist" element={<ClientList></ClientList>} /> //Ported
-      <Route path="/navigator" element={<Navigator></Navigator>} /> //Ported
-      <Route path="/admin" element={<AdminPage />} />
+      <Route path="/groups" element={<Groups />} /> //Ported
+      <Route path="/agents" element= {<Agents />} /> //Ported
+      <Route path="/company" element={<Company />} /> //Ported
+      <Route path="/clientlist" element={<ClientList />} /> //Ported
+      <Route path="/navigator" element={<Navigator />} /> //Ported
+      <Route path="/admin" element={<AdminPage />} /> //Ported
       <Route path="/departments" element= {<Departments />} />
       <Route path="/conferenceRooms" element={<ConferenceRooms />} />
       <Route path="/floors" element={<Floors />} />
-      <Route path="/mealplanrates" element={<MealPlans/>} />
+      <Route path="/mealplanrates" element={<MealPlans />} />
       <Route path="/paxrates" element={<PaxRates />} />
       <Route path="/services" element={<AuxServices />} />
       <Route path="/jobs" element ={<JobTitles />} />
       <Route path="/guests" element = {<Guests></Guests>} />
       <Route path="/rooms" element = {<Rooms></Rooms>} />
-      <Route path="/roomtypes" element = {<RoomTypes></RoomTypes>} />
-      <Route path="/guestlist" element = {<ShowGuests></ShowGuests>} />
-      <Route path="/companylist" element = {<ShowCompany></ShowCompany>} />
-      <Route path="/agentlist" element ={<ShowAgents></ShowAgents>} />
-      <Route path="/grouplist" element={<ShowGroups></ShowGroups>} />
+      <Route path="/roomtypes" element = {<RoomTypes />} />
+      <Route path="/guestlist" element = {<ShowGuests />} />
+      <Route path="/companylist" element = {<ShowCompany />} />
+      <Route path="/agentlist" element ={<ShowAgents />} />
+      <Route path="/grouplist" element={<ShowGroups />} />
     </Routes>
   );
 };

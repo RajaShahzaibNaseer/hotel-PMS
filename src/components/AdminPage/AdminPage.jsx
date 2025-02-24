@@ -55,45 +55,85 @@ const AdminPage = () => {
     getBlocks();
   });
 
+  const routes = [
+    { title: "Floors", url: "/floors" },
+    { title: "Rooms", url: "/rooms" },
+    { title: "Room Types", url: "/roomtypes" },
+    { title: "Conference Rooms", url: "/conferenceRooms" },
+    { title: "Departments", url: "/departments" },
+    { title: "Jobs", url: "/jobs" },
+    { title: "Auxiliary Services", url: "/services" },
+    { title: "Meal Plan Rates", url: "/mealplanrates" },
+    { title: "Pax Rates", url: "/paxrates" },
+    { title: "Go Back", url: "/navigator" },
+  ];
+
   return (
-    <div className="admin-container">
-      <nav className="vertical-navbar">
-        <h2>Welcome, Admin</h2>
-        <form onSubmit={onSubmitForm}>
-          <input type="text" name="blockname" value={blockname} onChange={e => SetBlockName(e.target.value)} />
-          <button type="submit">Add Data</button>
+    <div className="flex h-screen bg-gradient-to-br from-gray-900 to-gray-800 text-white">
+      <nav className="w-64 p-5 flex flex-col items-center border-r border-gray-700 bg-gray-900 shadow-lg">
+        <h2 className="mb-5 text-xl font-semibold">Welcome, Admin</h2>
+        
+        {/* Add Block Form */}
+        <form onSubmit={onSubmitForm} className="w-full flex flex-col">
+          <input
+            className="p-2 bg-gray-800 border border-gray-700 rounded-md text-white text-lg outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
+            type="text"
+            name="blockname"
+            value={blockname}
+            placeholder="Enter Block Name"
+            onChange={(e) => setBlockName(e.target.value)}
+          />
+          <button className="mt-3 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-md transition">
+            Add Block
+          </button>
         </form>
-        <button onClick={() => navigate("/floors")}>Floors</button>
-        <button onClick={() => navigate("/rooms")}>Rooms</button>
-        <button onClick={() => navigate("/roomtypes")}>Room Types</button>
-        <button onClick={() => navigate("/conferenceRooms")}>Conference Rooms</button>
-        <button onClick={() => navigate("/departments")}>Departments</button>
-        <button onClick={() => navigate("/jobs")}>jobs</button>
-        <button onClick={() => navigate("/services")}>Auxilary Services</button>
-        <button onClick={() => navigate("/mealplanrates")}>Meal Plans</button>
-        <button onClick={() => navigate("/paxrates")}>Pax Rates</button>
-        <button onClick={() => navigate("/navigator")}>Go Back</button>
+        
+        <hr className="border-gray-700 w-full my-4" />
+        
+        {/* Navigation Buttons */}
+        <div>
+          {routes.map(({ title, url }) => (
+            <button
+              key={url}
+              onClick={() => navigate(url)}
+              className="w-full mt-2 py-2 bg-gray-800 hover:bg-gray-700 rounded-md text-white font-medium transition"
+            >
+              {title}
+            </button>
+          ))}
+        </div>
       </nav>
-      <div className="table-container">
-        <table>
-          <thead>
-            <tr>
-              <th>BlockID</th>
-              <th>Block Name</th>
-              <th>options</th>
-            </tr>
-          </thead>
-          <tbody>
-            {blocks.map(block => (
-              <tr key={block.id}>
-                <td>{block.id}</td>
-                <td>{block.blockname}</td>
-                <td><button onClick={() => deleteBlock(block.id)}>Delete</button></td>
+
+      {/* Blocks Table */}
+      <div className="flex-grow p-5 overflow-y-auto">
+        <h3 className="text-lg font-semibold mb-4">Blocks List</h3>
+        <div className="overflow-x-auto">
+          <table className="w-full border-collapse border border-gray-700 text-center">
+            <thead>
+              <tr className="bg-gray-800 text-gray-300">
+                <th className="border border-gray-700 p-3">Block ID</th>
+                <th className="border border-gray-700 p-3">Block Name</th>
+                <th className="border border-gray-700 p-3">Options</th>
               </tr>
-            ))
-            }
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {blocks.map((block) => (
+                <tr key={block.blockid} className="bg-gray-900 hover:bg-gray-800 transition">
+                  <td className="border border-gray-700 p-3">{block.blockid}</td>
+                  <td className="border border-gray-700 p-3">{block.blockname}</td>
+                  <td className="border border-gray-700 p-3">
+                    <button
+                      onClick={() => deleteBlock(block.blockid)}
+                      className="px-4 py-2 bg-red-600 hover:bg-red-500 text-white rounded-md transition"
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );

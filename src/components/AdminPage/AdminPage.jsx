@@ -85,10 +85,10 @@ const AdminPage = () => {
           </thead>
           <tbody>
             {blocks.map(block => (
-              <tr key={block.blockid}>
-                <td>{block.blockid}</td>
+              <tr key={block.id}>
+                <td>{block.id}</td>
                 <td>{block.blockname}</td>
-                <td><button onClick={() => deleteBlock(block.blockid)}>Delete</button></td>
+                <td><button onClick={() => deleteBlock(block.id)}>Delete</button></td>
               </tr>
             ))
             }

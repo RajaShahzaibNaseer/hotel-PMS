@@ -77,7 +77,7 @@ const Agents = () => {
   );
 
   return (
-    <div className="flex justify-center items-center h-auto bg-gradient-to-br from-[#1e1e1e] to-[#282c34]">
+    <div className="flex justify-center items-center bg-gradient-to-br from-[#1e1e1e] to-[#282c34]">
       <form className="bg-[#222] p-8 rounded-[10px] shadow-[0_5px_15px_rgba(0,0,0,0.3)] 
         w-[320px] text-center" 
         onSubmit={handleSubmit}>

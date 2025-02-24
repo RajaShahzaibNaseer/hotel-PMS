@@ -4,6 +4,7 @@ import LoginForm from "./components/LoginForm/LoginForm";
 import AdminPage from "./components/AdminPage/AdminPage"; 
 import Departments from "./components/HotelSystem//Departments/Departments";
 import ConferenceRooms from "./components/HotelSystem/ConferenceRooms/ConferenceRooms";
+import Blocks from './components/HotelSystem/Blocks/Blocks'
 import Floors from "./components/HotelSystem/Floors/Floors";
 import MealPlans from "./components/HotelSystem/MealPlans/MealPlans";
 import PaxRates from "./components/HotelSystem/PaxRates/PaxRates";
@@ -34,6 +35,7 @@ const App = () => {
       <Route path="/admin" element={<AdminPage />} /> //Ported
       <Route path="/departments" element= {<Departments />} />
       <Route path="/conferenceRooms" element={<ConferenceRooms />} />
+      <Route path="/blocks" element={<Blocks />} />
       <Route path="/floors" element={<Floors />} />
       <Route path="/mealplanrates" element={<MealPlans />} />
       <Route path="/paxrates" element={<PaxRates />} />

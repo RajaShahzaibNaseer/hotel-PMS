@@ -38,7 +38,7 @@ const ClientList = () => {
 
   const Button = ({text, type, handler}) => (
     <button 
-      className="w-[80%] p-[12px] bg-[#6e8efb] text-white border-none rounded-[5px] text-[18px] cursor-pointer 
+      className="w-4/5 p-3 mb-5 bg-[#6e8efb] text-white border-none rounded-[5px] text-[18px] cursor-pointer 
       transition duration-300 ease-in-out hover:bg-[#5a7dfb] hover:shadow-[0_0_12px_rgba(110,142,251,0.5)]"
       type={type} 
       onClick={handler}

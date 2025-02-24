@@ -30,7 +30,7 @@ const App = () => {
       <Route path="/agents" element= {<Agents></Agents>} /> //Ported
       <Route path="/company" element={<Company></Company>} /> //Ported
       <Route path="/clientlist" element={<ClientList></ClientList>} /> //Ported
-      <Route path="/navigator" element={<Navigator></Navigator>} />
+      <Route path="/navigator" element={<Navigator></Navigator>} /> //Ported
       <Route path="/admin" element={<AdminPage />} />
       <Route path="/departments" element= {<Departments />} />
       <Route path="/conferenceRooms" element={<ConferenceRooms />} />

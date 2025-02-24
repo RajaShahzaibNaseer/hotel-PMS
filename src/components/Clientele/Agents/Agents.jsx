@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import "./Agents.css";
 import { useNavigate } from "react-router-dom";
 
 const Agents = () => {
@@ -50,159 +49,153 @@ const Agents = () => {
     
   };
 
+  const Button = ({text, type, handler}) => (
+    <button 
+      className="w-[80%] p-[12px] bg-[#6e8efb] text-white border-none rounded-[5px] text-[18px] cursor-pointer 
+      transition duration-300 ease-in-out hover:bg-[#5a7dfb] hover:shadow-[0_0_12px_rgba(110,142,251,0.5)]"
+      type={type} 
+      onClick={handler}
+      >
+        {text}
+    </button>
+  )
+
+  const InputField = ({ label, name, type, value, onChange, required }) => (
+    <div className="mb-5 mr-5 text-left">
+      <label className="block font-bold mb-1.5 text-[#bbb]">{label}:</label>
+      <input
+        className="w-full p-[10px] bg-[#333] border border-[#444] rounded-s-md 
+        text-white text-[16px] outline-none transition duration-300 focus:border-[#6e8efb] 
+          focus:shadow-[0_0_8px_rgba(110,142,251,0.6)]"
+        type={type}
+        name={name}
+        value={value}
+        onChange={onChange}
+        required={required}
+      />
+    </div>
+  );
+
   return (
-    <div className="agent-container">
-      <form className="login-form" onSubmit={handleSubmit}>
+    <div className="flex justify-center items-center h-auto bg-gradient-to-br from-[#1e1e1e] to-[#282c34]">
+      <form className="bg-[#222] p-8 rounded-[10px] shadow-[0_5px_15px_rgba(0,0,0,0.3)] 
+        w-[320px] text-center" 
+        onSubmit={handleSubmit}>
         <h2>Agent Data</h2>
 
-        {/* Agency Name */}
-        <div className="input-group">
-          <label>Agency Name:</label>
-          <input
-            type="text"
-            name="agencyName"
-            value={formData.agencyName}
-            onChange={handleChange}
-            required
-          />
-        </div>
+        <InputField 
+          label="Agency Name" 
+          name="agencyName" 
+          type="text" 
+          value={formData.agencyName} 
+          onChange={handleChange} 
+          required 
+        />
 
-        {/* Agent Full Name */}
-        <div className="input-group">
-          <label>Agent Full Name:</label>
-          <input
-            type="text"
-            name="agentFullName"
-            value={formData.agentFullName}
-            onChange={handleChange}
-            required
-          />
-        </div>
+        <InputField 
+          label="Agency Full Name" 
+          name="agentFullName" 
+          type="text" 
+          value={formData.agentFullName} 
+          onChange={handleChange} 
+          required 
+        />
 
-        {/* Registration No */}
-        <div className="input-group">
-          <label>Registration No:</label>
-          <input
-            type="text"
-            name="registrationNo"
-            value={formData.registrationNo}
-            onChange={handleChange}
-            required
-          />
-        </div>
+        <InputField 
+          label="Registration No" 
+          name="registrationNo" 
+          type="text" 
+          value={formData.registrationNo} 
+          onChange={handleChange} 
+          required 
+        />
 
-        {/* Tax Identification Number */}
-        <div className="input-group">
-          <label>Tax Identification Number:</label>
-          <input
-            type="text"
-            name="taxIdentificationNo"
-            value={formData.taxIdentificationNo}
-            onChange={handleChange}
-            required
-          />
-        </div>
+        <InputField 
+          label="Tax Identification Number" 
+          name="taxIdentificationNo" 
+          type="text" 
+          value={formData.taxIdentificationNo} 
+          onChange={handleChange} 
+          required 
+        />
 
-        {/* Physical Address */}
-        <div className="input-group">
-          <label>Physical Address:</label>
-          <input
-            type="text"
-            name="physicalAddress"
-            value={formData.physicalAddress}
-            onChange={handleChange}
-            required
-          />
-        </div>
+        <InputField 
+          label="Physical Address" 
+          name="physicalAddress" 
+          type="text" 
+          value={formData.physicalAddress} 
+          onChange={handleChange} 
+          required 
+        />
 
-        {/* Agent Phone Number */}
-        <div className="input-group">
-          <label>Agent Phone No:</label>
-          <input
-            type="tel"
-            name="agencyPhoneNo"
-            value={formData.agencyPhoneNo}
-            onChange={handleChange}
-            required
-          />
-        </div>
+        <InputField 
+          label="Agent Phone No" 
+          name="agencyPhoneNo" 
+          type="tel" 
+          value={formData.agencyPhoneNo} 
+          onChange={handleChange} 
+          required 
+        />
 
-        {/* agent Email */}
-        <div className="input-group">
-          <label>Agent Email:</label>
-          <input
-            type="email"
-            name="agencyEmail"
-            value={formData.agencyEmail}
-            onChange={handleChange}
-            required
-          />
-        </div>
+        <InputField 
+          label="Agent Email" 
+          name="agencyEmail" 
+          type="email" 
+          value={formData.agencyEmail} 
+          onChange={handleChange} 
+          required 
+        />
 
-        {/* website */}
-        <div className="input-group">
-          <label>Website:</label>
-          <input
-            type="text"
-            name="website"
-            value={formData.website}
-            onChange={handleChange}
-            required
-          />
-        </div>
+        <InputField 
+          label="Website" 
+          name="website" 
+          type="text" 
+          value={formData.website} 
+          onChange={handleChange} 
+          required 
+        />
 
         <h2>Primary Contact Person Information</h2>
 
-        {/* full name */}
-        <div className="input-group">
-          <label>Full Name:</label>
-          <input
-            type="text"
-            name="fullName"
-            value={formData.fullName}
-            onChange={handleChange}
-            required
-          />
-        </div>
+        <InputField 
+          label="Full Name" 
+          name="fullName" 
+          type="text" 
+          value={formData.fullName} 
+          onChange={handleChange} 
+          required 
+        />
 
-        {/* Designation */}
-        <div className="input-group">
-          <label>Designation:</label>
-          <input
-            type="text"
-            name="designation"
-            value={formData.designation}
-            onChange={handleChange}
-            required
-          />
-        </div>
+        <InputField 
+          label="Designation" 
+          name="designation" 
+          type="text" 
+          value={formData.designation} 
+          onChange={handleChange} 
+          required 
+        />
 
-        {/* email */}
-        <div className="input-group">
-          <label>Email:</label>
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
-        </div>
+        <InputField 
+          label="Email" 
+          name="email" 
+          type="email" 
+          value={formData.email} 
+          onChange={handleChange} 
+          required 
+        />
 
-        {/* phoneNo */}
-        <div className="input-group">
-          <label>Phone No:</label>
-          <input
-            type="tel"
-            name="phoneNo"
-            value={formData.phoneNo}
-            onChange={handleChange}
-            required
-          />
-        </div>
+        <InputField 
+          label="Phone No" 
+          name="phoneNo" 
+          type="tel" 
+          value={formData.phoneNo} 
+          onChange={handleChange} 
+          required 
+        />
 
-        <button type="submit" onClick={handleSubmit}>Submit</button>
-        <button onClick={goToList}>Go Back</button>
+        <Button text={'Submit'} type={'submit'} handler={handleSubmit} />
+        <Button text={'Go Back'} type={'button'} handler={goToList} />
+
       </form>
     </div>
   );

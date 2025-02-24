@@ -2,13 +2,13 @@ const express = require("express");
 const BaseController = require("../Controllers/BaseController");
 
 const router = express.Router();
-const companyController = new BaseController("companies");
+const companyController = new BaseController("agents");
 
-router.get("/", companyController.getAll);
-router.get("/:id", companyController.getOne);
-router.post("/", companyController.create);
-router.put("/:id", companyController.update);
-router.delete("/:id", companyController.delete);
+router.get("/", companyController.getAll.bind(companyController));
+router.get("/:id", companyController.getOne.bind(companyController));
+router.post("/", companyController.create.bind(companyController));
+router.put("/:id", companyController.update.bind(companyController));
+router.delete("/:id", companyController.delete.bind(companyController));
 
 module.exports = router;
 

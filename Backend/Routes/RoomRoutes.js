@@ -2,12 +2,13 @@ const express = require("express");
 const BaseController = require("../Controllers/BaseController");
 
 const router = express.Router();
-const roomController = new BaseController("rooms");
+const roomController = new BaseController("agents");
 
-router.get("/", roomController.getAll);
-router.get("/:id", roomController.getOne);
-router.post("/", roomController.create);
-router.put("/:id", roomController.update);
-router.delete("/:id", roomController.delete);
+router.get("/", roomController.getAll.bind(roomController));
+router.get("/:id", roomController.getOne.bind(roomController));
+router.post("/", roomController.create.bind(roomController));
+router.put("/:id", roomController.update.bind(roomController));
+router.delete("/:id", roomController.delete.bind(roomController));
 
 module.exports = router;
+

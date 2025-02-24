@@ -2,12 +2,13 @@ const express = require("express");
 const BaseController = require("../Controllers/BaseController");
 
 const router = express.Router();
-const departmentController = new BaseController("departments");
+const departmentController = new BaseController("agents");
 
-router.get("/", departmentController.getAll);
-router.get("/:id", departmentController.getOne);
-router.post("/", departmentController.create);
-router.put("/:id", departmentController.update);
-router.delete("/:id", departmentController.delete);
+router.get("/", departmentController.getAll.bind(departmentController));
+router.get("/:id", departmentController.getOne.bind(departmentController));
+router.post("/", departmentController.create.bind(departmentController));
+router.put("/:id", departmentController.update.bind(departmentController));
+router.delete("/:id", departmentController.delete.bind(departmentController));
 
 module.exports = router;
+

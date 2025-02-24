@@ -2,12 +2,13 @@ const express = require("express");
 const BaseController = require("../Controllers/BaseController");
 
 const router = express.Router();
-const floorController = new BaseController("floors");
+const floorController = new BaseController("agents");
 
-router.get("/", floorController.getAll);
-router.get("/:id", floorController.getOne);
-router.post("/", floorController.create);
-router.put("/:id", floorController.update);
-router.delete("/:id", floorController.delete);
+router.get("/", floorController.getAll.bind(floorController));
+router.get("/:id", floorController.getOne.bind(floorController));
+router.post("/", floorController.create.bind(floorController));
+router.put("/:id", floorController.update.bind(floorController));
+router.delete("/:id", floorController.delete.bind(floorController));
 
 module.exports = router;
+

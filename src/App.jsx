@@ -28,7 +28,7 @@ const App = () => {
       <Route path="/" element={<LoginForm />} /> // Ported
       <Route path="/groups" element={<Groups></Groups>} /> //Ported
       <Route path="/agents" element= {<Agents></Agents>} /> //Ported
-      <Route path="/company" element={<Company></Company>} />
+      <Route path="/company" element={<Company></Company>} /> //Ported
       <Route path="/clientlist" element={<ClientList></ClientList>} />
       <Route path="/navigator" element={<Navigator></Navigator>} />
       <Route path="/admin" element={<AdminPage />} />

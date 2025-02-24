@@ -1,71 +1,38 @@
 import { useState, useEffect } from "react";
-import "./AdminPage.css";
 import { toFormData } from "axios";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Navigate, useNavigate, Link, Routes, Route } from "react-router-dom";
+
+import Blocks from '../HotelSystem/Blocks/Blocks'
+import Floors from "../HotelSystem/Floors/Floors";
+import MealPlans from "../HotelSystem/MealPlans/MealPlans";
+import PaxRates from "../HotelSystem/PaxRates/PaxRates";
+import AuxServices from "../HotelSystem/AuxServices/AuxServices";
+import JobTitles from "../HotelSystem/JobTitles/JobTitles";
+import Departments from "../HotelSystem/Departments/Departments";
+import Guests from "../Clientele/Guests/Guests";
+import Rooms from "../HotelSystem/Rooms/Rooms";
+import RoomTypes from "../HotelSystem/RoomTypes/RoomTypes";
+import ConferenceRooms from "../HotelSystem/ConferenceRooms/ConferenceRooms";
 
 const AdminPage = () => {
-
-  const [blocks, setBlocks] = useState([]);
-  const [blockname, SetBlockName] = useState("")
-  const navigate = useNavigate();
-
-
-  //adding blocks
-  const onSubmitForm = async e => {
-    e.preventDefault();
-    try {
-      const body = { blockname };
-      const response = await fetch("http://localhost:5000/blocks", {
-        method: "POST",
-        headers: {"Content-Type" : "application/json"},
-        body: JSON.stringify(body),
-      });
-      console.log(response);
-    } catch (error) {
-      console.error(error.message);
-    }
-  }
   
-  //delete blocks function
-  const deleteBlock = async id =>{
-    try {
-      const deleteBlock = await fetch(`http://localhost:5000/blocks/${id}` , {
-        method: "DELETE"
-      });
+  const navigate = useNavigate();
+  const [selectedPage, setSelectedPage] = useState(<Blocks />);
 
-      setBlocks(blocks.filter(block => block.blockid !== id));
-    } catch (error) {
-
-      console.error(error.message);
-    }
+  const updatePage = (component) => {
+    setSelectedPage(component)
   }
-
-  const getBlocks = async () => {
-    try {
-      const response = await await fetch("http://localhost:5000/blocks");
-      const jsonData = await response.json();
-
-      setBlocks(jsonData);
-    } catch (error) {
-      console.error(error.message);
-    }
-  }
-
-  useEffect(() => {
-    getBlocks();
-  });
-
   const routes = [
-    { title: "Floors", url: "/floors" },
-    { title: "Rooms", url: "/rooms" },
-    { title: "Room Types", url: "/roomtypes" },
-    { title: "Conference Rooms", url: "/conferenceRooms" },
-    { title: "Departments", url: "/departments" },
-    { title: "Jobs", url: "/jobs" },
-    { title: "Auxiliary Services", url: "/services" },
-    { title: "Meal Plan Rates", url: "/mealplanrates" },
-    { title: "Pax Rates", url: "/paxrates" },
-    { title: "Go Back", url: "/navigator" },
+    { title: "Blocks", url: "/blocks", component: <Blocks /> },
+    { title: "Floors", url: "/floors", component: <Floors /> },
+    { title: "Rooms", url: "/rooms", component: <Rooms /> },
+    { title: "Room Types", url: "/roomtypes", component: <RoomTypes /> },
+    { title: "Conference Rooms", url: "/conferenceRooms", component: <ConferenceRooms /> },
+    { title: "Departments", url: "/departments", component: <Departments /> },
+    { title: "Jobs", url: "/jobs", component: <JobTitles /> },
+    { title: "Auxiliary Services", url: "/services", component: <AuxServices /> },
+    { title: "Meal Plan Rates", url: "/mealplanrates", component: <MealPlans /> },
+    { title: "Pax Rates", url: "/paxrates", component: <PaxRates /> },
   ];
 
   return (
@@ -77,49 +44,28 @@ const AdminPage = () => {
         
         {/* Navigation Buttons */}
         <div>
-          {routes.map(({ title, url }) => (
+          {routes.map(({ title, component }) => (
             <button
-              key={url}
-              onClick={() => navigate(url)}
+              key={title}
               className="w-full mt-2 py-2 bg-gray-800 hover:bg-gray-700 rounded-md text-white font-medium transition"
+              onClick={() => updatePage(component)}
             >
               {title}
             </button>
           ))}
+          <button 
+            className="w-full mt-2 py-2 bg-gray-800 hover:bg-gray-700 rounded-md text-white font-medium transition"
+            onClick={() => navigate('/navigator')}
+            >
+                Go Back
+          </button>
         </div>
       </nav>
-
-      {/* Blocks Table */}
-      <div className="flex-grow p-5 overflow-y-auto">
-        <h3 className="text-lg font-semibold mb-4">Blocks List</h3>
-        <div className="overflow-x-auto">
-          <table className="w-full border-collapse border border-gray-700 text-center">
-            <thead>
-              <tr className="bg-gray-800 text-gray-300">
-                <th className="border border-gray-700 p-3">Block ID</th>
-                <th className="border border-gray-700 p-3">Block Name</th>
-                <th className="border border-gray-700 p-3">Options</th>
-              </tr>
-            </thead>
-            <tbody>
-              {blocks.map((block) => (
-                <tr key={block.blockid} className="bg-gray-900 hover:bg-gray-800 transition">
-                  <td className="border border-gray-700 p-3">{block.blockid}</td>
-                  <td className="border border-gray-700 p-3">{block.blockname}</td>
-                  <td className="border border-gray-700 p-3">
-                    <button
-                      onClick={() => deleteBlock(block.blockid)}
-                      className="px-4 py-2 bg-red-600 hover:bg-red-500 text-white rounded-md transition"
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+      {/* Main Content Area */}
+      <div className="flex-1 p-6">
+        {selectedPage}
       </div>
+      
     </div>
   );
 };

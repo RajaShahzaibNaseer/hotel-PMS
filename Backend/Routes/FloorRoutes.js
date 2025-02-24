@@ -1,7 +1,7 @@
-import express from "express";
-import BaseController from "../Controllers/BaseController";
+const express = require("express");
+const BaseController = require("../Controllers/BaseController");
 
-const router = express.router;
+const router = express.Router();
 const floorController = new BaseController("floors");
 
 router.get("/", floorController.getAll);

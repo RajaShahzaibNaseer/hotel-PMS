@@ -25,8 +25,8 @@ import ShowGroups from "./components/Clientele/Groups/ShowGroups";
 const App = () => {
   return (
     <Routes>
-      <Route path="/" element={<LoginForm />} />
-      <Route path="/groups" element={<Groups></Groups>} />
+      <Route path="/" element={<LoginForm />} /> // Ported
+      <Route path="/groups" element={<Groups></Groups>} /> //Ported
       <Route path="/agents" element= {<Agents></Agents>} />
       <Route path="/company" element={<Company></Company>} />
       <Route path="/clientlist" element={<ClientList></ClientList>} />

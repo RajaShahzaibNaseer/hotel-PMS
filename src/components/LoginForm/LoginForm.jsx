@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import "./LoginForm.css"; // Import the dark theme CSS
 import { useNavigate } from "react-router-dom";
 
 const LoginForm = () => {

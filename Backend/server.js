@@ -10,7 +10,10 @@ const jobRoute = require("./Routes/JobTitleRoutes");
 const auxRoute = require("./Routes/AuxRoutes");
 const mealPlanRoute = require("./Routes/MealPlanRoutes");
 const paxRateRoute = require("./Routes/PaxRateRoutes");
-
+const guestRoute = require("./Routes/GuestRoutes");
+const companyRoute = require("./Routes/CompanyRoutes");
+const agentRoute = require("./Routes/AgentRoutes");
+const groupRoute = require("./Routes/GroupRoutes");
 require("dotenv").config();
 
 const app = express();

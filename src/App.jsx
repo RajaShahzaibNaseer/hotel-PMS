@@ -36,7 +36,7 @@ const App = () => {
       <Route path="/departments" element= {<Departments />} />
       <Route path="/conferenceRooms" element={<ConferenceRooms />} />
       <Route path="/blocks" element={<Blocks />} /> //Ported
-      <Route path="/floors" element={<Floors />} />
+      <Route path="/floors" element={<Floors />} /> //Ported
       <Route path="/mealplanrates" element={<MealPlans />} />
       <Route path="/paxrates" element={<PaxRates />} />
       <Route path="/services" element={<AuxServices />} />

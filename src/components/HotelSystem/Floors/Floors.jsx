@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import "./Floors.css";
 import { toFormData } from "axios";
 import { Navigate, useNavigate } from "react-router-dom";
 
@@ -112,7 +111,7 @@ const Floors = () => {
         <table className="w-full border-collapse border border-gray-700 text-center">
           <thead>
             <tr className="bg-gray-800 text-gray-300">
-              <th className="border border-gray-700 p-3">FloorID</th>
+              <th className="border border-gray-700 p-3">Floor ID</th>
               <th className="border border-gray-700 p-3">Floor Name</th>
               <th className="border border-gray-700 p-3">Block Name</th>
               <th className="border border-gray-700 p-3">Options</th>

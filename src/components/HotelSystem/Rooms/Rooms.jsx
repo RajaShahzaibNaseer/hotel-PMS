@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import "./Rooms.css";
 import { toFormData } from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -60,49 +59,84 @@ const Rooms = () => {
   });
 
   return (
-    <div className="admin-container">
-      <nav className="vertical-navbar">
-        <h2>Welcome, Admin</h2>
-        <form onSubmit={onSubmitForm}>
-          <input type="text" name="roomNumber" value={roomNumber} onChange={e => setRoomNumber(e.target.value)} />
-          <input type="text" name="floorID" value={floorID} onChange={e => setFloorID(e.target.value)} />
-          <input type="text" name="roomTypeID" value={roomTypeID} onChange={e => setRoomTypeID(e.target.value)} />
-          <button type="submit">Add Data</button>
-        </form>
-        <button onClick={() => navigate("/admin")}>Blocks</button>
-        <button onClick={() => navigate("/floors")}>Floors</button>
-        <button onClick={() => navigate("/roomtypes")}>Room Types</button>
-        <button onClick={() => navigate("/conferenceRooms")}>Conference Rooms</button>
-        <button onClick={() => navigate("/departments")}>Departments</button>
-        <button onClick={() => navigate("/jobs")}>jobs</button>
-        <button onClick={() => navigate("/services")}>Auxilary Services</button>
-        <button onClick={() => navigate("/mealplanrates")}>Meal Plans</button>
-        <button onClick={() => navigate("/paxrates")}>Pax Rates</button>
-        <button onClick={() => navigate("/navigator")}>Go Back</button>
-      </nav>
-      <div className="table-container">
-        <table>
+    <div className="min-h-screen mx-auto p-6 bg-gray-900 text-white shadow-lg">
+      
+      <h2 className="text-2xl font-semibold mb-4 text-center">Manage Rooms</h2>
+      {/* Form */}
+      <form onSubmit={onSubmitForm} className="flex gap-3 mb-6">
+        <input 
+          type="text" 
+          name="roomNumber" 
+          placeholder="Enter Room Number"
+          className="flex-1 px-4 py-2 bg-gray-800 border border-gray-700 rounded-md 
+          text-white outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
+          value={roomNumber} 
+          onChange={e => setRoomNumber(e.target.value)} 
+        />
+        <input 
+          type="text" 
+          name="floorID"
+          placeholder="Enter Floor ID"
+          className="flex-1 px-4 py-2 bg-gray-800 border border-gray-700 rounded-md 
+          text-white outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
+          value={floorID} 
+          onChange={e => setFloorID(e.target.value)} 
+        />
+        <input 
+          type="text" 
+          name="roomTypeID"
+          placeholder="Enter Room type ID"
+          className="flex-1 px-4 py-2 bg-gray-800 border border-gray-700 rounded-md 
+          text-white outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
+          value={roomTypeID} 
+          onChange={e => setRoomTypeID(e.target.value)} 
+        />
+        <button 
+          type="submit"
+          className="px-5 py-2 bg-gray-800 hover:bg-gray-700 text-white rounded-md transition"
+        >
+          Add Data
+        </button>
+      </form>
+      {/* Rooms Table */}
+      <div className="overflow-x-auto">
+        <table className="w-full border-collapse border border-gray-700 text-center">
           <thead>
-            <tr>
-              <th>Room ID</th>
-              <th>Room Number</th>
-              <th>Floor ID</th>
-              <th>Room Type</th>
-              <th>Room Status</th>
-              <th>Options</th>
+            <tr className="bg-gray-800 text-gray-300">
+              <th className="border border-gray-700 p-3">Room ID</th>
+              <th className="border border-gray-700 p-3">Room Number</th>
+              <th className="border border-gray-700 p-3">Floor ID</th>
+              <th className="border border-gray-700 p-3">Room Type</th>
+              <th className="border border-gray-700 p-3">Room Status</th>
+              <th className="border border-gray-700 p-3">Options</th>
             </tr>
           </thead>
           <tbody>
-            {rooms.map(room => (
-              <tr key={room.roomid}>
-                <td>{room.roomid}</td>
-                <td>{room.roomnumber}</td>
-                <td>{room.floorid}</td>
-                <td>{room.roomtypeid}</td>
-                <td>{room.status}</td>
-                <td><button onClick={() => deleteRoom(room.roomid)}>Delete</button></td>
+            {rooms.length > 0 ? (
+              rooms.map(room => (
+                <tr key={room.roomid} className="bg-gray-900 hover:bg-gray-800 transition">
+                  <td className="border border-gray-700 p-3">{room.roomid}</td>
+                  <td className="border border-gray-700 p-3">{room.roomnumber}</td>
+                  <td className="border border-gray-700 p-3">{room.floorid}</td>
+                  <td className="border border-gray-700 p-3">{room.roomtypeid}</td>
+                  <td className="border border-gray-700 p-3">{room.status}</td>
+                  <td>
+                    <button 
+                      onClick={() => deleteRoom(room.roomid)}
+                      className="px-4 py-2 bg-red-600 hover:bg-red-500 text-white rounded-md transition"
+                    >
+                      Delete
+                      </button>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="6" className="p-4 text-gray-400">
+                  No rooms found.
+                </td>
               </tr>
-            ))
+            )
             }
           </tbody>
         </table>

@@ -34,7 +34,7 @@ const App = () => {
       <Route path="/navigator" element={<Navigator />} /> //Ported
       <Route path="/admin" element={<AdminPage />} /> //Ported
       <Route path="/departments" element= {<Departments />} />
-      <Route path="/conferenceRooms" element={<ConferenceRooms />} />
+      <Route path="/conferenceRooms" element={<ConferenceRooms />} /> //Ported
       <Route path="/blocks" element={<Blocks />} /> //Ported
       <Route path="/floors" element={<Floors />} /> //Ported
       <Route path="/mealplanrates" element={<MealPlans />} />

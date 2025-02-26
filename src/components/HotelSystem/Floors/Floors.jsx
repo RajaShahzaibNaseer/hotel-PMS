@@ -80,7 +80,7 @@ const Floors = () => {
     <div className="min-h-screen mx-auto p-6 bg-gray-900 text-white shadow-lg">
       <h2 className="text-2xl font-semibold mb-4 text-center">Manage Floors</h2>
 
-      <form onSubmit={onSubmitForm} className="flex gap-3 mb-6">
+      <form onSubmit={onSubmitForm} className="flex flex-wrap gap-3 mb-6">
         <input 
           type="text" 
           name="Floorname"

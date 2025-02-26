@@ -63,7 +63,7 @@ const Rooms = () => {
       
       <h2 className="text-2xl font-semibold mb-4 text-center">Manage Rooms</h2>
       {/* Form */}
-      <form onSubmit={onSubmitForm} className="flex gap-3 mb-6">
+      <form onSubmit={onSubmitForm} className="flex flex-wrap gap-3 mb-6">
         <input 
           type="text" 
           name="roomNumber" 
@@ -95,13 +95,13 @@ const Rooms = () => {
           type="submit"
           className="px-5 py-2 bg-gray-800 hover:bg-gray-700 text-white rounded-md transition"
         >
-          Add Data
+          Add
         </button>
       </form>
       {/* Rooms Table */}
       <div className="overflow-x-auto">
         <table className="w-full border-collapse border border-gray-700 text-center">
-          <thead>
+          <thead className="text-sm sm:text-base">
             <tr className="bg-gray-800 text-gray-300">
               <th className="border border-gray-700 p-3">Room ID</th>
               <th className="border border-gray-700 p-3">Room Number</th>
@@ -111,7 +111,7 @@ const Rooms = () => {
               <th className="border border-gray-700 p-3">Options</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="text-sm sm:text-base">
             {rooms.length > 0 ? (
               rooms.map(room => (
                 <tr key={room.roomid} className="bg-gray-900 hover:bg-gray-800 transition">

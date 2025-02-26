@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import "./MealPlans.css";
 import { toFormData } from "axios";
 import { useNavigate } from "react-router-dom";
+import DataTableForm from "../../UI/DataTableForm";
 
 const MealPlans = () => {
 
@@ -57,49 +57,32 @@ const MealPlans = () => {
   });
 
   return (
-    <div className="admin-container">
-      <nav className="vertical-navbar">
-        <h2>Welcome, Admin</h2>
-        <form onSubmit={onSubmitForm}>
-          <input type="text" name="mealPlanName" value={mealPlanName} onChange={e => setMealPlanName(e.target.value)} />
-          <input type="text" name="mealPlanPrice" value={mealPlanPrice} onChange={e => setMealPlanPrice(e.target.value)} />
-          <button type="submit">Add Data</button>
-        </form>
-          <button onClick={() => navigate("/admin")}>Blocks</button>
-          <button onClick={() => navigate("/floors")}>Floors</button>
-          <button onClick={() => navigate("/rooms")}>Rooms</button>
-          <button onClick={() => navigate("/roomtypes")}>Room Types</button>
-          <button onClick={() => navigate("/conferenceRooms")}>Conference Rooms</button>
-          <button onClick={() => navigate("/departments")}>Departments</button>
-          <button onClick={() => navigate("/jobs")}>jobs</button>
-          <button onClick={() => navigate("/services")}>Auxilary Services</button>
-          <button onClick={() => navigate("/paxrates")}>Pax Rates</button>
-          <button onClick={() => navigate("/navigator")}>Go Back</button>
-      </nav>
-      <div className="table-container">
-        <table>
-          <thead>
-            <tr>
-              <th>Meal Plan ID</th>
-              <th>Meal Plan Name</th>
-              <th>Meal Plan Price</th>
-              <th>Options</th>
-            </tr>
-          </thead>
-          <tbody>
-            {mealPlans.map(mealPlan => (
-              <tr key={mealPlan.mealplanrateid}>
-                <td>{mealPlan.mealplanrateid}</td>
-                <td>{mealPlan.mealplanname}</td>
-                <td>{mealPlan.price}</td>
-                <td><button onClick={() => deleteMealPlan(mealPlan.mealplanrateid)}>Delete</button></td>
-              </tr>
-            ))
-            }
-          </tbody>
-        </table>
-      </div>
-    </div>
+    <DataTableForm
+        title="Manage Departments"
+        formFields={[
+          {
+            type: "text",
+            name: "mealPlanName",
+            placeholder: "Enter Meal Plan Name",
+            value: mealPlanName,
+            onChange: (e) => setMealPlanName(e.target.value),
+          },
+          {
+            type: "number",
+            name: "mealPlanPrice",
+            placeholder: "Enter Meal Price",
+            value: mealPlanPrice,
+            onChange: (e) => setMealPlanPrice(e.target.value),
+          },
+        ]}
+        onFormSubmit={onSubmitForm}
+        tableHeaders={["Meal Plan ID", "Meal Plan Name", "Meal Plan Price", "Options"]}
+        tableData={mealPlans}
+        dataKeys={["mealplanrateid", "mealplanname", "price"]}
+        renderActions={(row) => (
+          <button onClick={() => deleteMealPlan(row.mealplanrateid)}>Delete</button>
+        )}
+    />
   );
 };
 

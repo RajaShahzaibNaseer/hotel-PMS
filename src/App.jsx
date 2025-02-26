@@ -42,8 +42,8 @@ const App = () => {
       <Route path="/services" element={<AuxServices />} />
       <Route path="/jobs" element ={<JobTitles />} />
       <Route path="/guests" element = {<Guests />} /> //Ported
-      <Route path="/rooms" element = {<Rooms></Rooms>} />
-      <Route path="/roomtypes" element = {<RoomTypes />} />
+      <Route path="/rooms" element = {<Rooms></Rooms>} /> //Ported
+      <Route path="/roomtypes" element = {<RoomTypes />} /> //Ported
       <Route path="/guestlist" element = {<ShowGuests />} />
       <Route path="/companylist" element = {<ShowCompany />} />
       <Route path="/agentlist" element ={<ShowAgents />} />

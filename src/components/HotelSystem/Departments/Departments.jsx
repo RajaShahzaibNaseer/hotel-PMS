@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import "./Departments.css";
 import { toFormData } from "axios";
 import { useNavigate } from "react-router-dom";
+import DataTableForm from "../../UI/DataTableForm";
 
 const Departments = () => {
 
@@ -56,46 +56,25 @@ const Departments = () => {
   });
 
   return (
-    <div className="admin-container">
-      <nav className="vertical-navbar">
-        <h2>Welcome, Admin</h2>
-        <form onSubmit={onSubmitForm}>
-          <input type="text" name="departmentname" value={departmentname} onChange={e => setDepartmentName(e.target.value)} />
-          <button type="submit">Add Data</button>
-        </form>
-          <button onClick={() => navigate("/admin")}>Blocks</button>
-          <button onClick={() => navigate("/floors")}>Floors</button>
-          <button onClick={() => navigate("/rooms")}>Rooms</button>
-          <button onClick={() => navigate("/roomtypes")}>Room Types</button>
-          <button onClick={() => navigate("/conferenceRooms")}>Conference Rooms</button>
-          <button onClick={() => navigate("/jobs")}>jobs</button>
-          <button onClick={() => navigate("/services")}>Auxilary Services</button>
-          <button onClick={() => navigate("/mealplanrates")}>Meal Plans</button>
-          <button onClick={() => navigate("/paxrates")}>Pax Rates</button>
-          <button onClick={() => navigate("/navigator")}>Go Back</button>
-      </nav>
-      <div className="table-container">
-        <table>
-          <thead>
-            <tr>
-              <th>Department ID</th>
-              <th>Department Name</th>
-              <th>Options</th>
-            </tr>
-          </thead>
-          <tbody>
-            {departments.map(department => (
-              <tr key={department.departmentid}>
-                <td>{department.departmentid}</td>
-                <td>{department.departmentname}</td>
-                <td><button onClick={() => deleteDepartment(department.departmentid)}>Delete</button></td>
-              </tr>
-            ))
-            }
-          </tbody>
-        </table>
-      </div>
-    </div>
+    <DataTableForm
+      title="Manage Departments"
+      formFields={[
+        {
+          type: "text",
+          name: "departmentname",
+          placeholder: "Enter Department Name",
+          value: departmentname,
+          onChange: (e) => setDepartmentName(e.target.value),
+        },
+      ]}
+      onFormSubmit={onSubmitForm}
+      tableHeaders={["Department ID", "Department Name", "Options"]}
+      tableData={departments}
+      dataKeys={["departmentid", "departmentname"]}
+      renderActions={(department) => (
+        <button onClick={() => deleteDepartment(department.departmentid)}>Delete</button>
+      )}
+    />
   );
 };
 

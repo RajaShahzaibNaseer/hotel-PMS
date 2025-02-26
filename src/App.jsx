@@ -33,7 +33,7 @@ const App = () => {
       <Route path="/clientlist" element={<ClientList />} /> //Ported
       <Route path="/navigator" element={<Navigator />} /> //Ported
       <Route path="/admin" element={<AdminPage />} /> //Ported
-      <Route path="/departments" element= {<Departments />} />
+      <Route path="/departments" element= {<Departments />} /> //Ported
       <Route path="/conferenceRooms" element={<ConferenceRooms />} /> //Ported
       <Route path="/blocks" element={<Blocks />} /> //Ported
       <Route path="/floors" element={<Floors />} /> //Ported

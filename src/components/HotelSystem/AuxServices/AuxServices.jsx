@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import "./AuxServices.css";
 import { toFormData } from "axios";
 import { useNavigate } from "react-router-dom";
+import DataTableForm from "../../UI/DataTableForm";
 
 const AuxServices = () => {
 
@@ -57,49 +57,32 @@ const AuxServices = () => {
   });
 
   return (
-    <div className="admin-container">
-      <nav className="vertical-navbar">
-        <h2>Welcome, Admin</h2>
-        <form onSubmit={onSubmitForm}>
-          <input type="text" name="serviceName" value={serviceName} onChange={e => setserviceName(e.target.value)} />
-          <input type="text" name="servicePrice" value={servicePrice} onChange={e => setservicePrice(e.target.value)} />
-          <button type="submit">Add Data</button>
-        </form>
-        <button onClick={() => navigate("/admin")}>Blocks</button>
-        <button onClick={() => navigate("/floors")}>Floors</button>
-        <button onClick={() => navigate("/rooms")}>Rooms</button>
-        <button onClick={() => navigate("/roomtypes")}>Room Types</button>
-        <button onClick={() => navigate("/conferenceRooms")}>Conference Rooms</button>
-        <button onClick={() => navigate("/departments")}>Departments</button>
-        <button onClick={() => navigate("/jobs")}>jobs</button>
-        <button onClick={() => navigate("/mealplanrates")}>Meal Plans</button>
-        <button onClick={() => navigate("/paxrates")}>Pax Rates</button>
-        <button onClick={() => navigate("/navigator")}>Go Back</button>
-      </nav>
-      <div className="table-container">
-        <table>
-          <thead>
-            <tr>
-              <th>service ID</th>
-              <th>service Name</th>
-              <th>service Price</th>
-              <th>Options</th>
-            </tr>
-          </thead>
-          <tbody>
-            {service.map(service => (
-              <tr key={service.serviceid}>
-                <td>{service.serviceid}</td>
-                <td>{service.servicename}</td>
-                <td>{service.price}</td>
-                <td><button onClick={() => deleteservice(service.serviceid)}>Delete</button></td>
-              </tr>
-            ))
-            }
-          </tbody>
-        </table>
-      </div>
-    </div>
+    <DataTableForm
+      title="Manage Aux Services"
+      formFields={[
+        {
+          type: "text",
+          name: "serviceName",
+          placeholder: "Enter Job Title Name",
+          value: serviceName,
+          onChange: (e) => setserviceName(e.target.value),
+        },
+        {
+          type: "text",
+          name: "servicePrice",
+          placeholder: "Enter Service Price",
+          value: servicePrice,
+          onChange: (e) => setservicePrice(e.target.value),
+        },
+      ]}
+      onFormSubmit={onSubmitForm}
+      tableHeaders={["Service ID", "Service Name", "Service Price", "Options"]}
+      tableData={service}
+      dataKeys={["serviceid", "servicename", "price"]}
+      renderActions={(row) => (
+        <button onClick={() => deleteservice(row.serviceid)}>Delete</button>
+      )}
+    />
   );
 };
 

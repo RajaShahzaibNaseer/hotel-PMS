@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import "./PaxRates.css";
 import { toFormData } from "axios";
 import { useNavigate } from "react-router-dom";
+import DataTableForm from "../../UI/DataTableForm";
 
 const PaxRates = () => {
 
@@ -57,49 +57,32 @@ const PaxRates = () => {
   });
 
   return (
-    <div className="admin-container">
-      <nav className="vertical-navbar">
-        <h2>Welcome, Admin</h2>
-        <form onSubmit={onSubmitForm}>
-          <input type="text" name="paxRateName" value={paxRateName} onChange={e => setpaxRateName(e.target.value)} />
-          <input type="text" name="paxRatePrice" value={paxRatePrice} onChange={e => setpaxRatePrice(e.target.value)} />
-          <button type="submit">Add Data</button>
-        </form>
-          <button onClick={() => navigate("/admin")}>Blocks</button>
-          <button onClick={() => navigate("/floors")}>Floors</button>
-          <button onClick={() => navigate("/rooms")}>Rooms</button>
-          <button onClick={() => navigate("/roomtypes")}>Room Types</button>
-          <button onClick={() => navigate("/conferenceRooms")}>Conference Rooms</button>
-          <button onClick={() => navigate("/departments")}>Departments</button>
-          <button onClick={() => navigate("/jobs")}>jobs</button>
-          <button onClick={() => navigate("/services")}>Auxilary Services</button>
-          <button onClick={() => navigate("/mealplanrates")}>Meal Plans</button>
-          <button onClick={() => navigate("/navigator")}>Go Back</button>
-      </nav>
-      <div className="table-container">
-        <table>
-          <thead>
-            <tr>
-              <th>Pax Rate ID</th>
-              <th>Pax Rate Name</th>
-              <th>Pax Rate Price</th>
-              <th>Options</th>
-            </tr>
-          </thead>
-          <tbody>
-            {paxRates.map(paxRate => (
-              <tr key={paxRate.paxrateid}>
-                <td>{paxRate.paxrateid}</td>
-                <td>{paxRate.paxratename}</td>
-                <td>{paxRate.price}</td>
-                <td><button onClick={() => deletepaxRate(paxRate.paxrateid)}>Delete</button></td>
-              </tr>
-            ))
-            }
-          </tbody>
-        </table>
-      </div>
-    </div>
+    <DataTableForm
+      title="Manage Pax Rates"
+      formFields={[
+        {
+          type: "text",
+          name: "paxRateName",
+          placeholder: "Enter Pax Rate Name",
+          value: paxRateName,
+          onChange: (e) => setpaxRateName(e.target.value),
+        },
+        {
+          type: "text",
+          name: "paxRatePrice",
+          placeholder: "Enter Pax Rate Price",
+          value: paxRatePrice,
+          onChange: (e) => setpaxRatePrice(e.target.value),
+        },
+      ]}
+      onFormSubmit={onSubmitForm}
+      tableHeaders={["Pax Rate ID", "Pax Rate Name", "Pax Rate Price", "Options"]}
+      tableData={paxRates}
+      dataKeys={["paxrateid", "paxratename", "price"]}
+      renderActions={(row) => (
+        <button onClick={() => deletepaxRate(row.paxrateid)}>Delete</button>
+      )}
+    />
   );
 };
 

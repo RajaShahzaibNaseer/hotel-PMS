@@ -2,7 +2,7 @@ const express = require("express");
 const BaseController = require("../Controllers/BaseController");
 
 const router = express.Router();
-const guestController = new BaseController("agents");
+const guestController = new BaseController("guests");
 
 router.get("/", guestController.getAll.bind(guestController));
 router.get("/:id", guestController.getOne.bind(guestController));

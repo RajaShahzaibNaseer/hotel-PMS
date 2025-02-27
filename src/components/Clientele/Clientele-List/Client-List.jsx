@@ -3,28 +3,6 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const ClientList = () => {
-  const navigate = useNavigate();
-
-  const goToGuest = () => {
-    navigate("/guestlist")
-  };
-
-  const goToCompany = () => {
-    navigate("/companylist")
-  };
-  
-  const goToAgents = () => {
-    navigate("/agentlist")
-  };
-
-  const goToGroups = () => {
-    navigate("/grouplist")
-  };
-
-  const goToMain = () =>
-  {
-    navigate("/navigator")
-  }
 
   const Button = ({text, type, url}) => {
     const navigate = useNavigate();

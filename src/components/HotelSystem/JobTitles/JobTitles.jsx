@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import "./JobTitles.css";
 import { toFormData } from "axios";
 import { Navigate, useNavigate } from "react-router-dom";
 import DataTableForm from "../../UI/DataTableForm";

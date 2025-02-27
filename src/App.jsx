@@ -46,10 +46,10 @@ const App = () => {
       <Route path="/rooms" element = {<Rooms />} /> //Ported
       <Route path="/roomtypes" element = {<RoomTypes />} /> //Ported
 
-      <Route path="/guestlist" element = {<ShowGuests />} />
-      <Route path="/companylist" element = {<ShowCompany />} />
-      <Route path="/agentlist" element ={<ShowAgents />} />
-      <Route path="/grouplist" element={<ShowGroups />} />
+      <Route path="/guestlist" element = {<ShowGuests />} /> //Ported
+      <Route path="/companylist" element = {<ShowCompany />} /> //Ported
+      <Route path="/agentlist" element ={<ShowAgents />} /> //Ported
+      <Route path="/grouplist" element={<ShowGroups />} /> 
     </Routes>
   );
 };

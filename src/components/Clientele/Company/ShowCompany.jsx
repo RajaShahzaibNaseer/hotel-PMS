@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import "./ShowCompany.css";
 import { toFormData } from "axios";
 import { useNavigate } from "react-router-dom";
+import ClienteleHeader from "../../UI/ClienteleHeader";
 
 const ShowCompany = () => {
 
@@ -38,58 +38,57 @@ const ShowCompany = () => {
     getCompany();
   });
 
+  const tableHeaders = [
+    "ID", "Company Name", "Registration No", "Tax ID No", "Business Type", "Physical Address",
+    "Billing Address", "Office Phone No", "Office Email", "Website", "Full Name", "Designation",
+    "Email", "Phone No", "Created At", "Options",
+  ];
+
+  const companyKeys = [
+    "id", "companyname", "registrationno", "taxidentificationno", "businesstype", "physicaladdress",
+    "billingaddress", "officephoneno", "officeemail", "website", "fullname", "designation",
+    "email", "phoneno", "created_at",
+  ];
+
   return (
-    <div className="companylist-container">
-      <nav className="horizontal-navbar">
-        <h2>Welcome, Admin</h2>
-        <button onClick={() => navigate("/company")}>Add Data</button>
-        <button onClick={() => navigate("/clientlist")}>Go Back</button>
-      </nav>
-      <div className="table-container">
-        <table>
-          <thead>
+    <div className="min-h-screen p-6 bg-gray-900 text-white">
+      <ClienteleHeader dataUrl="/company" goBack="/clientlist" />
+      {/* Table */}
+      <div className="overflow-x-auto mt-6">
+        <table className="w-full border-collapse border border-gray-700 text-sm text-center">
+          {/* Table Header */}
+          <thead className="bg-gray-800 text-gray-300 text-xs sm:text-sm">
             <tr>
-              <th>ID</th>
-              <th>Company Name</th>
-              <th>Registration No</th>
-              <th>Tax ID No</th>
-              <th>Business Type</th>
-              <th>Physical Address</th>
-              <th>Billing Address</th>
-              <th>Office Phone No</th>
-              <th>Office Email</th>
-              <th>Website</th>
-              <th>Full Name</th>
-              <th>Designation</th>
-              <th>Email</th>
-              <th>Phone No</th>
-              <th>Created At</th>
-              <th>Options</th>
+              {tableHeaders.map((header, index) => (
+                  <th key={index} className="border border-gray-700 p-2">{header}</th>
+              ))}
             </tr>
           </thead>
-            <tbody>
-              {companies.map((company) => (
+
+          {/* Table Body */}
+          <tbody className="text-xs sm:text-sm">
+            {companies.length > 0 ? (
+              companies.map((company) => (
                 <tr key={company.id}>
-                  <td>{company.id}</td>
-                  <td>{company.companyname}</td>
-                  <td>{company.registrationno}</td>
-                  <td>{company.taxidentificationno}</td>
-                  <td>{company.businesstype}</td>
-                  <td>{company.physicaladdress}</td>
-                  <td>{company.billingaddress}</td>
-                  <td>{company.officephoneno}</td>
-                  <td>{company.officeemail}</td>
-                  <td>{company.website}</td>
-                  <td>{company.fullname}</td>
-                  <td>{company.designation}</td>
-                  <td>{company.email}</td>
-                  <td>{company.phoneno}</td>
-                  <td>{company.created_at}</td>
-                  <td><button onClick={() => deleteCompany(company.id)} type="button">Delete</button></td>
+                  {companyKeys.map((key) => (
+                    <td key={key}>{company[key]}</td>
+                  ))}
+                  <td>
+                    <button onClick={() => deleteCompany(company.id)} type="button">
+                      Delete
+                    </button>
+                  </td>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={agentKeys.length + 1} className="p-4 text-gray-400">
+                  No guests found.
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
       </div>
     </div>
   );

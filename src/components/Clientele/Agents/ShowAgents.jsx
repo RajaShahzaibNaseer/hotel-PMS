@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import "./ShowAgents.css";
 import { toFormData } from "axios";
 import { useNavigate } from "react-router-dom";
+import ClienteleHeader from "../../UI/ClienteleHeader";
 
 const ShowAgents = () => {
 
@@ -38,54 +38,48 @@ const ShowAgents = () => {
     getAgent();
   });
 
+  const tableHeaders = [
+    "ID", "Agency Name", "Agent Full Name", "Registration No", "Tax ID No", "Physical Address",
+    "Agency Email", "Agency Phone No", "Website", "Full Name", "Designation", "Email", "Phone No",
+    "Created At", "Options"
+  ]
+
+  const agentKeys = [
+    "id", "agencyname", "agentfullname", "registrationno", "taxidentificationno", "physicaladdress",
+    "agencyemail", "agencyphoneno", "website", "fullname", "designation", "email", "phoneno",
+    "created_at"
+  ]
+
   return (
-    <div className="agentlist-container">
-      <nav className="horizontal-navbar">
-        <h2>Welcome, Admin</h2>
-        <button onClick={() => navigate("/agents")}>Add Data</button>
-        <button onClick={() => navigate("/clientlist")}>Go Back</button>
-      </nav>
-      <div className="table-container">
-        <table>
-          <thead>
+    <div className="min-h-screen p-6 bg-gray-900 text-white">
+      <ClienteleHeader dataUrl={"/agents"} goBack={"/clientlist"} />
+      <div className="overflow-x-auto mt-6">
+        <table className="w-full border-collapse border border-gray-700 text-sm text-center">
+          <thead className="bg-gray-800 text-gray-300 text-xs sm:text-sm">
             <tr>
-              <th>ID</th>
-              <th>Agency Name</th>
-              <th>Agent Full Name</th>
-              <th>Registration No</th>
-              <th>Tax ID No</th>
-              <th>Physical Address</th>
-              <th>Agency Email</th>
-              <th>Agency Phone No</th>
-              <th>Website</th>
-              <th>Full Name</th>
-              <th>Designation</th>
-              <th>Email</th>
-              <th>Phone No</th>
-              <th>Created At</th>
-              <th>Options</th>
+              {tableHeaders.map((header, index) => (
+                  <th key={index} className="border border-gray-700 p-2">{header}</th>
+              ))}
             </tr>
           </thead>
-          <tbody>
-              {agents.map((agent) => (
+          <tbody className="text-xs sm:text-sm">
+              {agents.length > 0 ? (
+                agents.map((agent) => (
                 <tr key={agent.id}>
-                  <td>{agent.id}</td>
-                  <td>{agent.agencyname}</td>
-                  <td>{agent.agentfullname}</td>
-                  <td>{agent.registrationno}</td>
-                  <td>{agent.taxidentificationno}</td>
-                  <td>{agent.physicaladdress}</td>
-                  <td>{agent.agencyemail}</td>
-                  <td>{agent.agencyphoneno}</td>
-                  <td>{agent.website}</td>
-                  <td>{agent.fullname}</td>
-                  <td>{agent.designation}</td>
-                  <td>{agent.email}</td>
-                  <td>{agent.phoneno}</td>
-                  <td>{agent.created_at}</td>
+                  {agentKeys.map((key) => (
+                    <td key={key}>{agent[key]}</td>
+                  ))}
                   <td><button onClick={() => deleteAgent(agent.id)}>Delete</button></td>
                 </tr>
-              ))}
+              ))
+              ) : (
+                <tr>
+                  <td colSpan={agentKeys.length + 1} className="p-4 text-gray-400">
+                    No guests found.
+                  </td>
+                </tr>
+              )
+              }
           </tbody>
         </table>
       </div>

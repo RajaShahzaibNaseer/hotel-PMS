@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import "./ShowGroups.css";
 import { toFormData } from "axios";
 import { useNavigate } from "react-router-dom";
+import ClienteleHeader from "../../UI/ClienteleHeader";
 
 const ShowGroups = () => {
 
@@ -37,42 +38,49 @@ const ShowGroups = () => {
     getGroups();
   });
 
+  const tableHeaders = [
+    "ID", "Group Name", "Associated With", "Full Name", "Email", "Phone", "Created At", "Options"
+  ]
+
+  const groupKeys = [
+    "id", "groupname", "associatedwith", "fullname", "email", "phoneno", "created_at"
+  ]
+
   return (
-    <div className="grouplist-container">
-      <nav className="horizontal-navbar">
-        <h2>Welcome, Admin</h2>
-        <button onClick={() => navigate("/groups")}>Add Data</button>
-        <button onClick={() => navigate("/clientlist")}>Go Back</button>
-      </nav>
-      <div className="table-container">
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Group Name</th>
-                    <th>Associated With</th>
-                    <th>Full Name</th>
-                    <th>Email</th>
-                    <th>Phone No</th>
-                    <th>Created At</th>
-                    <th>Options</th>
-                </tr>
-            </thead>
-            <tbody>
-                {groups.map((group) => (
-                <tr key={group.id}>
-                    <td>{group.id}</td>
-                    <td>{group.groupname}</td>
-                    <td>{group.associatedwith}</td>
-                    <td>{group.fullname}</td>
-                    <td>{group.email}</td>
-                    <td>{group.phoneno}</td>
-                    <td>{group.created_at}</td>
-                    <th><button onClick = {() => deleteGroups(group.id)} type="button">Delete</button></th>
-                </tr>
+    <div className="min-h-screen p-6 bg-gray-900 text-white">
+      <ClienteleHeader dataUrl={'/groups'} goBack={'/clientlist'} />
+      <div className="overflow-x-auto mt-6">
+        <table className="w-full border-collapse border border-gray-700 text-sm text-center">
+          <thead className="bg-gray-800 text-gray-300 text-xs sm:text-sm">
+            <tr>
+                {tableHeaders.map((header, index) => (
+                  <th key={index} className="border border-gray-700 p-2">{header}</th>
                 ))}
-            </tbody>
-          </table>
+            </tr>
+          </thead>
+          <tbody className="text-xs sm:text-sm">
+          {groups.length > 0 ? (
+            groups.map((group) => (
+              <tr key={group.id}>
+                {groupKeys.map((key) => (
+                  <td key={key}>{group[key]}</td>
+                ))}
+                <td>
+                  <button onClick={() => deleteGroups(group.id)} type="button">
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan={groupKeys.length + 1} className="p-4 text-gray-400">
+                No groups found.
+              </td>
+            </tr>
+          )}
+          </tbody>
+        </table>
       </div>
     </div>
   );

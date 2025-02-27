@@ -2,7 +2,7 @@ const express = require("express");
 const BaseController = require("../Controllers/BaseController");
 
 const router = express.Router();
-const paxRateController = new BaseController("agents");
+const paxRateController = new BaseController("paxrates");
 
 router.get("/", paxRateController.getAll.bind(paxRateController));
 router.get("/:id", paxRateController.getOne.bind(paxRateController));

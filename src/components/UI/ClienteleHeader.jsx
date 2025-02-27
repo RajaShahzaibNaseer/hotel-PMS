@@ -1,11 +1,11 @@
 import { useNavigate } from "react-router-dom";
 
-const ClienteleHeader = ({ dataUrl, goBack }) => {
+const ClienteleHeader = ({ dataUrl, goBack, title }) => {
     const navigate = useNavigate();
   
     return (
       <nav className="flex justify-between items-center bg-gray-800 p-4 rounded-md shadow-md">
-        <h2 className="text-lg font-semibold">Welcome, Admin</h2>
+        <h2 className="text-lg font-semibold">{title}</h2>
         <div className="space-x-2">
           <button 
             onClick={() => navigate(`${dataUrl}`)}

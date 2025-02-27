@@ -52,7 +52,7 @@ const ShowCompany = () => {
 
   return (
     <div className="min-h-screen p-6 bg-gray-900 text-white">
-      <ClienteleHeader dataUrl="/company" goBack="/clientlist" />
+      <ClienteleHeader dataUrl="/company" goBack="/clientlist" title={"Companies"} />
       {/* Table */}
       <div className="overflow-x-auto mt-6">
         <table className="w-full border-collapse border border-gray-700 text-sm text-center">
@@ -82,8 +82,8 @@ const ShowCompany = () => {
               ))
             ) : (
               <tr>
-                <td colSpan={agentKeys.length + 1} className="p-4 text-gray-400">
-                  No guests found.
+                <td colSpan={companyKeys.length + 1} className="p-4 text-left text-gray-400">
+                  No companies found.
                 </td>
               </tr>
             )}

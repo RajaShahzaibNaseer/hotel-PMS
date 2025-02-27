@@ -52,7 +52,7 @@ const ShowAgents = () => {
 
   return (
     <div className="min-h-screen p-6 bg-gray-900 text-white">
-      <ClienteleHeader dataUrl={"/agents"} goBack={"/clientlist"} />
+      <ClienteleHeader dataUrl={"/agents"} goBack={"/clientlist"} title={"Agents"} />
       <div className="overflow-x-auto mt-6">
         <table className="w-full border-collapse border border-gray-700 text-sm text-center">
           <thead className="bg-gray-800 text-gray-300 text-xs sm:text-sm">
@@ -74,8 +74,8 @@ const ShowAgents = () => {
               ))
               ) : (
                 <tr>
-                  <td colSpan={agentKeys.length + 1} className="p-4 text-gray-400">
-                    No guests found.
+                  <td colSpan={agentKeys.length + 1} className="p-4 text-left text-gray-400">
+                    No agents found.
                   </td>
                 </tr>
               )

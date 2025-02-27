@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import "./ShowGroups.css";
 import { toFormData } from "axios";
 import { useNavigate } from "react-router-dom";
 import ClienteleHeader from "../../UI/ClienteleHeader";
@@ -48,7 +47,7 @@ const ShowGroups = () => {
 
   return (
     <div className="min-h-screen p-6 bg-gray-900 text-white">
-      <ClienteleHeader dataUrl={'/groups'} goBack={'/clientlist'} />
+      <ClienteleHeader dataUrl={'/groups'} goBack={'/clientlist'} title={"Groups"} />
       <div className="overflow-x-auto mt-6">
         <table className="w-full border-collapse border border-gray-700 text-sm text-center">
           <thead className="bg-gray-800 text-gray-300 text-xs sm:text-sm">
@@ -74,7 +73,7 @@ const ShowGroups = () => {
             ))
           ) : (
             <tr>
-              <td colSpan={groupKeys.length + 1} className="p-4 text-gray-400">
+              <td colSpan={groupKeys.length + 1} className="p-4 text-left text-gray-400">
                 No groups found.
               </td>
             </tr>

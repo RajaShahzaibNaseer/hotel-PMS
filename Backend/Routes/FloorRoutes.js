@@ -2,7 +2,7 @@ const express = require("express");
 const BaseController = require("../Controllers/BaseController");
 
 const router = express.Router();
-const floorController = new BaseController("agents");
+const floorController = new BaseController("floors");
 
 router.get("/", floorController.getAll.bind(floorController));
 router.get("/:id", floorController.getOne.bind(floorController));

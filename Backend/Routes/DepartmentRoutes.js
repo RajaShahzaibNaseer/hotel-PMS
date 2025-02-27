@@ -2,7 +2,7 @@ const express = require("express");
 const BaseController = require("../Controllers/BaseController");
 
 const router = express.Router();
-const departmentController = new BaseController("agents");
+const departmentController = new BaseController("departments");
 
 router.get("/", departmentController.getAll.bind(departmentController));
 router.get("/:id", departmentController.getOne.bind(departmentController));

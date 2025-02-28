@@ -5,10 +5,10 @@ import DataTableForm from "../../UI/DataTableForm";
 
 const Floors = () => {
 
-  const [block, setBlock] = useState("");
+  const [block, setBlock] = useState();
   const [floors, setFloors] = useState([]);
-  const [floorName, setFloorName] = useState("");
-  const [blockID, setBlockID] = useState();
+  const [floorname, setFloorName] = useState("");
+  const [blockid, setBlockID] = useState();
   const[blockName, setBlockName] = useState("");
   const navigate = useNavigate();
 
@@ -17,13 +17,16 @@ const Floors = () => {
   const onSubmitForm = async e => {
     e.preventDefault();
     try {
-      const body = { floorName, blockID };
+      const body = { floorname, blockid };
+      console.log("floorname: ", floorname);
+      console.log("blockid: ",blockid);
       const response = await fetch("http://localhost:5000/floors", {
         method: "POST",
         headers: {"Content-Type" : "application/json"},
         body: JSON.stringify(body),
       });
       console.log(response);
+
     } catch (error) {
       console.error(error.message);
     }
@@ -67,14 +70,14 @@ const Floors = () => {
   useEffect(() => {
     getFloors();
 
-    const showBlock = id =>
-      {
-        getBlock(id);
-        setBlockName(block.blockname);
-        return (
-          <p>{blockName}</p>
-        );
-      }
+    // const showBlock = id =>
+    //   {
+    //     getBlock(id);
+    //     setBlockName(block.blockname);
+    //     return (
+    //       <p>{blockName}</p>
+    //     );
+    //   }
 
   });
   return (
@@ -85,14 +88,14 @@ const Floors = () => {
           name: "floorName",
           type: "text",
           placeholder: "Enter Floor Name",
-          value: floorName,
+          value: floorname,
           onChange: (e) => setFloorName(e.target.value),
         },
         {
           name: "blockID",
           type: "text",
           placeholder: "Enter Block ID",
-          value: blockID,
+          value: blockid,
           onChange: (e) => setBlockID(e.target.value),
         },
       ]}

@@ -62,7 +62,7 @@ const Blocks = () => {
         }
       ]}
       onFormSubmit={onSubmitForm}
-      tableHeaders={["Block ID", "Block Name"]}
+      tableHeaders={["Block ID", "Block Name", "Options"]}
       tableData={blocks}
       dataKeys={["id", "blockname"]}
       renderActions={(row) => (

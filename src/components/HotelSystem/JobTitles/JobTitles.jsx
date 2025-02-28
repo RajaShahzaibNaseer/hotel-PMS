@@ -7,9 +7,9 @@ const JobTitles = () => {
 
   const [department, setDepartment] = useState("");
   const [jobTitles, setjobTitles] = useState([]);
-  const [jobTitleName, setjobTitleName] = useState("");
-  const [departmentID, setDepartmentID] = useState();
-  const[departmentName, setdepartmentName] = useState("");
+  const [jobtitlename, setjobtitlename] = useState("");
+  const [departmentid, setdepartmentid] = useState();
+  const[departmentname, setdepartmentname] = useState("");
   const navigate = useNavigate();
 
 
@@ -17,8 +17,8 @@ const JobTitles = () => {
   const onSubmitForm = async e => {
     e.preventDefault();
     try {
-      const body = { jobTitleName, departmentID };
-      const response = await fetch("http://localhost:5000/jobTitle", {
+      const body = { jobtitlename, departmentid };
+      const response = await fetch("http://localhost:5000/jobs", {
         method: "POST",
         headers: {"Content-Type" : "application/json"},
         body: JSON.stringify(body),
@@ -33,11 +33,11 @@ const JobTitles = () => {
   const deletejobTitle = async id =>{
     try {
 
-      const deletejobTitle = await fetch(`http://localhost:5000/jobTitle/${id}` , {
+      const deletejobTitle = await fetch(`http://localhost:5000/jobs/${id}` , {
         method: "DELETE"
       });
 
-      setjobTitles(jobTitles.filter(jobTitle => jobTitle.jobTitleid !== id));
+      setjobTitles(jobTitles.filter(jobTitle => jobTitle.id !== id));
 
     } catch (error) {
       console.error(error.message);
@@ -46,7 +46,7 @@ const JobTitles = () => {
 
   const getjobTitles = async () => {
     try {
-      const response = await fetch("http://localhost:5000/jobTitle");
+      const response = await fetch("http://localhost:5000/jobs");
       const jsonData = await response.json();
 
       setjobTitles(jsonData);
@@ -70,9 +70,9 @@ const JobTitles = () => {
     const showDepartment = id =>
       {
         getDepartment(id);
-        setDepartmentName(department.Departmentname);
+        setdepartmentname(department.departmentname);
         return (
-          <p>{departmentName}</p>
+          <p>{departmentname}</p>
         );
       }
 
@@ -83,25 +83,26 @@ const JobTitles = () => {
       formFields={[
         {
           type: "text",
-          name: "jobTitlename",
+          name: "jobtitlename",
           placeholder: "Enter Job Title Name",
-          value: jobTitleName,
-          onChange: (e) => setjobTitleName(e.target.value),
+          value: jobtitlename,
+          onChange: (e) => setjobtitlename(e.target.value),
         },
         {
           type: "text",
           name: "departmentid",
           placeholder: "Enter Department ID",
-          value: departmentID,
-          onChange: (e) => setDepartmentID(e.target.value),
+          value: departmentid,
+          onChange: (e) => setdepartmentid(e.target.value),
         },
       ]}
       onFormSubmit={onSubmitForm}
       tableHeaders={["jobTitle ID", "job Title Name", "Department Name", "Options"]}
       tableData={jobTitles}
-      dataKeys={["jobtitleid", "jobtitlename", "departmentid"]}
+      dataKeys={["id", "jobtitlename", "departmentid"]}
       renderActions={(row) => (
-        <button onClick={() => deletejobTitle(row.jobtitleid)}>Delete</button>
+        <button onClick={() => deletejobTitle(row.id)}
+        className="px-4 py-2 bg-red-600 hover:bg-red-500 text-white rounded-md transition">Delete</button>
       )}
     />
   );

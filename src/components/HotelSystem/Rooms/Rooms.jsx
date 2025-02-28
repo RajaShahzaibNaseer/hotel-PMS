@@ -10,7 +10,6 @@ const Rooms = () => {
   const [floorid, setfloorid] = useState();
   const [roomtypeid,setroomtypeid] = useState();
   const [roomstatus,setroomstatus] = useState("Vacant Ready");
-  const [roomPrice, setRoomPrice] = useState();
   const navigate = useNavigate();
 
   //adding blocks

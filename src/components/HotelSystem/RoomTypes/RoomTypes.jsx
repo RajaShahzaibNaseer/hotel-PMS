@@ -6,15 +6,15 @@ import { useNavigate } from "react-router-dom";
 const RoomTypes = () => {
 
   const [roomTypes, setRoomTypes] = useState([]);
-  const [roomTypeName, setRoomTypeName] = useState("");
-  const [roomTypePrice, setRoomTypePrice] = useState();
+  const [roomtypename, setroomtypename] = useState("");
+  const [roomtypeprice, setroomtypeprice] = useState();
   const navigate = useNavigate();
 
   //adding blocks
   const onSubmitForm = async e => {
     e.preventDefault();
     try {
-      const body = { roomTypeName, roomTypePrice };
+      const body = { roomtypename, roomtypeprice };
       const response = await fetch("http://localhost:5000/roomtypes", {
         method: "POST",
         headers: {"Content-Type" : "application/json"},
@@ -61,27 +61,27 @@ const RoomTypes = () => {
       title="Manage Room Types"
       formFields={[
         {
-          name: "roomTypeName",
+          name: "roomtypename",
           type: "text",
           placeholder: "Room Type Name",
-          value: roomTypeName,
-          onChange: (e) => setRoomTypeName(e.target.value),
+          value: roomtypename,
+          onChange: (e) => setroomtypename(e.target.value),
         },
         {
-          name: "roomTypePrice",
+          name: "roomtypeprice",
           type: "text",
           placeholder: "Room Type Price",
-          value: roomTypePrice,
-          onChange: (e) => setRoomTypePrice(e.target.value),
+          value: roomtypeprice,
+          onChange: (e) => setroomtypeprice(e.target.value),
         }
       ]}
       onFormSubmit={onSubmitForm}
-      tableHeaders={["Room Type ID", "Room Type Name", "Room Type Price"]}
+      tableHeaders={["Room Type ID", "Room Type Name", "Room Type Price", "Options"]}
       tableData={roomTypes}
-      dataKeys={["roomtypeid", "roomtypename", "price"]}
+      dataKeys={["id", "roomtypename", "roomtypeprice"]}
       renderActions={(row) => (
         <button
-          onClick={() => deleteRoomType(row.roomtypeid)}
+          onClick={() => deleteRoomType(row.id)}
           className="px-4 py-2 bg-red-600 hover:bg-red-500 text-white rounded-md transition"
         >
           Delete

@@ -6,15 +6,15 @@ import DataTableForm from "../../UI/DataTableForm";
 const PaxRates = () => {
 
   const [paxRates, setpaxRates] = useState([]);
-  const [paxRateName, setpaxRateName] = useState("");
-  const [paxRatePrice, setpaxRatePrice] = useState();
+  const [paxratename, setpaxratename] = useState("");
+  const [paxrateprice, setpaxrateprice] = useState();
   const navigate = useNavigate();
 
   //adding blocks
   const onSubmitForm = async e => {
     e.preventDefault();
     try {
-      const body = { paxRateName, paxRatePrice };
+      const body = { paxratename, paxrateprice };
       const response = await fetch("http://localhost:5000/paxrates", {
         method: "POST",
         headers: {"Content-Type" : "application/json"},
@@ -34,7 +34,7 @@ const PaxRates = () => {
         method: "DELETE"
       });
 
-      setpaxRates(paxRates.filter(paxRate => paxRate.paxRaterateid !== id));
+      setpaxRates(paxRates.filter(paxRate => paxRate.id !== id));
 
     } catch (error) {
       console.error(error.message);
@@ -62,25 +62,26 @@ const PaxRates = () => {
       formFields={[
         {
           type: "text",
-          name: "paxRateName",
+          name: "paxratename",
           placeholder: "Enter Pax Rate Name",
-          value: paxRateName,
-          onChange: (e) => setpaxRateName(e.target.value),
+          value: paxratename,
+          onChange: (e) => setpaxratename(e.target.value),
         },
         {
           type: "text",
-          name: "paxRatePrice",
+          name: "paxrateprice",
           placeholder: "Enter Pax Rate Price",
-          value: paxRatePrice,
-          onChange: (e) => setpaxRatePrice(e.target.value),
+          value: paxrateprice,
+          onChange: (e) => setpaxrateprice(e.target.value),
         },
       ]}
       onFormSubmit={onSubmitForm}
       tableHeaders={["Pax Rate ID", "Pax Rate Name", "Pax Rate Price", "Options"]}
       tableData={paxRates}
-      dataKeys={["paxrateid", "paxratename", "price"]}
+      dataKeys={["id", "paxratename", "paxrateprice"]}
       renderActions={(row) => (
-        <button onClick={() => deletepaxRate(row.paxrateid)}>Delete</button>
+        <button onClick={() => deletepaxRate(row.id)}
+        className="px-4 py-2 bg-red-600 hover:bg-red-500 text-white rounded-md transition">Delete</button>
       )}
     />
   );

@@ -64,7 +64,7 @@ const Blocks = () => {
       onFormSubmit={onSubmitForm}
       tableHeaders={["Block ID", "Block Name"]}
       tableData={blocks}
-      dataKeys={["blockid", "blockname"]}
+      dataKeys={["id", "blockname"]}
       renderActions={(row) => (
         <button
           onClick={() => deleteBlock(row.blockid)}

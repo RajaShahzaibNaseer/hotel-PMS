@@ -37,7 +37,7 @@ const Floors = () => {
         method: "DELETE"
       });
 
-      setFloors(floors.filter(floor => floor.floorid !== id));
+      setFloors(floors.filter(floor => floor.id !== id));
 
     } catch (error) {
       console.error(error.message);
@@ -99,10 +99,10 @@ const Floors = () => {
       onFormSubmit={onSubmitForm}
       tableHeaders={["Floor ID", "Floor Name", "Block ID", "Options"]}
       tableData={floors}
-      dataKeys={["floorid", "floorname", "blockid"]}
+      dataKeys={["id", "floorname", "blockid"]}
       renderActions={(row) => (
         <button
-          onClick={() => deleteFloor(row.floorid)}
+          onClick={() => deleteFloor(row.id)}
           className="px-4 py-2 bg-red-600 hover:bg-red-500 text-white rounded-md transition"
         >
           Delete

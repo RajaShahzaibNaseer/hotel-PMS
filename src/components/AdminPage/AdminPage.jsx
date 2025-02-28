@@ -9,7 +9,6 @@ import PaxRates from "../HotelSystem/PaxRates/PaxRates";
 import AuxServices from "../HotelSystem/AuxServices/AuxServices";
 import JobTitles from "../HotelSystem/JobTitles/JobTitles";
 import Departments from "../HotelSystem/Departments/Departments";
-import Guests from "../Clientele/Guests/Guests";
 import Rooms from "../HotelSystem/Rooms/Rooms";
 import RoomTypes from "../HotelSystem/RoomTypes/RoomTypes";
 import ConferenceRooms from "../HotelSystem/ConferenceRooms/ConferenceRooms";

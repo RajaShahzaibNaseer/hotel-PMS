@@ -35,7 +35,6 @@ const Guests = () => {
       ...prevData,
       [e.target.name]: e.target.value,
     }));
-    console.log(`${e.target.name}: ${e.target.value}`);
   };
 
   const handleSubmit = async (e) => {
@@ -63,7 +62,7 @@ const Guests = () => {
         <h2>Guest Data</h2>
 
         <InputField label={"Full Name"} type={'text'} name={'fullName'} value={formData.fullName} onChange={handleChange} required />
-        <InputField label={"Date of Birth"} type={'text'} name={'dateOfBirth'} value={formData.dateOfBirth} onChange={handleChange} required />
+        <InputField label={"Date of Birth"} type={'date'} name={'dateOfBirth'} value={formData.dateOfBirth} onChange={handleChange} required />
 
         
         {/* Gender Selection */}
@@ -93,7 +92,7 @@ const Guests = () => {
         <InputField label={"Phone No"} type={'tel'} name={'phoneNo'} value={formData.phoneNo} onChange={handleChange} required />
         <InputField label={"Email"} type={'email'} name={'email'} value={formData.email} onChange={handleChange} required />
         <InputField label={"Residential Address"} type={'text'} name={'residentialAddress'} value={formData.residentialAddress} onChange={handleChange} required />
-        <InputField label={"Emergency Contact"} type={'text'} name={'emergencyContact'} value={formData.emergencyContact} onChange={handleChange} required />
+        <InputField label={"Emergency Contact Name"} type={'text'} name={'emergencyContact'} value={formData.emergencyContact} onChange={handleChange} required />
         <InputField label={"Emergency Phone No"} type={'tel'} name={'emergencyPhone'} value={formData.emergencyPhone} onChange={handleChange} required />
         <InputField label={"Emergency Relationship"} type={'text'} name={'emergencyRelationship'} value={formData.emergencyRelationship} onChange={handleChange} required />
         <InputField label={"Preferred Room Type"} type={'text'} name={'preferredRoomType'} value={formData.preferredRoomType} onChange={handleChange} required />

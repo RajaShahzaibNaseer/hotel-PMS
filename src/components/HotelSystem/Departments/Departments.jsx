@@ -33,7 +33,7 @@ const Departments = () => {
         method: "DELETE"
       });
 
-      setDepartments(departments.filter(department => department.departmentid !== id));
+      setDepartments(departments.filter(department => department.id !== id));
 
     } catch (error) {
       console.error(error.message);
@@ -70,9 +70,10 @@ const Departments = () => {
       onFormSubmit={onSubmitForm}
       tableHeaders={["Department ID", "Department Name", "Options"]}
       tableData={departments}
-      dataKeys={["departmentid", "departmentname"]}
+      dataKeys={["id", "departmentname"]}
       renderActions={(department) => (
-        <button onClick={() => deleteDepartment(department.departmentid)}>Delete</button>
+        <button onClick={() => deleteDepartment(department.id)}
+        className="px-4 py-2 bg-red-600 hover:bg-red-500 text-white rounded-md transition">Delete</button>
       )}
     />
   );

@@ -6,16 +6,16 @@ import DataTableForm from "../../UI/DataTableForm";
 const AuxServices = () => {
 
   const [service, setservice] = useState([]);
-  const [serviceName, setserviceName] = useState("");
-  const [servicePrice, setservicePrice] = useState();
+  const [servicename, setservicename] = useState("");
+  const [serviceprice, setserviceprice] = useState();
   const navigate = useNavigate();
 
   //adding blocks
   const onSubmitForm = async e => {
     e.preventDefault();
     try {
-      const body = { serviceName, servicePrice };
-      const response = await fetch("http://localhost:5000/services", {
+      const body = { servicename, serviceprice };
+      const response = await fetch("http://localhost:5000/aux", {
         method: "POST",
         headers: {"Content-Type" : "application/json"},
         body: JSON.stringify(body),
@@ -30,11 +30,11 @@ const AuxServices = () => {
   const deleteservice = async id =>{
     try {
 
-      const deleteservice = await fetch(`http://localhost:5000/services/${id}` , {
+      const deleteservice = await fetch(`http://localhost:5000/aux/${id}` , {
         method: "DELETE"
       });
 
-      setservice(service.filter(service => service.serviceid !== id));
+      setservice(service.filter(service => service.id !== id));
 
     } catch (error) {
       console.error(error.message);
@@ -43,7 +43,7 @@ const AuxServices = () => {
 
   const getservice = async () => {
     try {
-      const response = await fetch("http://localhost:5000/services");
+      const response = await fetch("http://localhost:5000/aux");
       const jsonData = await response.json();
 
       setservice(jsonData);
@@ -62,25 +62,26 @@ const AuxServices = () => {
       formFields={[
         {
           type: "text",
-          name: "serviceName",
-          placeholder: "Enter Job Title Name",
-          value: serviceName,
-          onChange: (e) => setserviceName(e.target.value),
+          name: "servicename",
+          placeholder: "Enter service Name",
+          value: servicename,
+          onChange: (e) => setservicename(e.target.value),
         },
         {
           type: "text",
-          name: "servicePrice",
+          name: "serviceprice",
           placeholder: "Enter Service Price",
-          value: servicePrice,
-          onChange: (e) => setservicePrice(e.target.value),
+          value: serviceprice,
+          onChange: (e) => setserviceprice(e.target.value),
         },
       ]}
       onFormSubmit={onSubmitForm}
       tableHeaders={["Service ID", "Service Name", "Service Price", "Options"]}
       tableData={service}
-      dataKeys={["serviceid", "servicename", "price"]}
+      dataKeys={["id", "servicename", "serviceprice"]}
       renderActions={(row) => (
-        <button onClick={() => deleteservice(row.serviceid)}>Delete</button>
+        <button onClick={() => deleteservice(row.id)}
+        className="px-4 py-2 bg-red-600 hover:bg-red-500 text-white rounded-md transition">Delete</button>
       )}
     />
   );

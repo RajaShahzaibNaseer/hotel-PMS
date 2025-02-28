@@ -6,10 +6,10 @@ import DataTableForm from "../../UI/DataTableForm";
 const Rooms = () => {
 
   const [rooms, setRooms] = useState([]);
-  const [roomNumber, setRoomNumber] = useState("");
-  const [floorID, setFloorID] = useState();
-  const [roomTypeID,setRoomTypeID] = useState();
-  const [roomStatus,setRoomStatus] = useState("Vacant Ready");
+  const [roomnumber, setroomnumber] = useState("");
+  const [floorid, setfloorid] = useState();
+  const [roomtypeid,setroomtypeid] = useState();
+  const [roomstatus,setroomstatus] = useState("Vacant Ready");
   const [roomPrice, setRoomPrice] = useState();
   const navigate = useNavigate();
 
@@ -17,7 +17,7 @@ const Rooms = () => {
   const onSubmitForm = async e => {
     e.preventDefault();
     try {
-        const body = { roomNumber, floorID, roomTypeID, roomStatus, roomPrice };
+        const body = { roomnumber, floorid, roomtypeid, roomstatus, roomPrice };
         const response = await fetch("http://localhost:5000/rooms", {
             method: "POST",
             headers: {"Content-Type" : "application/json"},
@@ -37,7 +37,7 @@ const Rooms = () => {
         method: "DELETE"
       });
 
-      setRooms(rooms.filter(room => room.roomid !== id));
+      setRooms(rooms.filter(room => room.id !== id));
 
     } catch (error) {
       console.error(error.message);
@@ -64,35 +64,35 @@ const Rooms = () => {
       title="Manage Rooms"
       formFields={[
         {
-          name: "roomNumber",
+          name: "roomnumber",
           type: "text",
           placeholder: "Enter Room Number",
-          value: roomNumber,
-          onChange: (e) => setRoomNumber(e.target.value),
+          value: roomnumber,
+          onChange: (e) => setroomnumber(e.target.value),
         },
         {
-          name: "floorID",
+          name: "floorid",
           type: "text",
           placeholder: "Enter Floor ID",
-          value: floorID,
-          onChange: (e) => setFloorID(e.target.value),
+          value: floorid,
+          onChange: (e) => setfloorid(e.target.value),
         },
         {
-          name: "roomTypeID",
+          name: "roomtypeid",
           type: "text",
           placeholder: "Enter Room type ID",
-          value: roomTypeID,
-          onChange: (e) => setRoomTypeID(e.target.value),
+          value: roomtypeid,
+          onChange: (e) => setroomtypeid(e.target.value),
         },
       ]}
       onFormSubmit={onSubmitForm}
       tableHeaders={["Room ID", "Room Number", "Floor ID", "Room Type", 
                       "Room Status", "Options"]}
       tableData={rooms}
-      dataKeys={["roomid", "roomnumber", "floorid", "roomtypeid", "status"]}
+      dataKeys={["id", "roomnumber", "floorid", "roomtypeid", "roomstatus"]}
       renderActions={(row) => (
         <button
-          onClick={() => deleteRoom(row.roomid)}
+          onClick={() => deleteRoom(row.id)}
           className="px-4 py-2 bg-red-600 hover:bg-red-500 text-white rounded-md transition"
         >
           Delete

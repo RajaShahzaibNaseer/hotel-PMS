@@ -6,16 +6,16 @@ import DataTableForm from "../../UI/DataTableForm";
 const MealPlans = () => {
 
   const [mealPlans, setMealPlans] = useState([]);
-  const [mealPlanName, setMealPlanName] = useState("");
-  const [mealPlanPrice, setMealPlanPrice] = useState();
+  const [mealplanname, setmealplanname] = useState("");
+  const [mealplanprice, setmealplanprice] = useState();
   const navigate = useNavigate();
 
   //adding blocks
   const onSubmitForm = async e => {
     e.preventDefault();
     try {
-      const body = { mealPlanName, mealPlanPrice };
-      const response = await fetch("http://localhost:5000/mealplanrates", {
+      const body = { mealplanname, mealplanprice };
+      const response = await fetch("http://localhost:5000/mealplans", {
         method: "POST",
         headers: {"Content-Type" : "application/json"},
         body: JSON.stringify(body),
@@ -30,11 +30,11 @@ const MealPlans = () => {
   const deleteMealPlan = async id =>{
     try {
 
-      const deleteMealPlan = await fetch(`http://localhost:5000/mealplanrates/${id}` , {
+      const deleteMealPlan = await fetch(`http://localhost:5000/mealplans/${id}` , {
         method: "DELETE"
       });
 
-      setMealPlans(mealPlans.filter(mealPlan => mealPlan.mealplanrateid !== id));
+      setMealPlans(mealPlans.filter(mealPlan => mealPlan.id !== id));
 
     } catch (error) {
       console.error(error.message);
@@ -43,7 +43,7 @@ const MealPlans = () => {
 
   const getMealPlans = async () => {
     try {
-      const response = await fetch("http://localhost:5000/mealplanrates");
+      const response = await fetch("http://localhost:5000/mealplans");
       const jsonData = await response.json();
 
       setMealPlans(jsonData);
@@ -62,25 +62,26 @@ const MealPlans = () => {
         formFields={[
           {
             type: "text",
-            name: "mealPlanName",
+            name: "mealplanname",
             placeholder: "Enter Meal Plan Name",
-            value: mealPlanName,
-            onChange: (e) => setMealPlanName(e.target.value),
+            value: mealplanname,
+            onChange: (e) => setmealplanname(e.target.value),
           },
           {
             type: "number",
-            name: "mealPlanPrice",
+            name: "mealplanprice",
             placeholder: "Enter Meal Price",
-            value: mealPlanPrice,
-            onChange: (e) => setMealPlanPrice(e.target.value),
+            value: mealplanprice,
+            onChange: (e) => setmealplanprice(e.target.value),
           },
         ]}
         onFormSubmit={onSubmitForm}
         tableHeaders={["Meal Plan ID", "Meal Plan Name", "Meal Plan Price", "Options"]}
         tableData={mealPlans}
-        dataKeys={["mealplanrateid", "mealplanname", "price"]}
+        dataKeys={["id", "mealplanname", "mealplanprice"]}
         renderActions={(row) => (
-          <button onClick={() => deleteMealPlan(row.mealplanrateid)}>Delete</button>
+          <button onClick={() => deleteMealPlan(row.id)}
+          className="px-4 py-2 bg-red-600 hover:bg-red-500 text-white rounded-md transition">Delete</button>
         )}
     />
   );

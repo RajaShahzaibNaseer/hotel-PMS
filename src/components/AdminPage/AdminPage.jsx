@@ -17,6 +17,7 @@ const AdminPage = () => {
   
   const navigate = useNavigate();
   const [selectedPage, setSelectedPage] = useState(<Blocks />);
+  const [activePage, setActivePage] = useState("Blocks");
 
   const NavBar = () => {
     const [isOpen, setIsOpen] = useState(false); // Toggle state for nav
@@ -44,8 +45,8 @@ const AdminPage = () => {
             {routes.map(({ title, component }) => (
               <button
                 key={title}
-                className="w-full min-w-32 mt-2 py-2 bg-gray-800 hover:bg-gray-700 rounded-md text-white font-medium transition"
-                onClick={() => updatePage(component)}
+                className={`w-full min-w-32 mt-2 py-2 ${activePage === title ? "bg-gray-700" : "bg-gray-800 hover:bg-gray-700"} rounded-md text-white font-medium transition`}
+                onClick={() => updatePage(component, title)}
               >
                 {title}
               </button>
@@ -62,8 +63,9 @@ const AdminPage = () => {
     );
   };
 
-  const updatePage = (component) => {
+  const updatePage = (component, title) => {
     setSelectedPage(component)
+    setActivePage(title)
   }
   const routes = [
     { title: "Blocks", url: "/blocks", component: <Blocks /> },

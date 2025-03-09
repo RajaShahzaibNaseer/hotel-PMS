@@ -2,17 +2,17 @@ import React from "react";
 import { Routes, Route } from "react-router-dom";
 import LoginForm from "./components/LoginForm/LoginForm"; 
 import AdminPage from "./components/AdminPage/AdminPage"; 
-import Departments from "./components/HotelSystem//Departments/Departments";
-import ConferenceRooms from "./components/HotelSystem/ConferenceRooms/ConferenceRooms";
-import Blocks from './components/HotelSystem/Blocks/Blocks'
-import Floors from "./components/HotelSystem/Floors/Floors";
-import MealPlans from "./components/HotelSystem/MealPlans/MealPlans";
-import PaxRates from "./components/HotelSystem/PaxRates/PaxRates";
-import AuxServices from "./components/HotelSystem/AuxServices/AuxServices";
-import JobTitles from "./components/HotelSystem/JobTitles/JobTitles";
+import Departments from "./components/HotelSystem/Departments";
+import ConferenceRooms from "./components/HotelSystem/ConferenceRooms";
+import Blocks from './components/HotelSystem/Blocks'
+import Floors from "./components/HotelSystem/Floors";
+import MealPlans from "./components/HotelSystem/MealPlans";
+import PaxRates from "./components/HotelSystem/PaxRates";
+import AuxServices from "./components/HotelSystem/AuxServices";
+import JobTitles from "./components/HotelSystem/JobTitles";
 import Guests from "./components/Clientele/Guests/Guests";
-import Rooms from "./components/HotelSystem/Rooms/Rooms";
-import RoomTypes from "./components/HotelSystem/RoomTypes/RoomTypes";
+import Rooms from "./components/HotelSystem/Rooms";
+import RoomTypes from "./components/HotelSystem/RoomTypes";
 import Navigator from "./components/Navigator/Navigator";
 import ClientList from "./components/Clientele/Clientele-List/Client-List";
 import Company from "./components/Clientele/Company/Company";

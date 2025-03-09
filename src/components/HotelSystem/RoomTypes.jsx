@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import DataTableForm from '../../UI/DataTableForm'
+import DataTableForm from '../UI/DataTableForm'
 import { toFormData } from "axios";
 import { useNavigate } from "react-router-dom";
-import { API_URL } from "../../../config";
+import { API_URL } from "../../config";
 
 const RoomTypes = () => {
 

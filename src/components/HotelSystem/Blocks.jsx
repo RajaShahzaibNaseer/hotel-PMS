@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import DataTableForm from "../../UI/DataTableForm";
-import { API_URL } from "../../../config";
+import DataTableForm from "../UI/DataTableForm";
+import { API_URL } from "../../config";
 
 const Blocks = () => {
   const [blocks, setBlocks] = useState([]);

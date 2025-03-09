@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { toFormData } from "axios";
 import { Navigate, useNavigate } from "react-router-dom";
-import DataTableForm from "../../UI/DataTableForm";
-import { API_URL } from "../../../config";
+import DataTableForm from "../UI/DataTableForm";
+import { API_URL } from "../../config";
 
 const ConferenceRooms = () => {
 

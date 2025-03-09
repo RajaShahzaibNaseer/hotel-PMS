@@ -2,16 +2,16 @@ import { useState, useEffect } from "react";
 import { toFormData } from "axios";
 import { Navigate, useNavigate, Link, Routes, Route } from "react-router-dom";
 
-import Blocks from '../HotelSystem/Blocks/Blocks'
-import Floors from "../HotelSystem/Floors/Floors";
-import MealPlans from "../HotelSystem/MealPlans/MealPlans";
-import PaxRates from "../HotelSystem/PaxRates/PaxRates";
-import AuxServices from "../HotelSystem/AuxServices/AuxServices";
-import JobTitles from "../HotelSystem/JobTitles/JobTitles";
-import Departments from "../HotelSystem/Departments/Departments";
-import Rooms from "../HotelSystem/Rooms/Rooms";
-import RoomTypes from "../HotelSystem/RoomTypes/RoomTypes";
-import ConferenceRooms from "../HotelSystem/ConferenceRooms/ConferenceRooms";
+import Blocks from '../HotelSystem/Blocks'
+import Floors from "../HotelSystem/Floors";
+import MealPlans from "../HotelSystem/MealPlans";
+import PaxRates from "../HotelSystem/PaxRates";
+import AuxServices from "../HotelSystem/AuxServices";
+import JobTitles from "../HotelSystem/JobTitles";
+import Departments from "../HotelSystem/Departments";
+import Rooms from "../HotelSystem/Rooms";
+import RoomTypes from "../HotelSystem/RoomTypes";
+import ConferenceRooms from "../HotelSystem/ConferenceRooms";
 
 const AdminPage = () => {
   

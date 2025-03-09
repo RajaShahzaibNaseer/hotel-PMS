@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import DataTableForm from "../../UI/DataTableForm";
+import { API_URL } from "../../../config";
 
 const Blocks = () => {
   const [blocks, setBlocks] = useState([]);
@@ -12,7 +13,7 @@ const Blocks = () => {
 
     try {
       const body = { blockname };
-      await fetch("http://localhost:5000/blocks", {
+      await fetch(`${API_URL}/blocks`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
@@ -27,7 +28,7 @@ const Blocks = () => {
   // Deleting a block
   const deleteBlock = async (id) => {
     try {
-      await fetch(`http://localhost:5000/blocks/${id}`, { method: "DELETE" });
+      await fetch(`${API_URL}/blocks/${id}`, { method: "DELETE" });
       setBlocks(blocks.filter((block) => block.blockid !== id));
     } catch (error) {
       console.error(error.message);
@@ -37,7 +38,7 @@ const Blocks = () => {
   // Fetching blocks
   const getBlocks = async () => {
     try {
-      const response = await fetch("http://localhost:5000/blocks");
+      const response = await fetch(`${API_URL}/blocks`);
       const jsonData = await response.json();
       setBlocks(jsonData);
     } catch (error) {

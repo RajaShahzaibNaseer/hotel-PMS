@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { toFormData } from "axios";
 import { useNavigate } from "react-router-dom";
 import ClienteleHeader from "../../UI/ClienteleHeader";
+import { API_URL } from "../../../config";
+
 
 const ShowAgents = () => {
 
@@ -12,7 +14,7 @@ const ShowAgents = () => {
   const deleteAgent = async id =>{
     try {
 
-      const deleteAgent = await fetch(`http://localhost:5000/agents/${id}` , {
+      const deleteAgent = await fetch(`${API_URL}/agents/${id}` , {
         method: "DELETE"
       });
 
@@ -25,7 +27,7 @@ const ShowAgents = () => {
 
   const getAgent = async () => {
     try {
-      const response = await fetch("http://localhost:5000/agents");
+      const response = await fetch(`${API_URL}/agents`);
       const jsonData = await response.json();
 
       setAgents(jsonData);

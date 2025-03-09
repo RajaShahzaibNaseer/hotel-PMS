@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import ClienteleHeader from "../../UI/ClienteleHeader";
 import { toFormData } from "axios";
 import { useNavigate } from "react-router-dom";
+import { API_URL } from "../../../config";
 
 const ShowGuests = () => {
 
@@ -10,7 +11,7 @@ const ShowGuests = () => {
   const deleteGuests = async id =>{
     try {
 
-      const deleteGuest = await fetch(`http://localhost:5000/guests/${id}` , {
+      const deleteGuest = await fetch(`${API_URL}/guests/${id}` , {
         method: "DELETE"
       });
 
@@ -23,7 +24,7 @@ const ShowGuests = () => {
 
   const getGuests = async () => {
     try {
-      const response = await fetch("http://localhost:5000/guests");
+      const response = await fetch(`${API_URL}/guests`);
       const jsonData = await response.json();
 
       setGuests(jsonData);

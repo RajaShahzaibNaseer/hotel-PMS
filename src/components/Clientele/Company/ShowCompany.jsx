@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { toFormData } from "axios";
 import { useNavigate } from "react-router-dom";
 import ClienteleHeader from "../../UI/ClienteleHeader";
+import { API_URL } from "../../../config";
 
 const ShowCompany = () => {
 
@@ -12,7 +13,7 @@ const ShowCompany = () => {
   const deleteCompany = async id =>{
     try {
 
-      const deleteCompany = await fetch(`http://localhost:5000/company/${id}` , {
+      const deleteCompany = await fetch(`${API_URL}/company/${id}` , {
         method: "DELETE"
       });
 
@@ -25,7 +26,7 @@ const ShowCompany = () => {
 
   const getCompany = async () => {
     try {
-      const response = await fetch("http://localhost:5000/company");
+      const response = await fetch(`${API_URL}/company`);
       const jsonData = await response.json();
 
       setCompanies(jsonData);

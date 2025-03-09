@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { toFormData } from "axios";
 import { useNavigate } from "react-router-dom";
 import ClienteleHeader from "../../UI/ClienteleHeader";
+import { API_URL } from "../../../config";
 
 const ShowGroups = () => {
 
@@ -11,7 +12,7 @@ const ShowGroups = () => {
 
   const deleteGroups = async id =>{
     try {
-      const deleteGroups = await fetch(`http://localhost:5000/groups/${id}` , {
+      const deleteGroups = await fetch(`${API_URL}/groups/${id}` , {
         method: "DELETE"
       });
 
@@ -24,7 +25,7 @@ const ShowGroups = () => {
 
   const getGroups = async () => {
     try {
-      const response = await fetch("http://localhost:5000/groups");
+      const response = await fetch(`${API_URL}/groups`);
       const jsonData = await response.json();
 
       setGroups(jsonData);

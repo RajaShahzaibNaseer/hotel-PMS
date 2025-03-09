@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { toFormData } from "axios";
 import { useNavigate } from "react-router-dom";
 import DataTableForm from "../../UI/DataTableForm";
+import { API_URL } from "../../../config";
 
 const AuxServices = () => {
 
@@ -15,7 +16,7 @@ const AuxServices = () => {
     e.preventDefault();
     try {
       const body = { servicename, serviceprice };
-      const response = await fetch("http://localhost:5000/aux", {
+      const response = await fetch(`${API_URL}/aux`, {
         method: "POST",
         headers: {"Content-Type" : "application/json"},
         body: JSON.stringify(body),
@@ -30,7 +31,7 @@ const AuxServices = () => {
   const deleteservice = async id =>{
     try {
 
-      const deleteservice = await fetch(`http://localhost:5000/aux/${id}` , {
+      const deleteservice = await fetch(`${API_URL}/aux/${id}` , {
         method: "DELETE"
       });
 
@@ -43,7 +44,7 @@ const AuxServices = () => {
 
   const getservice = async () => {
     try {
-      const response = await fetch("http://localhost:5000/aux");
+      const response = await fetch(`${API_URL}/aux`);
       const jsonData = await response.json();
 
       setservice(jsonData);

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { toFormData } from "axios";
 import { useNavigate } from "react-router-dom";
 import DataTableForm from "../../UI/DataTableForm";
+import { API_URL } from "../../../config";
 
 const MealPlans = () => {
 
@@ -15,7 +16,7 @@ const MealPlans = () => {
     e.preventDefault();
     try {
       const body = { mealplanname, mealplanprice };
-      const response = await fetch("http://localhost:5000/mealplans", {
+      const response = await fetch(`${API_URL}/mealplans`, {
         method: "POST",
         headers: {"Content-Type" : "application/json"},
         body: JSON.stringify(body),
@@ -30,7 +31,7 @@ const MealPlans = () => {
   const deleteMealPlan = async id =>{
     try {
 
-      const deleteMealPlan = await fetch(`http://localhost:5000/mealplans/${id}` , {
+      const deleteMealPlan = await fetch(`${API_URL}/mealplans/${id}` , {
         method: "DELETE"
       });
 
@@ -43,7 +44,7 @@ const MealPlans = () => {
 
   const getMealPlans = async () => {
     try {
-      const response = await fetch("http://localhost:5000/mealplans");
+      const response = await fetch(`${API_URL}/mealplans`);
       const jsonData = await response.json();
 
       setMealPlans(jsonData);

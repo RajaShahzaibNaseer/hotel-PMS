@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { toFormData } from "axios";
 import { useNavigate } from "react-router-dom";
 import DataTableForm from "../../UI/DataTableForm";
+import { API_URL } from "../../../config";
 
 const PaxRates = () => {
 
@@ -15,7 +16,7 @@ const PaxRates = () => {
     e.preventDefault();
     try {
       const body = { paxratename, paxrateprice };
-      const response = await fetch("http://localhost:5000/paxrates", {
+      const response = await fetch(`${API_URL}/paxrates`, {
         method: "POST",
         headers: {"Content-Type" : "application/json"},
         body: JSON.stringify(body),
@@ -30,7 +31,7 @@ const PaxRates = () => {
   const deletepaxRate = async id =>{
     try {
 
-      const deletepaxRate = await fetch(`http://localhost:5000/paxrates/${id}` , {
+      const deletepaxRate = await fetch(`${API_URL}/paxrates/${id}` , {
         method: "DELETE"
       });
 
@@ -43,7 +44,7 @@ const PaxRates = () => {
 
   const getpaxRates = async () => {
     try {
-      const response = await fetch("http://localhost:5000/paxrates");
+      const response = await fetch(`${API_URL}/paxrates`);
       const jsonData = await response.json();
 
       setpaxRates(jsonData);

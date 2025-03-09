@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { toFormData } from "axios";
 import { Navigate, useNavigate } from "react-router-dom";
 import DataTableForm from "../../UI/DataTableForm";
+import { API_URL } from "../../../config";
 
 const Floors = () => {
 
@@ -20,7 +21,7 @@ const Floors = () => {
       const body = { floorname, blockid };
       console.log("floorname: ", floorname);
       console.log("blockid: ",blockid);
-      const response = await fetch("http://localhost:5000/floors", {
+      const response = await fetch(`${API_URL}/floors`, {
         method: "POST",
         headers: {"Content-Type" : "application/json"},
         body: JSON.stringify(body),
@@ -36,7 +37,7 @@ const Floors = () => {
   const deleteFloor = async id =>{
     try {
 
-      const deleteFloor = await fetch(`http://localhost:5000/floors/${id}` , {
+      const deleteFloor = await fetch(`${API_URL}/floors/${id}` , {
         method: "DELETE"
       });
 
@@ -49,7 +50,7 @@ const Floors = () => {
 
   const getFloors = async () => {
     try {
-      const response = await fetch("http://localhost:5000/floors");
+      const response = await fetch(`${API_URL}/floors`);
       const jsonData = await response.json();
 
       setFloors(jsonData);
@@ -60,7 +61,7 @@ const Floors = () => {
 
   const getBlock = async id =>
   {
-    const response = await fetch(`http://localhost:5000/blocks/${id}`);
+    const response = await fetch(`${API_URL}/blocks/${id}`);
     const jsonData = await response.json();
     console.log(jsonData);
     setBlock(jsonData);

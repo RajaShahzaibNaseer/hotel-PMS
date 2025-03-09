@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { toFormData } from "axios";
 import { Navigate, useNavigate } from "react-router-dom";
 import DataTableForm from "../../UI/DataTableForm";
+import { API_URL } from "../../../config";
 
 const JobTitles = () => {
 
@@ -18,7 +19,7 @@ const JobTitles = () => {
     e.preventDefault();
     try {
       const body = { jobtitlename, departmentid };
-      const response = await fetch("http://localhost:5000/jobs", {
+      const response = await fetch(`${API_URL}/jobs`, {
         method: "POST",
         headers: {"Content-Type" : "application/json"},
         body: JSON.stringify(body),
@@ -33,7 +34,7 @@ const JobTitles = () => {
   const deletejobTitle = async id =>{
     try {
 
-      const deletejobTitle = await fetch(`http://localhost:5000/jobs/${id}` , {
+      const deletejobTitle = await fetch(`${API_URL}/jobs/${id}` , {
         method: "DELETE"
       });
 
@@ -46,7 +47,7 @@ const JobTitles = () => {
 
   const getjobTitles = async () => {
     try {
-      const response = await fetch("http://localhost:5000/jobs");
+      const response = await fetch(`${API_URL}/jobs`);
       const jsonData = await response.json();
 
       setjobTitles(jsonData);
@@ -57,7 +58,7 @@ const JobTitles = () => {
 
   const getDepartment = async id =>
   {
-    const response = await fetch(`http://localhost:5000/departments/${id}`);
+    const response = await fetch(`${API_URL}/departments/${id}`);
     const jsonData = await response.json();
     console.log(jsonData);
     setDepartment(jsonData);

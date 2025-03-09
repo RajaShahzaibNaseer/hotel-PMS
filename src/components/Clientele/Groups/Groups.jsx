@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 // import "./Groups.css";
 import { useNavigate } from "react-router-dom";
+import { API_URL } from "../../../config";
 
 const Groups = () => {
   const [formData, setFormData] = useState({
@@ -29,7 +30,7 @@ const Groups = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:5000/groups", {
+      const response = await fetch(`${API_URL}/groups`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData), 

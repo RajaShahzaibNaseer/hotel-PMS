@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { toFormData } from "axios";
 import { useNavigate } from "react-router-dom";
 import DataTableForm from "../../UI/DataTableForm";
+import { API_URL } from "../../../config";
 
 const Rooms = () => {
 
@@ -17,7 +18,7 @@ const Rooms = () => {
     e.preventDefault();
     try {
         const body = { roomnumber, floorid, roomtypeid, roomstatus, roomPrice };
-        const response = await fetch("http://localhost:5000/rooms", {
+        const response = await fetch(`${API_URL}/rooms`, {
             method: "POST",
             headers: {"Content-Type" : "application/json"},
             body: JSON.stringify(body),
@@ -32,7 +33,7 @@ const Rooms = () => {
   const deleteRoom = async id =>{
     try {
 
-      const deleteRooms = await fetch(`http://localhost:5000/rooms/${id}` , {
+      const deleteRooms = await fetch(`${API_URL}/rooms/${id}` , {
         method: "DELETE"
       });
 
@@ -45,7 +46,7 @@ const Rooms = () => {
 
   const getRooms = async () => {
     try {
-      const response = await fetch("http://localhost:5000/rooms");
+      const response = await fetch(`${API_URL}/rooms`);
       const jsonData = await response.json();
 
       setRooms(jsonData);

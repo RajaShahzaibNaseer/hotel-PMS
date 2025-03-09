@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { API_URL } from "../../../config";
+
 
 const Agents = () => {
   const [formData, setFormData] = useState({
@@ -35,7 +37,7 @@ const Agents = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:5000/agents", {
+      const response = await fetch(`${API_URL}/agents`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData), 

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { toFormData } from "axios";
 import { Navigate, useNavigate } from "react-router-dom";
 import DataTableForm from "../../UI/DataTableForm";
+import { API_URL } from "../../../config";
 
 const ConferenceRooms = () => {
 
@@ -15,7 +16,7 @@ const ConferenceRooms = () => {
         e.preventDefault();
         try {
         const body = { conferenceroomname, conferenceroomdesc };
-        const response = await fetch("http://localhost:5000/conferencerooms", {
+        const response = await fetch(`${API_URL}/conferencerooms`, {
             method: "POST",
             headers: {"Content-Type" : "application/json"},
             body: JSON.stringify(body),
@@ -30,7 +31,7 @@ const ConferenceRooms = () => {
     const deleteConferenceRoom = async id =>{
         try {
 
-        const deleteConferenceRoom = await fetch(`http://localhost:5000/conferencerooms/${id}` , {
+        const deleteConferenceRoom = await fetch(`${API_URL}/conferencerooms/${id}` , {
             method: "DELETE"
         });
 
@@ -43,7 +44,7 @@ const ConferenceRooms = () => {
 
     const getConferenceRooms = async () => {
         try {
-        const response = await await fetch("http://localhost:5000/conferencerooms");
+        const response = await await fetch(`${API_URL}/conferencerooms`);
         const jsonData = await response.json();
 
         setConferenceRooms(jsonData);

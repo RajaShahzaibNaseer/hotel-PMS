@@ -2,14 +2,11 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Navigator = () => {
+  
   const navigate = useNavigate();
 
-  const goToHotel = () => {
-    navigate("/admin")
-  };
-
-  const goToClientele = () => {
-    navigate("/clientlist")
+  const goTo = (location) => () => {
+    navigate(location);
   };
   
   const Button = ({text, type, handler}) => (
@@ -27,8 +24,9 @@ const Navigator = () => {
     <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-[#1e1e1e] to-[#282c34] text-white">
       <div className="bg-[#222] p-8 rounded-s-md shadow-[0_5px_15px_rgba(0,0,0,0.3)] w-[320px] text-center" >
         <h2 className="mb-4 text-xl">Navigator</h2>
-        <Button text={'Hotel System'} type={'button'} handler={goToHotel} />
-        <Button text={'Clientele Management'} type={'button'} handler={goToClientele} />
+        <Button text={'Hotel System'} type={'button'} handler={goTo('/admin')} />
+        <Button text={'Clientele Management'} type={'button'} handler={goTo('/clientlist')} />
+        <Button text={'Inventory'} type={'button'} handler={goTo('/inventory')} />
       </div>
     </div>
   );

@@ -23,33 +23,43 @@ import ShowCompany from "./components/Clientele/Company/ShowCompany";
 import ShowAgents from "./components/Clientele/Agents/ShowAgents";
 import ShowGroups from "./components/Clientele/Groups/ShowGroups";
 
+import Inventory from "./components/Inventory/Inventory";
+import StockOnHand from "./components/Inventory/StockOnHand";
+import PurchaseOrders from "./components/Inventory/PurchaseOrders";
+import Setup from "./components/Inventory/Setup";
+
 const App = () => {
   return (
     <Routes>
-      <Route path="/" element={<LoginForm />} /> // Ported
-      <Route path="/groups" element={<Groups />} /> //Ported
-      <Route path="/agents" element= {<Agents />} /> //Ported
-      <Route path="/company" element={<Company />} /> //Ported
-      <Route path="/clientlist" element={<ClientList />} /> //Ported
-      <Route path="/navigator" element={<Navigator />} /> //Ported
+      <Route path="/" element={<LoginForm />} />  
+      <Route path="/groups" element={<Groups />} />  
+      <Route path="/agents" element= {<Agents />} />  
+      <Route path="/company" element={<Company />} />  
+      <Route path="/clientlist" element={<ClientList />} />  
+      <Route path="/navigator" element={<Navigator />} />  
       
-      <Route path="/admin" element={<AdminPage />} /> //Ported
-      <Route path="/departments" element= {<Departments />} /> //Ported
-      <Route path="/conferenceRooms" element={<ConferenceRooms />} /> //Ported
-      <Route path="/blocks" element={<Blocks />} /> //Ported
-      <Route path="/floors" element={<Floors />} /> //Ported
-      <Route path="/mealplanrates" element={<MealPlans />} /> //Ported
+      <Route path="/admin" element={<AdminPage />} />  
+      <Route path="/departments" element= {<Departments />} />  
+      <Route path="/conferenceRooms" element={<ConferenceRooms />} />  
+      <Route path="/blocks" element={<Blocks />} />  
+      <Route path="/floors" element={<Floors />} />  
+      <Route path="/mealplanrates" element={<MealPlans />} />  
       <Route path="/paxrates" element={<PaxRates />} />
       <Route path="/services" element={<AuxServices />} />
-      <Route path="/jobs" element ={<JobTitles />} /> //Ported
-      <Route path="/guests" element = {<Guests />} /> //Ported
-      <Route path="/rooms" element = {<Rooms />} /> //Ported
-      <Route path="/roomtypes" element = {<RoomTypes />} /> //Ported
+      <Route path="/jobs" element ={<JobTitles />} />  
+      <Route path="/guests" element = {<Guests />} />  
+      <Route path="/rooms" element = {<Rooms />} />  
+      <Route path="/roomtypes" element = {<RoomTypes />} />  
 
-      <Route path="/guestlist" element = {<ShowGuests />} /> //Ported
-      <Route path="/companylist" element = {<ShowCompany />} /> //Ported
-      <Route path="/agentlist" element ={<ShowAgents />} /> //Ported
-      <Route path="/grouplist" element={<ShowGroups />} /> //Ported
+      <Route path="/guestlist" element = {<ShowGuests />} />  
+      <Route path="/companylist" element = {<ShowCompany />} />  
+      <Route path="/agentlist" element ={<ShowAgents />} />  
+      <Route path="/grouplist" element={<ShowGroups />} />  
+
+      <Route path="/inventory" element={<Inventory />} />
+      <Route path="/stock_on_hand" element={<StockOnHand />} />
+      <Route path="/purchase_orders" element={<PurchaseOrders />} />
+      <Route path="/setup" element={<Setup />} />
     </Routes>
   );
 };

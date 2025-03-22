@@ -5,6 +5,9 @@ import { Navigate, useNavigate, Link, Routes, Route } from "react-router-dom";
 import StockOnHand from "./StockOnHand";
 import PurchaseOrders from "./PurchaseOrders";
 import Setup from "./Setup";
+import StockRequests from "./StockRequests";
+import StockTransfer from "./StockTransfer";
+import StockTakes from "./StockTakes";
 
 const Inventory = () => {
   
@@ -63,6 +66,9 @@ const Inventory = () => {
   const routes = [
     { title: "Stock On Hand", url: "/stock_on_hand", component: <StockOnHand /> },
     { title: "Purchase Orders", url: "/purchase_orders", component: <PurchaseOrders /> },
+    { title: "Stock Requests", url: "/stock_requests", component: <StockRequests /> },
+    { title: "Stock Transfers", url: "/stock_transfer", component: <StockTransfer /> },
+    { title: "Stock Takes", url: "/stock_takes", component: <StockTakes /> },
     { title: "Setup", url: "/setup", component: <Setup /> },
   ];
 

@@ -26,6 +26,9 @@ import ShowGroups from "./components/Clientele/Groups/ShowGroups";
 import Inventory from "./components/Inventory/Inventory";
 import StockOnHand from "./components/Inventory/StockOnHand";
 import PurchaseOrders from "./components/Inventory/PurchaseOrders";
+import StockRequests from "./components/Inventory/StockRequests";
+import StockTransfer from "./components/Inventory/StockTransfer";
+import StockTakes from "./components/Inventory/StockTakes";
 import Setup from "./components/Inventory/Setup";
 
 const App = () => {
@@ -58,7 +61,9 @@ const App = () => {
 
       <Route path="/inventory" element={<Inventory />} />
       <Route path="/stock_on_hand" element={<StockOnHand />} />
-      <Route path="/purchase_orders" element={<PurchaseOrders />} />
+      <Route path="/stock_requests" element={<StockRequests />} />
+      <Route path="/stock_transfer" element={<StockTransfer />} />
+      <Route path="/stock_takes" element={<StockTakes />} />
       <Route path="/setup" element={<Setup />} />
     </Routes>
   );

@@ -20,6 +20,7 @@ const itemRoute = require("./Routes/ItemsRoutes");
 const foodSymbolRoute = require("./Routes/FoodSymbolRoutes");
 const foodModifierRoute = require("./Routes/ItemModifierRoutes");
 const finishedGoodsRoute = require("./Routes/FinishedGoodsRoutes");
+const supplierRoute = require("./Routes/SuppliersRoutes");
 
 require("dotenv").config();
 
@@ -48,6 +49,7 @@ app.use("/items",itemRoute);
 app.use("/food-symbols",foodSymbolRoute);
 app.use("/modifiers",foodModifierRoute);
 app.use("/finished-goods",finishedGoodsRoute);
+app.use("/suppliers",supplierRoute);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

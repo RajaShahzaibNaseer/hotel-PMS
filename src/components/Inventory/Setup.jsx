@@ -21,12 +21,14 @@ const Setup = () => {
         <>
             <h2 className="text-2xl font-semibold mb-4 text-center">Inventory Setup</h2>
             <hr/>
-            <div className="items-center flex flex-col justify-center sm:flex-row gap-4 mt-10">
-                <Button icon={"📕"} title={"Recipes"} link={"recipes"} />
-                <Button icon={"📋"} title={"Menu"} link={"menu"} />
-                <Button icon={"📜"} title={"Ingredients & Sub Recipes"} link={"ingredients"} />
-                <Button icon={"📦"} title={"Finished Goods"} link={"finished_goods"} />
-                <Button icon={"⚙️"} title={"Inventory Settings"} link={"settings"} />
+            <div className="flex justify-center mt-10">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <Button icon={"📕"} title={"Recipes"} link={"recipes"} />
+                    <Button icon={"📋"} title={"Menu"} link={"menu"} />
+                    <Button icon={"📜"} title={"Ingredients & Sub Recipes"} link={"ingredients"} />
+                    <Button icon={"📦"} title={"Finished Goods"} link={"finished_goods"} />
+                    <Button icon={"⚙️"} title={"Inventory Settings"} link={"settings"} />
+                </div>
             </div>
         </>
     )

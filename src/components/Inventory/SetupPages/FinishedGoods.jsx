@@ -19,25 +19,25 @@ const Modal = ({ isOpen, onClose, children }) => {
     );
 };
 const FinishedGoods = () => {
-    const tableHeader = ["Name", "Unit Name", "Cost/Unit (KES)", "Supplier", "Actions"];
+    const tableHeader = ["Name", "Unit Name", "Cost/Unit (KES)", "Supplier", "Reorder Level", "Actions"];
     const [tableData, setTableData] = useState([
-        ["Sugar", "Kg", "120", "ABC Supplies"],
-        ["Flour", "Kg", "80", "XYZ Traders"]
+        ["Sugar", "Kg", "120", "ABC Supplies", "5"],
+        ["Flour", "Kg", "80", "XYZ Traders", "10"]
     ]);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentIndex, setCurrentIndex] = useState(null);
-    const [itemData, setItemData] = useState({ name: "", unit: "", cost: "", supplier: "" });
+    const [itemData, setItemData] = useState({ name: "", unit: "", cost: "", supplier: "", reorderLevel: "" });
 
     // Open modal for actions
     const openModal = (index = null) => {
         setCurrentIndex(index);
 
         if (index !== null) {
-            const [name, unit, cost, supplier] = tableData[index];
-            setItemData({ name, unit, cost, supplier });
+            const [name, unit, cost, supplier, reorderLevel] = tableData[index];
+            setItemData({ name, unit, cost, supplier, reorderLevel });
         } else {
-            setItemData({ name: "", unit: "", cost: "", supplier: "" });
+            setItemData({ name: "", unit: "", cost: "", supplier: "", reorderLevel: "" });
         }
 
         setIsModalOpen(true);
@@ -52,14 +52,14 @@ const FinishedGoods = () => {
 
     // Add new item
     const addItem = () => {
-        setTableData([...tableData, [itemData.name, itemData.unit, itemData.cost, itemData.supplier]]);
+        setTableData([...tableData, [itemData.name, itemData.unit, itemData.cost, itemData.supplier, itemData.reorderLevel]]);
         closeModal();
     };
 
     // Edit existing item
     const editItem = () => {
         const updatedTable = [...tableData];
-        updatedTable[currentIndex] = [itemData.name, itemData.unit, itemData.cost, itemData.supplier];
+        updatedTable[currentIndex] = [itemData.name, itemData.unit, itemData.cost, itemData.supplier, itemData.reorderLevel];
         setTableData(updatedTable);
         closeModal();
     };
@@ -157,6 +157,14 @@ const FinishedGoods = () => {
                         name="supplier"
                         placeholder="Supplier"
                         value={itemData.supplier}
+                        onChange={handleInputChange}
+                        className="p-2 bg-gray-700 rounded"
+                    />
+                    <input
+                        type="text"
+                        name="reorderLevel"
+                        placeholder="Reorder Level"
+                        value={itemData.reorderLevel}
                         onChange={handleInputChange}
                         className="p-2 bg-gray-700 rounded"
                     />

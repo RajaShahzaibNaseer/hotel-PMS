@@ -20,17 +20,17 @@ const Modal = ({ isOpen, onClose, children }) => {
 };
 
 const Menu = () => {
-    const tableHeader = ["Name", "Price (KES)", "Actions"];
+    const tableHeader = ["Name", "Price (KES)", "Category", "Actions"];
     const initialTableData = [
-        ["3 TUSKER LITE OFFER", "120"],
-        ["3 TUSKER MALT OFFER", "80"],
-        ["3 WHITECAP LAGER OFFER", "120"],
+        ["3 TUSKER LITE OFFER", "120", "Drinks"],
+        ["3 TUSKER MALT OFFER", "80", "Drinks"],
+        ["3 WHITECAP LAGER OFFER", "120", "Drinks"],
     ];
     const [tableData, setTableData] = useState(initialTableData);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalType, setModalType] = useState(null); // 'add', 'edit', or 'delete'
     const [selectedRow, setSelectedRow] = useState(null);
-    const [formData, setFormData] = useState({ name: "", price: "" });
+    const [formData, setFormData] = useState({ name: "", price: "", category: "" });
 
     // Open modal for actions
     const openModal = (type, rowIndex = null) => {
@@ -38,11 +38,19 @@ const Menu = () => {
         setSelectedRow(rowIndex);
 
         if (type === "edit" && rowIndex !== null) {
-            setFormData({ name: tableData[rowIndex][0], price: tableData[rowIndex][1] });
+            setFormData({
+                name: tableData[rowIndex][0],
+                price: tableData[rowIndex][1],
+                category: tableData[rowIndex][2],
+            });
         } else if (type === "delete" && rowIndex !== null) {
-            setFormData({ name: tableData[rowIndex][0], price: tableData[rowIndex][1] });
+            setFormData({
+                name: tableData[rowIndex][0],
+                price: tableData[rowIndex][1],
+                category: tableData[rowIndex][2],
+            });
         } else {
-            setFormData({ name: "", price: "" });
+            setFormData({ name: "", price: "", category: "" });
         }
 
         setIsModalOpen(true);
@@ -62,10 +70,10 @@ const Menu = () => {
     // Handle form submission for add/edit
     const handleSubmit = () => {
         if (modalType === "add") {
-            setTableData([...tableData, [formData.name, formData.price]]);
+            setTableData([...tableData, [formData.name, formData.price, formData.category]]);
         } else if (modalType === "edit" && selectedRow !== null) {
             const updatedData = [...tableData];
-            updatedData[selectedRow] = [formData.name, formData.price];
+            updatedData[selectedRow] = [formData.name, formData.price, formData.category];
             setTableData(updatedData);
         }
         closeModal();
@@ -153,6 +161,14 @@ const Menu = () => {
                                 className="w-full p-2 bg-gray-700 rounded"
                                 placeholder="Price (KES)"
                                 value={formData.price}
+                                onChange={handleInputChange}
+                            />
+                            <input
+                                name="category"
+                                type="text"
+                                className="w-full p-2 bg-gray-700 rounded"
+                                placeholder="Category"
+                                value={formData.category}
                                 onChange={handleInputChange}
                             />
                             <div className="flex justify-end gap-2">

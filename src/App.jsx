@@ -37,6 +37,8 @@ import Ingredients from "./components/Inventory/SetupPages/Ingredients";
 import Recipes from "./components/Inventory/SetupPages/Recipes";
 import Menu from "./components/Inventory/SetupPages/Menu";
 import Settings from "./components/Inventory/SetupPages/InventorySettings";
+import Suppliers from "./components/Inventory/SetupPages/Suppliers";
+import Measurements from "./components/Inventory/SetupPages/Measurements";
 
 const App = () => {
   return (
@@ -81,7 +83,10 @@ const App = () => {
       <Route path="/menu" element={<Menu/>} />
       <Route path="/ingredients" element={<Ingredients />} />
       <Route path="/finished_goods" element={<FinishedGoods />} />
+      <Route path="/suppliers" element={<Suppliers />} />
       <Route path="/settings" element={<Settings />} />
+      <Route path="/measurement_units" element={<Measurements />} />
+
 
     </Routes>
   );

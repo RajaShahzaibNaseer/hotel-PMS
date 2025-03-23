@@ -18,6 +18,7 @@ const stockRoute = require("./Routes/StocksRoutes")
 const categoryRoute = require("./Routes/CategoryRoutes")
 const itemRoute = require("./Routes/ItemsRoutes");
 const foodSymbolRoute = require("./Routes/FoodSymbolRoutes");
+const foodModifierRoute = require("./Routes/ItemModifierRoutes");
 require("dotenv").config();
 
 const app = express();
@@ -43,6 +44,7 @@ app.use("/stocks", stockRoute);
 app.use("/categories", categoryRoute);
 app.use("/items",itemRoute);
 app.use("/food-symbols",foodSymbolRoute);
+app.use("/modifiers",foodModifierRoute);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

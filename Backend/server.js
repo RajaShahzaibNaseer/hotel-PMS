@@ -23,6 +23,15 @@ const finishedGoodsRoute = require("./Routes/FinishedGoodsRoutes");
 const supplierRoute = require("./Routes/SuppliersRoutes");
 const purchaseOrderRoute = require("./Routes/PurchaseOrdersRoutes");
 const ingredientRoute = require("./Routes/ingredientsRoutes");
+const inventoryRoute = require("./Routes/InventoryRoutes");
+const ordertracker = require("./Routes/OrderTrackerRoutes");
+const inventoryRoute = require("./Routes/InventoryRoutes"); 
+const inventoryRoute = require("./Routes/InventoryRoutes");
+const inventoryRoute = require("./Routes/InventoryRoutes");
+const inventoryRoute = require("./Routes/InventoryRoutes");
+const inventoryRoute = require("./Routes/InventoryRoutes");
+const inventoryRoute = require("./Routes/InventoryRoutes");
+
 require("dotenv").config();
 
 const app = express();
@@ -53,6 +62,7 @@ app.use("/finished-goods",finishedGoodsRoute);
 app.use("/suppliers",supplierRoute);
 app.use("/purchase-orders",purchaseOrderRoute);
 app.use("/ingredients",ingredientRoute);
+app.use("/inventory",inventoryRoute);
 
 
 const PORT = process.env.PORT || 5000;

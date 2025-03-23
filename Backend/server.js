@@ -17,6 +17,7 @@ const groupRoute = require("./Routes/GroupRoutes");
 const stockRoute = require("./Routes/StocksRoutes")
 const categoryRoute = require("./Routes/CategoryRoutes")
 const itemRoute = require("./Routes/ItemsRoutes");
+const foodSymbolRoute = require("./Routes/FoodSymbolRoutes");
 require("dotenv").config();
 
 const app = express();
@@ -41,7 +42,7 @@ app.use("/groups", groupRoute);
 app.use("/stocks", stockRoute);
 app.use("/categories", categoryRoute);
 app.use("/items",itemRoute);
-
+app.use("/food-symbols",foodSymbolRoute);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

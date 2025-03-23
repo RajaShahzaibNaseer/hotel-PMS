@@ -29,7 +29,7 @@ const recipeRoute = require("./Routes/RecipeRoutes");
 const stockRequestRoute = require("./Routes/StockRequestsRoutes");
 const stockTakeRoute = require("./Routes/StockTakesRoutes");
 const stockTransfersRoute = require("./Routes/StockTransfers");
-const inventoryRoute = require("./Routes/InventoryRoutes");
+const userRoute = require("./Routes/UserRoutes");
 const inventoryRoute = require("./Routes/InventoryRoutes");
 
 require("dotenv").config();

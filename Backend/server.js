@@ -24,13 +24,13 @@ const supplierRoute = require("./Routes/SuppliersRoutes");
 const purchaseOrderRoute = require("./Routes/PurchaseOrdersRoutes");
 const ingredientRoute = require("./Routes/ingredientsRoutes");
 const inventoryRoute = require("./Routes/InventoryRoutes");
-const ordertracker = require("./Routes/OrderTrackerRoutes");
+const orderTrackerRoute = require("./Routes/OrderTrackerRoutes");
 const recipeRoute = require("./Routes/RecipeRoutes"); 
 const stockRequestRoute = require("./Routes/StockRequestsRoutes");
 const stockTakeRoute = require("./Routes/StockTakesRoutes");
 const stockTransfersRoute = require("./Routes/StockTransfers");
 const userRoute = require("./Routes/UserRoutes");
-const inventoryRoute = require("./Routes/InventoryRoutes");
+const userPermissionRoute = require("./Routes/userPermissionRoutes");
 
 require("dotenv").config();
 
@@ -62,6 +62,13 @@ app.use("/finished-goods",finishedGoodsRoute);
 app.use("/suppliers",supplierRoute);
 app.use("/purchase-orders",purchaseOrderRoute);
 app.use("/ingredients",ingredientRoute);
+app.use("/ordertracker",orderTrackerRoute);
+app.use("/recipe",recipeRoute);
+app.use("/stockrequest",stockRequestRoute);
+app.use("/stocktake",stockTakeRoute);
+app.use("/stocktransfer",stockTransfersRoute);
+app.use("/user",userRoute);
+app.use("/userpermission",userPermissionRoute);
 app.use("/inventory",inventoryRoute);
 
 

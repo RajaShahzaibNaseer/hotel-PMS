@@ -29,7 +29,14 @@ import PurchaseOrders from "./components/Inventory/PurchaseOrders";
 import StockRequests from "./components/Inventory/StockRequests";
 import StockTransfer from "./components/Inventory/StockTransfer";
 import StockTakes from "./components/Inventory/StockTakes";
+import ViewConsignment from "./components/Inventory/ViewConsignment";
+
 import Setup from "./components/Inventory/Setup";
+import FinishedGoods from "./components/Inventory/SetupPages/FinishedGoods";
+import Ingredients from "./components/Inventory/SetupPages/Ingredients";
+import Recipes from "./components/Inventory/SetupPages/Recipes";
+import Menu from "./components/Inventory/SetupPages/Menu";
+import Settings from "./components/Inventory/SetupPages/InventorySettings";
 
 const App = () => {
   return (
@@ -60,11 +67,22 @@ const App = () => {
       <Route path="/grouplist" element={<ShowGroups />} />  
 
       <Route path="/inventory" element={<Inventory />} />
+
       <Route path="/stock_on_hand" element={<StockOnHand />} />
+      <Route path="/view_consignment" element={<ViewConsignment />} />
+
       <Route path="/stock_requests" element={<StockRequests />} />
       <Route path="/stock_transfer" element={<StockTransfer />} />
       <Route path="/stock_takes" element={<StockTakes />} />
+      <Route path="/purchase_orders" element={<PurchaseOrders />} />
+
       <Route path="/setup" element={<Setup />} />
+      <Route path="/recipes" element={<Recipes />} />
+      <Route path="/menu" element={<Menu/>} />
+      <Route path="/ingredients" element={<Ingredients />} />
+      <Route path="/finished_goods" element={<FinishedGoods />} />
+      <Route path="/settings" element={<Settings />} />
+
     </Routes>
   );
 };

@@ -45,7 +45,7 @@ export default function AccordionTable({ tableData, tableHeaders }) {
           {tableData.map((section, index) => (
             <React.Fragment key={index}>
               <tr
-                className="bg-gray-800 hover:bg-gray-700 transition-all duration-200 cursor-pointer border-b-2 border-b-gray-700"
+                className="bg-gray-800 hover:bg-gray-700 transition-all duration-200 cursor-pointer border-b-2 border-b-gray-700 select-none"
                 onClick={() => toggleCategory(index)} >
                 <td colSpan={tableHeaders.length} className="p-4 font-medium text-gray-200 mb-2">
                   {isCategoryOpen(index) ? "▲" : "▼"} {section.category}

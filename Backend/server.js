@@ -22,6 +22,7 @@ const foodModifierRoute = require("./Routes/ItemModifierRoutes");
 const finishedGoodsRoute = require("./Routes/FinishedGoodsRoutes");
 const supplierRoute = require("./Routes/SuppliersRoutes");
 const purchaseOrderRoute = require("./Routes/PurchaseOrdersRoutes");
+const ingredientRoute = require("./Routes/ingredientsRoutes");
 require("dotenv").config();
 
 const app = express();
@@ -51,6 +52,8 @@ app.use("/modifiers",foodModifierRoute);
 app.use("/finished-goods",finishedGoodsRoute);
 app.use("/suppliers",supplierRoute);
 app.use("/purchase-orders",purchaseOrderRoute);
+app.use("/ingredients",ingredientRoute);
+
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

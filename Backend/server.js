@@ -15,6 +15,7 @@ const companyRoute = require("./Routes/CompanyRoutes");
 const agentRoute = require("./Routes/AgentRoutes");
 const groupRoute = require("./Routes/GroupRoutes");
 const stockRoute = require("./Routes/StocksRoutes")
+const categoryRoute = require("./Routes/CategoryRoutes")
 require("dotenv").config();
 
 const app = express();
@@ -36,7 +37,8 @@ app.use("/guests", guestRoute);
 app.use("/company", companyRoute);
 app.use("/agents", agentRoute);
 app.use("/groups", groupRoute);
-app.use("/stocks", stockRoute)
+app.use("/stocks", stockRoute);
+app.use("/categories", categoryRoute);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

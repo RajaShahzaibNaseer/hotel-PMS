@@ -28,7 +28,7 @@ const ordertracker = require("./Routes/OrderTrackerRoutes");
 const recipeRoute = require("./Routes/RecipeRoutes"); 
 const stockRequestRoute = require("./Routes/StockRequestsRoutes");
 const stockTakeRoute = require("./Routes/StockTakesRoutes");
-const inventoryRoute = require("./Routes/InventoryRoutes");
+const stockTransfersRoute = require("./Routes/StockTransfers");
 const inventoryRoute = require("./Routes/InventoryRoutes");
 const inventoryRoute = require("./Routes/InventoryRoutes");
 

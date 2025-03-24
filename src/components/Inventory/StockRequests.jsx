@@ -154,7 +154,7 @@ const StockRequests = () => {
 
   return (
     <div className="bg-gray-900 text-white p-4">
-      <h2 className="text-2xl font-semibold mb-4 text-center">Purchase Orders</h2>
+      <h2 className="text-2xl font-semibold mb-4 text-center">Stock Requests</h2>
 
       {/* Tabs */}
       <div className="flex border-b border-gray-700 mb-4">

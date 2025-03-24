@@ -1,186 +1,543 @@
 import { useState } from "react";
-import Modal from "../UI/Modal";
-
-
-const setTableHeader = ["Order No.", "Item", "Created By", "Sent By", "Ordered By", "Due Date", "Total (KES)", "Actions"];
-const sentTableData = [
-    ["#123", "Sugar", "John Doe", "John Doe", "John Doe", "2023-06-20", "1200"],
-    ["#456", "Flour", "Jane Smith", "Jane Smith", "Jane Smith", "2023-06-21", "800"],
-    ["#789", "Salt", "Bob Johnson", "Bob Johnson", "Bob Johnson", "2023-06-22", "600"],
-];
-
-const newTableHeader = ["Sr. No.", "Item", "Stock on Hand", "Supplier", "Price/Unit", "Unit Value", "Quantity", "Deliver to", "Total (KES)", "Actions"];
-const newTableData = [
-    ["1", "Sugar", "50", "ABC Supplies", "120", "Kg", "20", "Store A", "2400"],
-    ["2", "Flour", "30", "XYZ Traders", "80", "Kg", "15", "Store B", "1200"],
-    ["3", "Salt", "40", "XYZ Traders", "60", "Kg", "10", "Store C", "600"],
-]
-
-const receivedTableHeader = ["Order No.", "Inv Ref. No.", "Item", "Created By", "Ordered By", "Due Date", "Received Date", "Total (KES)", "Actions"];
-const receivedTableData = [
-    ["#123", "#456", "Sugar", "John Doe", "John Doe", "2023-06-20", "2023-06-22", "1200"],
-    ["#456", "#789", "Flour", "Jane Smith", "Jane Smith", "2023-06-21", "2023-06-23", "800"],
-    ["#789", "#123", "Salt", "Bob Johnson", "Bob Johnson", "2023-06-22", "2023-06-24", "600"],
-];
-
-const SentPurchaseOrders = () => {
-    return (
-        <table className="w-full border border-gray-700 text-center">
-            <thead>
-                <tr className="bg-gray-800 text-gray-300">
-                    {setTableHeader.map((header, index) => (
-                        <th key={index} className="border border-gray-700 p-3">{header}</th>
-                    ))}
-                </tr>
-            </thead>
-            <tbody>
-                {sentTableData.map((row, rowIndex) => (
-                    <tr key={rowIndex} className="border border-gray-700 hover:bg-gray-800">
-                        {row.map((cell, cellIndex) => (
-                            <td key={cellIndex} className="border border-gray-700 p-3">{cell}</td>
-                        ))}
-                        <td className="border flex flex-col border-gray-700 p-3 gap-2">
-                            <button
-                                className="bg-blue-500 px-4 py-2 rounded"
-                                onClick={() => openModal("edit", rowIndex)}
-                            >
-                                Open
-                            </button>
-                            <button
-                                className="bg-green-500 px-4 py-2 rounded"
-                                onClick={() => openModal("delete", rowIndex)}
-                            >
-                                Receive
-                            </button>
-                            <button
-                                className="bg-yellow-500 px-4 py-2 rounded"
-                                onClick={() => openModal("edit", rowIndex)}
-                            >
-                                Re-Send
-                            </button>
-                            <button
-                                className="bg-red-500 px-4 py-2 rounded"
-                                onClick={() => openModal("delete", rowIndex)}
-                            >
-                                Delete
-                            </button>
-                        </td>
-                    </tr>
-                ))}
-            </tbody>
-        </table>
-    )
-}
-
-const NewPurchaseOrder = () => {
-    return (
-        <div className="flex flex-col items-center justify-center">
-            <button className="bg-green-500 px-4 py-2 rounded hover:bg-green-600 mb-4">
-                <span className="font-extrabold">+</span>New Purchase Order
-            </button>
-            <table className="w-full border border-gray-700 text-center">
-                <thead>
-                    <tr className="bg-gray-800 text-gray-300">
-                        {newTableHeader.map((header, index) => (
-                            <th key={index} className="border border-gray-700 p-3">{header}</th>
-                        ))}
-                    </tr>
-                </thead>
-                <tbody>
-                    {newTableData.map((row, rowIndex) => (
-                        <tr key={rowIndex} className="border border-gray-700 hover:bg-gray-800">
-                            {row.map((cell, cellIndex) => (
-                                <td key={cellIndex} className="border border-gray-700 p-3">{cell}</td>
-                            ))}
-                            <td className="border flex flex-col border-gray-700 p-3 gap-2">
-                                <button
-                                    className="bg-green-500 px-4 py-2 rounded"
-                                    onClick={() => openModal("edit", rowIndex)}
-                                >
-                                    Edit
-                                </button>
-                                <button
-                                    className="bg-red-500 px-4 py-2 rounded"
-                                    onClick={() => openModal("delete", rowIndex)}
-                                >
-                                    Delete
-                                </button>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-        </div>
-    )
-}
-
-const ReceivedPurchaseOrder = () => {
-    return (
-        <>
-            <table className="w-full border border-gray-700 text-center">
-                <thead>
-                    <tr className="bg-gray-800 text-gray-300">
-                        {setTableHeader.map((header, index) => (
-                            <th key={index} className="border border-gray-700 p-3">{header}</th>
-                        ))}
-                    </tr>
-                </thead>
-                <tbody>
-                    {sentTableData.map((row, rowIndex) => (
-                        <tr key={rowIndex} className="border border-gray-700 hover:bg-gray-800">
-                            {row.map((cell, cellIndex) => (
-                                <td key={cellIndex} className="border border-gray-700 p-3">{cell}</td>
-                            ))}
-                            <td className="border flex flex-col border-gray-700 p-3 gap-2">
-                                <button
-                                    className="bg-blue-500 px-4 py-2 rounded"
-                                    onClick={() => openModal("edit", rowIndex)}
-                                >
-                                    Open
-                                </button>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-        </>
-    )
-}
 
 const PurchaseOrders = () => {
-    const [tab, setTab] = useState(0);
+  const [activeTab, setActiveTab] = useState(0);
+  const [editingIndex, setEditingIndex] = useState(null);
+  const [isAddingNew, setIsAddingNew] = useState(false);
+  
+  // New form state
+  const [newOrderForm, setNewOrderForm] = useState({
+    id: "",
+    item: "",
+    stock: "",
+    supplier: "",
+    price: "",
+    unit: "",
+    quantity: "",
+    deliverTo: "",
+    total: ""
+  });
+  
+  // Table data states
+  const [newOrders, setNewOrders] = useState([
+    { id: "1", item: "Sugar", stock: "50", supplier: "ABC Supplies", price: "120", unit: "Kg", quantity: "20", deliverTo: "Store A", total: "2400" },
+    { id: "2", item: "Flour", stock: "30", supplier: "XYZ Traders", price: "80", unit: "Kg", quantity: "15", deliverTo: "Store B", total: "1200" },
+    { id: "3", item: "Salt", stock: "40", supplier: "XYZ Traders", price: "60", unit: "Kg", quantity: "10", deliverTo: "Store C", total: "600" }
+  ]);
 
-    const tabs = [
-        { label: "Open Purchase Order", component: <NewPurchaseOrder /> },
-        { label: "Sent Purchase Order", component: <SentPurchaseOrders /> },
-        { label: "Received Purchase Order", component: <ReceivedPurchaseOrder /> },
-    ];
+  const [sentOrders, setSentOrders] = useState([
+    { orderNo: "#123", item: "Sugar", createdBy: "John Doe", sentBy: "John Doe", orderedBy: "John Doe", dueDate: "2023-06-20", total: "1200" },
+    { orderNo: "#456", item: "Flour", createdBy: "Jane Smith", sentBy: "Jane Smith", orderedBy: "Jane Smith", dueDate: "2023-06-21", total: "800" },
+    { orderNo: "#789", item: "Salt", createdBy: "Bob Johnson", sentBy: "Bob Johnson", orderedBy: "Bob Johnson", dueDate: "2023-06-22", total: "600" }
+  ]);
 
-    return (
-        <>
-            <h2 className="text-2xl font-semibold mb-4 text-center">Purchase Orders</h2>
+  const [receivedOrders, setReceivedOrders] = useState([
+    { orderNo: "#123", invRefNo: "#456", item: "Sugar", createdBy: "John Doe", orderedBy: "John Doe", dueDate: "2023-06-20", receivedDate: "2023-06-22", total: "1200" },
+    { orderNo: "#456", invRefNo: "#789", item: "Flour", createdBy: "Jane Smith", orderedBy: "Jane Smith", dueDate: "2023-06-21", receivedDate: "2023-06-23", total: "800" },
+    { orderNo: "#789", invRefNo: "#123", item: "Salt", createdBy: "Bob Johnson", orderedBy: "Bob Johnson", dueDate: "2023-06-22", receivedDate: "2023-06-24", total: "600" }
+  ]);
 
-            {/* Tabs */}
-            <div className="flex border-b border-gray-700">
-                {tabs.map((tabItem, index) => (
-                    <button
-                        key={index}
-                        onClick={() => setTab(index)}
-                        className={`flex-1 py-2 text-center transition ${
-                            tab === index
-                                ? "border-b-2 border-blue-500 text-blue-400 font-semibold"
-                                : "text-gray-400 hover:text-white"
-                        }`}
-                    >
-                        {tabItem.label}
-                    </button>
-                ))}
+  // Handle form input change
+  const handleFormChange = (e) => {
+    const { name, value } = e.target;
+    setNewOrderForm({
+      ...newOrderForm,
+      [name]: value
+    });
+  };
+
+  // Handle edit input change
+  const handleEditChange = (e, index) => {
+    const { name, value } = e.target;
+    const updatedOrders = [...newOrders];
+    updatedOrders[index] = {
+      ...updatedOrders[index],
+      [name]: value
+    };
+    setNewOrders(updatedOrders);
+  };
+
+  // Start editing an item
+  const handleEditItem = (index) => {
+    setEditingIndex(index);
+    // Here you would fetch the latest data from backend if needed
+  };
+
+  // Save edited item
+  const handleSaveEdit = (index) => {
+    setEditingIndex(null);
+    // Backend integration - send the updated item to your API
+    // Example: api.updateOrder(newOrders[index])
+    //   .then(() => console.log("Order updated"))
+    //   .catch(error => console.error("Error updating order:", error));
+  };
+
+  // Cancel editing
+  const handleCancelEdit = () => {
+    setEditingIndex(null);
+    // Optionally revert changes by re-fetching data from backend
+  };
+
+  // Add new order
+  const handleAddNewOrder = () => {
+    // Generate a new ID (in a real app, the backend would handle this)
+    const newId = String(newOrders.length + 1);
+    
+    // Calculate total if not provided
+    const total = newOrderForm.total || 
+      (parseInt(newOrderForm.price || 0) * parseInt(newOrderForm.quantity || 0)).toString();
+    
+    const newOrder = {
+      ...newOrderForm,
+      id: newId,
+      total
+    };
+    
+    setNewOrders([...newOrders, newOrder]);
+    
+    // Reset form and exit add mode
+    setNewOrderForm({
+      id: "",
+      item: "",
+      stock: "",
+      supplier: "",
+      price: "",
+      unit: "",
+      quantity: "",
+      deliverTo: "",
+      total: ""
+    });
+    setIsAddingNew(false);
+    
+    // Backend integration - send the new order to your API
+    // Example: api.createOrder(newOrder)
+    //   .then(response => console.log("Order created", response))
+    //   .catch(error => console.error("Error creating order:", error));
+  };
+
+  // Delete an item
+  const handleDeleteItem = (index, tabType) => {
+    if (window.confirm("Are you sure you want to delete this item?")) {
+      if (tabType === 0) {
+        const orderToDelete = newOrders[index];
+        setNewOrders(newOrders.filter((_, i) => i !== index));
+        
+        // Backend integration - send delete request
+        // Example: api.deleteOrder(orderToDelete.id)
+        //   .then(() => console.log("Order deleted"))
+        //   .catch(error => console.error("Error deleting order:", error));
+      } else if (tabType === 1) {
+        const orderToDelete = sentOrders[index];
+        setSentOrders(sentOrders.filter((_, i) => i !== index));
+        
+        // Example: api.deleteOrder(orderToDelete.orderNo)
+      } else {
+        const orderToDelete = receivedOrders[index];
+        setReceivedOrders(receivedOrders.filter((_, i) => i !== index));
+        
+        // Example: api.deleteOrder(orderToDelete.orderNo)
+      }
+    }
+  };
+
+  // Calculate total automatically
+  const calculateTotal = () => {
+    const price = parseFloat(newOrderForm.price) || 0;
+    const quantity = parseFloat(newOrderForm.quantity) || 0;
+    const total = (price * quantity).toFixed(2);
+    
+    setNewOrderForm({
+      ...newOrderForm,
+      total
+    });
+  };
+
+  return (
+    <div className="bg-gray-900 text-white p-4">
+      <h2 className="text-2xl font-semibold mb-4 text-center">Purchase Orders</h2>
+
+      {/* Tabs */}
+      <div className="flex border-b border-gray-700 mb-4">
+        <button
+          onClick={() => setActiveTab(0)}
+          className={`flex-1 py-2 text-center ${activeTab === 0 ? "border-b-2 border-blue-500 text-blue-400" : "text-gray-400"}`}
+        >
+          Open Orders
+        </button>
+        <button
+          onClick={() => setActiveTab(1)}
+          className={`flex-1 py-2 text-center ${activeTab === 1 ? "border-b-2 border-blue-500 text-blue-400" : "text-gray-400"}`}
+        >
+          Sent Orders
+        </button>
+        <button
+          onClick={() => setActiveTab(2)}
+          className={`flex-1 py-2 text-center ${activeTab === 2 ? "border-b-2 border-blue-500 text-blue-400" : "text-gray-400"}`}
+        >
+          Received Orders
+        </button>
+      </div>
+
+      {/* Content */}
+      <div className="mt-4">
+        {activeTab === 0 && (
+          <div>
+            {!isAddingNew ? (
+              <button 
+                onClick={() => setIsAddingNew(true)} 
+                className="bg-green-500 px-4 py-2 rounded hover:bg-green-600 mb-4"
+              >
+                + New Purchase Order
+              </button>
+            ) : (
+              <div className="bg-gray-800 p-4 rounded mb-4">
+                <h3 className="text-xl mb-3">Add New Purchase Order</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-sm mb-1">Item</label>
+                    <input
+                      type="text"
+                      name="item"
+                      value={newOrderForm.item}
+                      onChange={handleFormChange}
+                      className="w-full p-2 bg-gray-700 rounded"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm mb-1">Stock on Hand</label>
+                    <input
+                      type="text"
+                      name="stock"
+                      value={newOrderForm.stock}
+                      onChange={handleFormChange}
+                      className="w-full p-2 bg-gray-700 rounded"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm mb-1">Supplier</label>
+                    <input
+                      type="text"
+                      name="supplier"
+                      value={newOrderForm.supplier}
+                      onChange={handleFormChange}
+                      className="w-full p-2 bg-gray-700 rounded"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm mb-1">Price per Unit</label>
+                    <input
+                      type="text"
+                      name="price"
+                      value={newOrderForm.price}
+                      onChange={handleFormChange}
+                      onBlur={calculateTotal}
+                      className="w-full p-2 bg-gray-700 rounded"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm mb-1">Unit</label>
+                    <input
+                      type="text"
+                      name="unit"
+                      value={newOrderForm.unit}
+                      onChange={handleFormChange}
+                      className="w-full p-2 bg-gray-700 rounded"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm mb-1">Quantity</label>
+                    <input
+                      type="text"
+                      name="quantity"
+                      value={newOrderForm.quantity}
+                      onChange={handleFormChange}
+                      onBlur={calculateTotal}
+                      className="w-full p-2 bg-gray-700 rounded"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm mb-1">Deliver To</label>
+                    <input
+                      type="text"
+                      name="deliverTo"
+                      value={newOrderForm.deliverTo}
+                      onChange={handleFormChange}
+                      className="w-full p-2 bg-gray-700 rounded"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm mb-1">Total</label>
+                    <input
+                      type="text"
+                      name="total"
+                      value={newOrderForm.total}
+                      onChange={handleFormChange}
+                      className="w-full p-2 bg-gray-700 rounded"
+                      readOnly
+                    />
+                  </div>
+                </div>
+                <div className="flex justify-end mt-4 gap-2">
+                  <button
+                    onClick={() => setIsAddingNew(false)}
+                    className="bg-gray-600 px-4 py-2 rounded"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleAddNewOrder}
+                    className="bg-green-500 px-4 py-2 rounded"
+                  >
+                    Save Order
+                  </button>
+                </div>
+              </div>
+            )}
+            
+            <div className="overflow-x-auto">
+              <table className="w-full border border-gray-700">
+                <thead>
+                  <tr className="bg-gray-800">
+                    <th className="p-2 border border-gray-700">ID</th>
+                    <th className="p-2 border border-gray-700">Item</th>
+                    <th className="p-2 border border-gray-700">Stock</th>
+                    <th className="p-2 border border-gray-700">Supplier</th>
+                    <th className="p-2 border border-gray-700">Price</th>
+                    <th className="p-2 border border-gray-700">Unit</th>
+                    <th className="p-2 border border-gray-700">Quantity</th>
+                    <th className="p-2 border border-gray-700">Deliver To</th>
+                    <th className="p-2 border border-gray-700">Total</th>
+                    <th className="p-2 border border-gray-700">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {newOrders.map((order, index) => (
+                    <tr key={index} className="hover:bg-gray-800">
+                      <td className="p-2 border border-gray-700">{order.id}</td>
+                      
+                      {editingIndex === index ? (
+                        // Editable row
+                        <>
+                          <td className="p-2 border border-gray-700">
+                            <input
+                              type="text"
+                              name="item"
+                              value={order.item}
+                              onChange={(e) => handleEditChange(e, index)}
+                              className="w-full p-1 bg-gray-700 rounded"
+                            />
+                          </td>
+                          <td className="p-2 border border-gray-700">
+                            <input
+                              type="text"
+                              name="stock"
+                              value={order.stock}
+                              onChange={(e) => handleEditChange(e, index)}
+                              className="w-full p-1 bg-gray-700 rounded"
+                            />
+                          </td>
+                          <td className="p-2 border border-gray-700">
+                            <input
+                              type="text"
+                              name="supplier"
+                              value={order.supplier}
+                              onChange={(e) => handleEditChange(e, index)}
+                              className="w-full p-1 bg-gray-700 rounded"
+                            />
+                          </td>
+                          <td className="p-2 border border-gray-700">
+                            <input
+                              type="text"
+                              name="price"
+                              value={order.price}
+                              onChange={(e) => handleEditChange(e, index)}
+                              className="w-full p-1 bg-gray-700 rounded"
+                            />
+                          </td>
+                          <td className="p-2 border border-gray-700">
+                            <input
+                              type="text"
+                              name="unit"
+                              value={order.unit}
+                              onChange={(e) => handleEditChange(e, index)}
+                              className="w-full p-1 bg-gray-700 rounded"
+                            />
+                          </td>
+                          <td className="p-2 border border-gray-700">
+                            <input
+                              type="text"
+                              name="quantity"
+                              value={order.quantity}
+                              onChange={(e) => handleEditChange(e, index)}
+                              className="w-full p-1 bg-gray-700 rounded"
+                            />
+                          </td>
+                          <td className="p-2 border border-gray-700">
+                            <input
+                              type="text"
+                              name="deliverTo"
+                              value={order.deliverTo}
+                              onChange={(e) => handleEditChange(e, index)}
+                              className="w-full p-1 bg-gray-700 rounded"
+                            />
+                          </td>
+                          <td className="p-2 border border-gray-700">
+                            <input
+                              type="text"
+                              name="total"
+                              value={order.total}
+                              onChange={(e) => handleEditChange(e, index)}
+                              className="w-full p-1 bg-gray-700 rounded"
+                            />
+                          </td>
+                        </>
+                      ) : (
+                        // View mode
+                        <>
+                          <td className="p-2 border border-gray-700">{order.item}</td>
+                          <td className="p-2 border border-gray-700">{order.stock}</td>
+                          <td className="p-2 border border-gray-700">{order.supplier}</td>
+                          <td className="p-2 border border-gray-700">{order.price}</td>
+                          <td className="p-2 border border-gray-700">{order.unit}</td>
+                          <td className="p-2 border border-gray-700">{order.quantity}</td>
+                          <td className="p-2 border border-gray-700">{order.deliverTo}</td>
+                          <td className="p-2 border border-gray-700">{order.total}</td>
+                        </>
+                      )}
+                      
+                      <td className="p-2 border border-gray-700">
+                        {editingIndex === index ? (
+                          <div className="flex flex-col gap-1">
+                            <button
+                              onClick={() => handleSaveEdit(index)}
+                              className="bg-green-500 px-2 py-1 rounded"
+                            >
+                              Save
+                            </button>
+                            <button
+                              onClick={handleCancelEdit}
+                              className="bg-gray-500 px-2 py-1 rounded"
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        ) : (
+                          <div className="flex flex-col gap-1">
+                            <button
+                              onClick={() => handleEditItem(index)}
+                              className="bg-green-500 px-2 py-1 rounded mb-1"
+                            >
+                              Edit
+                            </button>
+                            <button
+                              onClick={() => handleDeleteItem(index, 0)}
+                              className="bg-red-500 px-2 py-1 rounded"
+                            >
+                              Delete
+                            </button>
+                          </div>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
+          </div>
+        )}
 
-            {/* Content */}
-            <div className="mt-4 p-4 bg-gray-800 rounded-lg">{tabs[tab].component}</div>
-        </>
-    );
+        {activeTab === 1 && (
+          <div className="overflow-x-auto">
+            <table className="w-full border border-gray-700">
+              <thead>
+                <tr className="bg-gray-800">
+                  <th className="p-2 border border-gray-700">Order No.</th>
+                  <th className="p-2 border border-gray-700">Item</th>
+                  <th className="p-2 border border-gray-700">Created By</th>
+                  <th className="p-2 border border-gray-700">Sent By</th>
+                  <th className="p-2 border border-gray-700">Ordered By</th>
+                  <th className="p-2 border border-gray-700">Due Date</th>
+                  <th className="p-2 border border-gray-700">Total</th>
+                  <th className="p-2 border border-gray-700">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {sentOrders.map((order, index) => (
+                  <tr key={index} className="hover:bg-gray-800">
+                    <td className="p-2 border border-gray-700">{order.orderNo}</td>
+                    <td className="p-2 border border-gray-700">{order.item}</td>
+                    <td className="p-2 border border-gray-700">{order.createdBy}</td>
+                    <td className="p-2 border border-gray-700">{order.sentBy}</td>
+                    <td className="p-2 border border-gray-700">{order.orderedBy}</td>
+                    <td className="p-2 border border-gray-700">{order.dueDate}</td>
+                    <td className="p-2 border border-gray-700">{order.total}</td>
+                    <td className="p-2 border border-gray-700">
+                      <div className="flex flex-col gap-1">
+                        <button className="bg-blue-500 px-2 py-1 rounded mb-1">
+                          Open
+                        </button>
+                        <button className="bg-green-500 px-2 py-1 rounded mb-1">
+                          Receive
+                        </button>
+                        <button className="bg-yellow-500 px-2 py-1 rounded mb-1">
+                          Re-Send
+                        </button>
+                        <button 
+                          onClick={() => handleDeleteItem(index, 1)}
+                          className="bg-red-500 px-2 py-1 rounded"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+
+        {activeTab === 2 && (
+          <div className="overflow-x-auto">
+            <table className="w-full border border-gray-700">
+              <thead>
+                <tr className="bg-gray-800">
+                  <th className="p-2 border border-gray-700">Order No.</th>
+                  <th className="p-2 border border-gray-700">Inv Ref. No.</th>
+                  <th className="p-2 border border-gray-700">Item</th>
+                  <th className="p-2 border border-gray-700">Created By</th>
+                  <th className="p-2 border border-gray-700">Ordered By</th>
+                  <th className="p-2 border border-gray-700">Due Date</th>
+                  <th className="p-2 border border-gray-700">Received Date</th>
+                  <th className="p-2 border border-gray-700">Total</th>
+                  <th className="p-2 border border-gray-700">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {receivedOrders.map((order, index) => (
+                  <tr key={index} className="hover:bg-gray-800">
+                    <td className="p-2 border border-gray-700">{order.orderNo}</td>
+                    <td className="p-2 border border-gray-700">{order.invRefNo}</td>
+                    <td className="p-2 border border-gray-700">{order.item}</td>
+                    <td className="p-2 border border-gray-700">{order.createdBy}</td>
+                    <td className="p-2 border border-gray-700">{order.orderedBy}</td>
+                    <td className="p-2 border border-gray-700">{order.dueDate}</td>
+                    <td className="p-2 border border-gray-700">{order.receivedDate}</td>
+                    <td className="p-2 border border-gray-700">{order.total}</td>
+                    <td className="p-2 border border-gray-700">
+                      <button className="bg-blue-500 px-2 py-1 rounded">
+                        Open
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+    </div>
+  );
 };
 
 export default PurchaseOrders;

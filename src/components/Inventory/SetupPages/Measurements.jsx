@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { API_URL } from "../../../config";
 
 const Measurements = () => {
-    const measurementHeaders = ["Name", "Actions"];
+    const measurementHeaders = ["id" ,"Name", "Actions"];
     const [measurementData, setMeasurementData] = useState([
         { name: "Kilograms", isEditing: false },
         { name: "Litres", isEditing: false },
@@ -11,6 +12,23 @@ const Measurements = () => {
         { name: "Ounces", isEditing: false },
         { name: "Meters", isEditing: false },
     ]);
+
+    //fetching measurement data from database
+    const fetchData = async () =>
+    {
+        try {
+            const response = await fetch(`${API_URL}/measurement`);
+            const jsonData = await response.json();
+            setMeasurementData(jsonData);
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
+
+    //usage of fetch function
+    useEffect(() =>{
+        fetchData();
+    });
 
     // Toggle edit mode for a row
     const handleEditToggle = (index) => {

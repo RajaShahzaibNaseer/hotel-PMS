@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { API_URL } from "../../../config";
 
 const Modal = ({ isOpen, onClose, children }) => {
     if (!isOpen) return null;
@@ -14,23 +15,40 @@ const Modal = ({ isOpen, onClose, children }) => {
 };
 
 const Recipes = () => {
-    const tableHeader = ["Item", "Cost", "Sale Price", "Profitability", "Ingredients", "Track Consumption?", "Actions"];
-    const initialTableData = [
-        { item: "Sugar", cost: "120", salePrice: "150", profitability: "30%", ingredients: "Sugar, Flour", trackConsumption: "✔" },
-        { item: "Flour", cost: "80", salePrice: "100", profitability: "20%", ingredients: "Sugar, Flour", trackConsumption: "✔" },
-    ];
+    const tableHeader = ["id", "name", "Cost", "Sale Price", "Profitability", "Ingredients", "Track Consumption?", "Actions"];
+    // const initialTableData = [
+    //     { id: "1" ,name: "Sugar", cost: "120", salePrice: "150", profitability: "30%", ingredients: "Sugar, Flour", trackConsumption: "✔" },
+    //     { id: "2" ,name: "Flour", cost: "80", salePrice: "100", profitability: "20%", ingredients: "Sugar, Flour", trackConsumption: "✔" },
+    // ];
 
-    const [tableData, setTableData] = useState(initialTableData);
+    const [tableData, setTableData] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalType, setModalType] = useState(null); // 'add' or 'edit'
     const [selectedRow, setSelectedRow] = useState(null);
     const [formData, setFormData] = useState({
-        item: "",
+        id: "",
+        name: "",
         cost: "",
         salePrice: "",
         profitability: "",
         ingredients: "",
         trackConsumption: "",
+    });
+
+    //fetching data from database
+    const fetchData = async () =>
+    {
+        try {
+            const response = await fetch(`${API_URL}/recipe`);
+            const jsonData = await response.json();
+            setTableData(jsonData);
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
+
+    useEffect(() =>{
+        fetchData();
     });
 
     // Open modal for actions
@@ -40,7 +58,8 @@ const Recipes = () => {
 
         if (type === "edit" && rowIndex !== null) {
             setFormData({
-                item: tableData[rowIndex].item,
+                id: tableData[rowIndex].id,
+                name: tableData[rowIndex].name,
                 cost: tableData[rowIndex].cost,
                 salePrice: tableData[rowIndex].salePrice,
                 profitability: tableData[rowIndex].profitability,
@@ -49,7 +68,8 @@ const Recipes = () => {
             });
         } else {
             setFormData({
-                item: "",
+                id: "",
+                name: "",
                 cost: "",
                 salePrice: "",
                 profitability: "",
@@ -139,7 +159,7 @@ const Recipes = () => {
                     <>
                         <h2 className="text-2xl font-bold mb-4">Confirm Deletion</h2>
                         <p>
-                            Are you sure you want to delete <span className="font-bold">{formData.item}</span>?
+                            Are you sure you want to delete <span className="font-bold">{formData.name}</span>?
                         </p>
                         <div className="flex justify-end gap-2 mt-4">
                             <button onClick={closeModal} className="bg-gray-600 px-4 py-2 rounded">Cancel</button>
@@ -153,11 +173,19 @@ const Recipes = () => {
                         </h2>
                         <form className="space-y-4">
                             <input
-                                name="item"
+                                name="id"
+                                type="number"
+                                className="w-full p-2 bg-gray-700 rounded"
+                                placeholder="id"
+                                value={formData.id}
+                                onChange={handleInputChange}
+                            />
+                            <input
+                                name="name"
                                 type="text"
                                 className="w-full p-2 bg-gray-700 rounded"
-                                placeholder="Item"
-                                value={formData.item}
+                                placeholder="Name"
+                                value={formData.name}
                                 onChange={handleInputChange}
                             />
                             <input

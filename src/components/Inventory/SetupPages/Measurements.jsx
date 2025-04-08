@@ -4,14 +4,8 @@ import { API_URL } from "../../../config";
 
 const Measurements = () => {
     const measurementHeaders = ["id" ,"Name", "Actions"];
-    const [measurementData, setMeasurementData] = useState([
-        { name: "Kilograms", isEditing: false },
-        { name: "Litres", isEditing: false },
-        { name: "Pounds", isEditing: false },
-        { name: "Grams", isEditing: false },
-        { name: "Ounces", isEditing: false },
-        { name: "Meters", isEditing: false },
-    ]);
+    const [measurementData, setMeasurementData] = useState([]);
+    const [refresh, setRefresh] = useState(true);
 
     //fetching measurement data from database
     const fetchData = async () =>
@@ -27,7 +21,11 @@ const Measurements = () => {
 
     //usage of fetch function
     useEffect(() =>{
-        fetchData();
+        if(refresh)
+        {
+            fetchData();
+            setRefresh(false);
+        }
     });
 
     // Toggle edit mode for a row
@@ -49,17 +47,53 @@ const Measurements = () => {
     };
 
     // Save edited item
-    const handleSave = (index) => {
-        setMeasurementData((prevData) =>
-            prevData.map((item, i) =>
-                i === index ? { ...item, isEditing: false } : item
-            )
-        );
+    const handleSave = async (index) => {
+        const item = measurementData[index];
+    
+        try {
+            if (item.id) {
+                // Existing item – update it with PUT
+                const response = await fetch(`${API_URL}/measurement/${item.id}`, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ name: item.name }),
+                });
+    
+                if (!response.ok) throw new Error("Failed to update item.");
+            } else {
+                // New item – create it with POST
+                const response = await fetch(`${API_URL}/measurement`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ name: item.name }),
+                });
+    
+                if (!response.ok) throw new Error("Failed to create item.");
+            }
+    
+            // Trigger refresh to fetch updated list
+            setRefresh(true);
+        } catch (error) {
+            console.error("Save error:", error.message);
+        }
     };
+    
 
     // Delete an item
-    const handleDelete = (index) => {
-        setMeasurementData((prevData) => prevData.filter((_, i) => i !== index));
+    const handleDelete = async (index) => {
+        try {
+            const id = measurementData[index].id;
+            const respone = await fetch(`${API_URL}/measurement/${id}`, {
+                method: "DELETE",
+            });
+            setRefresh(true);
+        } catch (error) {
+            console.log(error.message);
+        }
     };
 
     // Add a new measurement unit
@@ -96,6 +130,20 @@ const Measurements = () => {
                 <tbody>
                     {measurementData.map((row, rowIndex) => (
                         <tr key={rowIndex} className="border border-gray-700 hover:bg-gray-800 transition-colors">
+                        <td className="border border-gray-700 p-3">
+                                {row.isEditing ? (
+                                    <input
+                                        type="number"
+                                        value={row.id}
+                                        onChange={(e) =>
+                                            handleInputChange(rowIndex, e.target.value)
+                                        }
+                                        className="p-2 bg-gray-700 rounded w-full"
+                                    />
+                                ) : (
+                                    row.id
+                                )}
+                            </td>
                             <td className="border border-gray-700 p-3">
                                 {row.isEditing ? (
                                     <input

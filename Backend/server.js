@@ -32,7 +32,6 @@ const stockTransfersRoute = require("./Routes/StockTransfers");
 const userRoute = require("./Routes/UserRoutes");
 const userPermissionRoute = require("./Routes/userPermissionRoutes");
 const measurementRoute = require("./Routes/MeasurementRoutes");
-
 require("dotenv").config();
 
 const app = express();
@@ -72,7 +71,6 @@ app.use("/user",userRoute);
 app.use("/userpermission",userPermissionRoute);
 app.use("/inventory",inventoryRoute);
 app.use("/measurement", measurementRoute);
-
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

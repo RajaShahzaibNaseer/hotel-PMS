@@ -1,12 +1,33 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { API_URL } from "../../../config";
+
 
 const Suppliers = () => {
-    const supplierHeaders = ["Supplier Name", "Supplier Email", "Actions"];
-    const [supplierData, setSupplierData] = useState([
-        { name: "ABC Supplies", email: "GZ2X1@example.com", isEditing: false },
-        { name: "XYZ Traders", email: "2nTl1@example.com", isEditing: false },
-    ]);
+    const supplierHeaders = ["ID", "Supplier Name", "Supplier Email","Phone","Address 1","Address 2", "Actions"];
+    const [supplierData, setSupplierData] = useState([]);
+    const [refresh,setRefresh] = useState(true);
+
+    //fetching data from the database
+    const fetchData = async () =>
+    {
+        try {
+            const response = await fetch(`${API_URL}/suppliers`);
+            const jsonData = await response.json();
+            setSupplierData(jsonData);
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
+
+    //using fetch function
+    useEffect(() =>{
+        if(refresh)
+        {
+            fetchData();
+            setRefresh(false);
+        }
+    });
 
     // Toggle edit mode for a row
     const handleEditToggle = (index) => {
@@ -27,18 +48,73 @@ const Suppliers = () => {
     };
 
     // Save edited item
-    const handleSave = (index) => {
-        setSupplierData((prevData) =>
-            prevData.map((item, i) =>
-                i === index ? { ...item, isEditing: false } : item
-            )
-        );
+    const handleSave = async (index) => {
+       const item = supplierData[index];
+       try {
+        if(item.id)
+        {
+            const response = await fetch(`${API_URL}/suppliers/${item.id}`,{
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ 
+                    name: item.name,
+                    email:item.email,
+                    phone:item.phone,
+                    address1: item.address1,
+                    address2: item.address2
+                 }),
+            });
+            
+            if (!response.ok) throw new Error("Failed to create item.");
+        }
+        else
+        {
+            const response = await fetch(`${API_URL}/suppliers`,{
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ 
+                    name: item.name,
+                    email:item.email,
+                    phone:item.phone,
+                    address1: item.address1,
+                    address2: item.address2
+                 }),
+            });
+        }
+        setRefresh(true);
+       } catch (error) {
+        console.log(error.message);
+       }
     };
 
     // Delete an item
-    const handleDelete = (index) => {
-        setSupplierData((prevData) => prevData.filter((_, i) => i !== index));
+    const handleDelete = async (index) => {
+        try {
+            const id = supplierData[index].id;
+            const response = await fetch(`${API_URL}/suppliers/${id}`,{
+                method: "DELETE"
+            });
+            setRefresh(true);
+        } catch (error) {
+            console.log(error.message);
+        }
     };
+
+    const handleAddNew = () => {
+        const newSupplier = { 
+            name: "",
+            email:"",
+            phone:"",
+            address1: "",
+            address2: "",
+             isEditing: true };
+        setSupplierData([...supplierData, newSupplier]);
+    };
+
 
     return (
         <div className="flex flex-col min-h-screen p-5 bg-gradient-to-br from-gray-900 to-gray-800 text-white">
@@ -47,6 +123,12 @@ const Suppliers = () => {
                     <span className="text-xl">⇐</span>
                 </Link>
                 <h1 className="text-3xl font-bold text-gray-100">Suppliers</h1>
+                <button
+                    className="bg-green-500 px-4 py-2 rounded"
+                    onClick={handleAddNew}
+                >
+                    Add New
+                </button>
             </div>
 
             <table className="w-full border border-gray-700 text-center">
@@ -62,7 +144,7 @@ const Suppliers = () => {
                 <tbody>
                     {supplierData.map((row, rowIndex) => (
                         <tr key={rowIndex} className="border border-gray-700 hover:bg-gray-800">
-                            {Object.keys(row).slice(0, 2).map((field, cellIndex) => (
+                            {Object.keys(row).filter(field => field != "isEditing").map((field, cellIndex) => (
                                 <td key={cellIndex} className="border border-gray-700 p-3">
                                     {row.isEditing ? (
                                         <input

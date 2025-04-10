@@ -51,7 +51,7 @@ const Suppliers = () => {
     const handleSave = async (index) => {
        const item = supplierData[index];
        try {
-        if(item.id)
+        if(item.id != "")
         {
             const response = await fetch(`${API_URL}/suppliers/${item.id}`,{
                 method: "PUT",
@@ -105,13 +105,14 @@ const Suppliers = () => {
     };
 
     const handleAddNew = () => {
-        const newSupplier = { 
+        const newSupplier = {
+            id: "", 
             name: "",
             email:"",
             phone:"",
             address1: "",
             address2: "",
-             isEditing: true };
+            isEditing: true };
         setSupplierData([...supplierData, newSupplier]);
     };
 
@@ -146,7 +147,9 @@ const Suppliers = () => {
                         <tr key={rowIndex} className="border border-gray-700 hover:bg-gray-800">
                             {Object.keys(row).filter(field => field != "isEditing").map((field, cellIndex) => (
                                 <td key={cellIndex} className="border border-gray-700 p-3">
-                                    {row.isEditing ? (
+                                    {field === "id" ? (
+                                        row[field]
+                                        ) :row.isEditing ? (
                                         <input
                                             type="text"
                                             value={row[field]}
@@ -169,6 +172,7 @@ const Suppliers = () => {
                                         >
                                             Save
                                         </button>
+
                                     </>
                                 ) : (
                                     <>

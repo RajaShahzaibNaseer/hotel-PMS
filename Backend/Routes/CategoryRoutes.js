@@ -2,7 +2,7 @@ const express = require("express");
 const BaseController = require("../Controllers/BaseController");
 
 const router = express.Router();
-const categoryController = new BaseController("category");
+const categoryController = new BaseController("categories");
 
 router.get("/", categoryController.getAll.bind(categoryController));
 router.get("/:id", categoryController.getOne.bind(categoryController));

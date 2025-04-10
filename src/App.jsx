@@ -39,6 +39,8 @@ import Menu from "./components/Inventory/SetupPages/Menu";
 import Settings from "./components/Inventory/SetupPages/InventorySettings";
 import Suppliers from "./components/Inventory/SetupPages/Suppliers";
 import Measurements from "./components/Inventory/SetupPages/Measurements";
+import Categories from "./components/Inventory/SetupPages/Categories";
+
 
 const App = () => {
   return (
@@ -86,6 +88,7 @@ const App = () => {
       <Route path="/suppliers" element={<Suppliers />} />
       <Route path="/settings" element={<Settings />} />
       <Route path="/measurement_units" element={<Measurements />} />
+      <Route path="/categories" element={<Categories/>} />
 
 
     </Routes>

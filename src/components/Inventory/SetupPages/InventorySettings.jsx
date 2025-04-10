@@ -31,7 +31,7 @@ const InventorySettings = () => {
             <div className="items-center flex flex-col justify-center sm:flex-row gap-4 mt-10">
                 <Button icon={"🚚"} title={"Suppliers"} link={"suppliers"} />
                 <Button icon={"📏"} title={"Measurement Units"} link={"measurement_units"} />
-                <Button icon={"🏷"} title={"Categories"} link={"categories"} />``
+                <Button icon={"🏷"} title={"Categories"} link={"categories"} />
             </div>
         </div>
     )

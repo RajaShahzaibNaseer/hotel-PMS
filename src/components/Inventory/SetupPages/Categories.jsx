@@ -38,10 +38,10 @@ const Categoriess = () => {
     };
 
     // Handle input change
-    const handleInputChange = (index, value) => {
+    const handleInputChange = (index, field, value) => {
         setCategoriesData((prevData) =>
             prevData.map((item, i) =>
-                i === index ? { ...item, name: value } : item
+                i === index ? { ...item, [field]: value } : item
             )
         );
     };
@@ -58,7 +58,7 @@ const Categoriess = () => {
                     headers: {
                         "Content-Type": "application/json",
                     },
-                    body: JSON.stringify({ name: item.name }),
+                    body: JSON.stringify({ name: item.name, description: item.description}),
                 });
     
                 if (!response.ok) throw new Error("Failed to update item.");
@@ -69,7 +69,7 @@ const Categoriess = () => {
                     headers: {
                         "Content-Type": "application/json",
                     },
-                    body: JSON.stringify({ name: item.name }),
+                    body: JSON.stringify({ name: item.name, description: item.description }),
                 });
     
                 if (!response.ok) throw new Error("Failed to create item.");
@@ -98,7 +98,7 @@ const Categoriess = () => {
 
     // Add a new categories unit
     const handleAddNew = () => {
-        const newCategories = { id: "",name: "New Unit", isEditing: true };
+        const newCategories = { id: "",name: "",description: "", isEditing: true };
         setCategoriesData([...categoriesData, newCategories]);
     };
 
@@ -107,7 +107,7 @@ const Categoriess = () => {
             <div className="flex justify-between items-center mb-6">
                 <div className="flex items-center gap-6">
                     <Link to="/inventory" className="text-xl border p-2 rounded">⇐</Link>
-                    <h1 className="text-3xl font-bold">Categories Units</h1>
+                    <h1 className="text-3xl font-bold">Categories</h1>
                 </div>
                 <button
                     className="bg-green-500 px-4 py-2 rounded"
@@ -141,12 +141,26 @@ const Categoriess = () => {
                                         type="text"
                                         value={row.name}
                                         onChange={(e) =>
-                                            handleInputChange(rowIndex, e.target.value)
+                                            handleInputChange(rowIndex, "name" ,e.target.value)
                                         }
                                         className="p-2 bg-gray-700 rounded w-full"
                                     />
                                 ) : (
                                     row.name
+                                )}
+                            </td>
+                            <td className="border border-gray-700 p-3">
+                                {row.isEditing ? (
+                                    <input
+                                        type="text"
+                                        value={row.description}
+                                        onChange={(e) =>
+                                            handleInputChange(rowIndex, "description", e.target.value)
+                                        }
+                                        className="p-2 bg-gray-700 rounded w-full"
+                                    />
+                                ) : (
+                                    row.description
                                 )}
                             </td>
                             <td className="border border-gray-700 p-3">

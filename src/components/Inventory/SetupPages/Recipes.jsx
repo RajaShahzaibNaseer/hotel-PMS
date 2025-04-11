@@ -80,15 +80,6 @@ const Recipes = () => {
                 trackConsumption: !!tableData[rowIndex].trackConsumption,
             });
         } else {
-            // setFormData({
-            //     id: "",
-            //     name: "",
-            //     cost: "",
-            //     salePrice: "",
-            //     profitability: "",
-            //     ingredients: "",
-            //     trackConsumption: "",
-            // })
         }
 
         setIsModalOpen(true);

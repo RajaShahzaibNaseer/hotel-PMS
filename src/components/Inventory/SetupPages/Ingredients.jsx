@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { API_URL } from "../../../config";
+
 
 const Modal = ({ isOpen, onClose, children }) => {
     if (!isOpen) return null;
@@ -20,32 +22,70 @@ const Modal = ({ isOpen, onClose, children }) => {
 };
 
 const Ingredients = () => {
-    const tableHeader = ["Name", "Unit Name", "Cost/Unit", "Supplier", "Actions"];
-    const [tableData, setTableData] = useState([
-        ["Sugar", "Kg", "120", "ABC Supplies"],
-        ["Flour", "Kg", "80", "XYZ Traders"],
-    ]);
-
+    const tableHeader = ["id","Name", "Barcode", "Description", "Category", "Measurement Unit", "Buying Unit","Supplier", "Actions"];
+    const [tableData, setTableData] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalType, setModalType] = useState(null); // 'add', 'edit', or 'delete'
     const [selectedRow, setSelectedRow] = useState(null);
-    const [formData, setFormData] = useState({ name: "", unit: "", cost: "", supplier: "" });
+    const [formData, setFormData] = useState({
+        id: "",
+        name: "",
+        barcode: "",
+        description: "",
+        category: "",
+        measurementUnits: "",
+        buyingUnits: "",
+        supplier: "",
+    });
+
+    const [refresh,setRefresh] = useState(true);
+
+     const fetchData = async () =>{
+        try {
+            const response = await fetch(`${API_URL}/ingredients`)
+            const jsonData = await response.json();
+            setTableData(jsonData);
+        } catch (error) {
+            
+        }
+     }
+    
+    useEffect(() => {
+        if(refresh)
+        {
+            fetchData();
+            setRefresh(false);
+        }
+    });
 
     // Open modal for actions
     const openModal = (type, rowIndex = null) => {
         setModalType(type);
         setSelectedRow(rowIndex);
-
         if (type === "edit" && rowIndex !== null) {
-            const [name, unit, cost, supplier] = tableData[rowIndex];
-            setFormData({ name, unit, cost, supplier });
-        } else if (type === "delete" && rowIndex !== null) {
-            const [name, unit, cost, supplier] = tableData[rowIndex];
-            setFormData({ name, unit, cost, supplier });
-        } else {
-            setFormData({ name: "", unit: "", cost: "", supplier: "" });
-        }
+            setFormData({
+                id: tableData[rowIndex].id,
+                name: tableData[rowIndex].name,
+                barcode: tableData[rowIndex].barcode,
+                description: tableData[rowIndex].description,
+                category: tableData[rowIndex].category,
+                measurementUnits: tableData[rowIndex].measurementUnits,
+                buyingUnits: tableData[rowIndex].buyingUnits,
+                supplier: tableData[rowIndex].supplier,
 
+            });
+        } else if(type ==="delete" && rowIndex !== null) {
+            setFormData({
+                id: tableData[rowIndex].id,
+                name: tableData[rowIndex].name,
+                barcode: tableData[rowIndex].barcode,
+                description: tableData[rowIndex].description,
+                category: tableData[rowIndex].category,
+                measurementUnits: tableData[rowIndex].measurementUnits,
+                buyingUnits: tableData[rowIndex].buyingUnits,
+                supplier: tableData[rowIndex].supplier,
+            });
+        }
         setIsModalOpen(true);
     };
 
@@ -61,20 +101,65 @@ const Ingredients = () => {
     };
 
     // Handle form submission for add/edit
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         if (modalType === "add") {
-            setTableData([...tableData, [formData.name, formData.unit, formData.cost, formData.supplier]]);
+            try {
+                const respone = await fetch(`${API_URL}/ingredients`,{
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        id: formData.id,
+                        name: formData.name,
+                        barcode: formData.barcode,
+                        description: formData.description,
+                        category: formData.category,
+                        measurementUnits: formData.measurementUnits,
+                        buyingUnits: formData.buyingUnits,
+                        supplier: formData.supplier,
+                    }),
+                })
+            } catch (error) {
+                console.log(error.message);
+            }
+            setRefresh(true);
         } else if (modalType === "edit" && selectedRow !== null) {
-            const updatedData = [...tableData];
-            updatedData[selectedRow] = [formData.name, formData.unit, formData.cost, formData.supplier];
-            setTableData(updatedData);
+            try {
+                const response = await fetch(`${API_URL}/ingredients/${formData.id}`,{
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        id: formData.id,
+                        name: formData.name,
+                        barcode: formData.barcode,
+                        description: formData.description,
+                        category: formData.category,
+                        measurementUnits: formData.measurementUnits,
+                        buyingUnits: formData.buyingUnits,
+                        supplier: formData.supplier,
+                    }),
+                });
+                setRefresh(true);
+            } catch (error) {
+                console.log(error.message);
+            }
         }
         closeModal();
     };
 
     // Handle delete confirmation
-    const handleDeleteConfirm = () => {
-        setTableData(tableData.filter((_, index) => index !== selectedRow));
+    const handleDeleteConfirm = async () => {
+        try {
+            const response = await fetch(`${API_URL}/ingredients/${formData.id}`,{
+                method: "DELETE"
+            });
+            setRefresh(true);
+        } catch (error) {
+            console.log(error.message);
+        }
         closeModal();
     };
 
@@ -99,16 +184,11 @@ const Ingredients = () => {
                 <tbody>
                     {tableData.map((row, rowIndex) => (
                         <tr key={rowIndex} className="border border-gray-700 hover:bg-gray-800">
-                            {row.map((cell, cellIndex) => (
-                                <td key={cellIndex} className="border border-gray-700 p-3">{cell}</td>
-                            ))}
+                            {Object.keys(row).filter(field => field != "created_at").map((field, cellIndex) => (
+                            <td key={cellIndex} className="border border-gray-700 p-3">{row[field]}
+                            </td>
+                        ))}
                             <td className="border border-gray-700 p-3">
-                                <button
-                                    className="bg-blue-500 px-4 py-2 rounded mr-2"
-                                    onClick={() => openModal("usage", rowIndex)}
-                                >
-                                    Usage
-                                </button>
                                 <button
                                     className="bg-green-500 px-4 py-2 rounded mr-2"
                                     onClick={() => openModal("edit", rowIndex)}
@@ -140,16 +220,6 @@ const Ingredients = () => {
                             <button onClick={handleDeleteConfirm} className="bg-red-600 px-4 py-2 rounded">Delete</button>
                         </div>
                     </>
-                ) : modalType === "usage" ? (
-                    <>
-                        <h2 className="text-2xl font-bold mb-4">Usage Details</h2>
-                        <p>
-                            Usage details for <span className="font-bold">{formData.name}</span>.
-                        </p>
-                        <div className="flex justify-end gap-2 mt-4">
-                            <button onClick={closeModal} className="bg-gray-600 px-4 py-2 rounded">Close</button>
-                        </div>
-                    </>
                 ) : (
                     <>
                         <h2 className="text-2xl font-bold mb-4">
@@ -165,24 +235,48 @@ const Ingredients = () => {
                                 onChange={handleInputChange}
                             />
                             <input
-                                name="unit"
-                                type="text"
+                                name="barcode"
+                                type="number"
                                 className="w-full p-2 bg-gray-700 rounded"
-                                placeholder="Unit Name"
-                                value={formData.unit}
+                                placeholder="barcode"
+                                value={formData.barcode}
                                 onChange={handleInputChange}
                             />
                             <input
-                                name="cost"
+                                name="description"
                                 type="text"
                                 className="w-full p-2 bg-gray-700 rounded"
-                                placeholder="Cost/Unit"
-                                value={formData.cost}
+                                placeholder="description"
+                                value={formData.description}
+                                onChange={handleInputChange}
+                            />
+                            <input
+                                name="category"
+                                type="number"
+                                className="w-full p-2 bg-gray-700 rounded"
+                                placeholder="category id"
+                                value={formData.category}
+                                onChange={handleInputChange}
+                            />
+                            <input
+                                name="measurementUnits"
+                                type="text"
+                                className="w-full p-2 bg-gray-700 rounded"
+                                placeholder="measurement"
+                                value={formData.measurementUnits}
+                                onChange={handleInputChange}
+                            />
+                            <input
+                                name="buyingUnits"
+                                type="text"
+                                className="w-full p-2 bg-gray-700 rounded"
+                                placeholder="buying Currency"
+                                value={formData.buyingUnits}
                                 onChange={handleInputChange}
                             />
                             <input
                                 name="supplier"
-                                type="text"
+                                type="number"
                                 className="w-full p-2 bg-gray-700 rounded"
                                 placeholder="Supplier"
                                 value={formData.supplier}

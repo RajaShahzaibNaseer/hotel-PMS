@@ -32,10 +32,12 @@ import StockTakes from "./components/Inventory/StockTakes";
 import ViewConsignment from "./components/Inventory/ViewConsignment";
 
 import Setup from "./components/Inventory/Setup";
+import Items from "./components/Inventory/SetupPages/Items";
 import FinishedGoods from "./components/Inventory/SetupPages/FinishedGoods";
 import Ingredients from "./components/Inventory/SetupPages/Ingredients";
 import Recipes from "./components/Inventory/SetupPages/Recipes";
 import Menu from "./components/Inventory/SetupPages/Menu";
+
 import Settings from "./components/Inventory/SetupPages/InventorySettings";
 import Suppliers from "./components/Inventory/SetupPages/Suppliers";
 import Measurements from "./components/Inventory/SetupPages/Measurements";
@@ -89,8 +91,7 @@ const App = () => {
       <Route path="/settings" element={<Settings />} />
       <Route path="/measurement_units" element={<Measurements />} />
       <Route path="/categories" element={<Categories/>} />
-
-
+      <Route path="/items" element={<Items></Items>} />
     </Routes>
   );
 };

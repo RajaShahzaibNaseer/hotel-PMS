@@ -1,5 +1,5 @@
-import { useState } from "react";
-
+import { useEffect, useState } from "react";
+import { API_URL } from "../../config";
 import React from "react";
 
 const OrderForm = ({
@@ -116,6 +116,28 @@ const StockTransfer = () => {
         quantity: "",
         deliverTo: "",
         total: "",
+    });
+    const [refresh,setRefresh] = useState(true);
+
+    //fetching data from backend
+    const fetchData = async () =>
+    {
+      try {
+        const response = await fetch(`${API_URL}/stocktransfer`);
+        const jsonData = await response.json();
+        setTransferData(jsonData);
+      } catch (error) {
+        console.log(error.message);
+      }
+    }
+
+    //using the fetch function
+    useEffect(() => {
+      if(refresh)
+      {
+        fetchData();
+        setRefresh(false);
+      }
     });
 
     const handleFormChange = (e) => {

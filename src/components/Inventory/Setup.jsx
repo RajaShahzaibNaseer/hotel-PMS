@@ -27,6 +27,7 @@ const Setup = () => {
                     <Button icon={"📋"} title={"Menu"} link={"menu"} />
                     <Button icon={"📜"} title={"Ingredients & Sub Recipes"} link={"ingredients"} />
                     <Button icon={"📦"} title={"Finished Goods"} link={"finished_goods"} />
+                    <Button icon={"🍴"} title={"Items"} link={"Items"} />
                     <Button icon={"⚙️"} title={"Inventory Settings"} link={"settings"} />
                 </div>
             </div>

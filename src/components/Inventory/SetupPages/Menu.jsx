@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { API_URL } from "../../../config";
 
 const Modal = ({ isOpen, onClose, children }) => {
     if (!isOpen) return null;
@@ -20,34 +21,54 @@ const Modal = ({ isOpen, onClose, children }) => {
 };
 
 const Menu = () => {
-    const tableHeader = ["Name", "Price (KES)", "Category", "Actions"];
-    const initialTableData = [
-        ["3 TUSKER LITE OFFER", "120", "Drinks"],
-        ["3 TUSKER MALT OFFER", "80", "Drinks"],
-        ["3 WHITECAP LAGER OFFER", "120", "Drinks"],
-    ];
-    const [tableData, setTableData] = useState(initialTableData);
+    const tableHeader = ["ID","Name", "Price (KES)", "Category", "Actions"];
+    const [tableData, setTableData] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalType, setModalType] = useState(null); // 'add', 'edit', or 'delete'
     const [selectedRow, setSelectedRow] = useState(null);
-    const [formData, setFormData] = useState({ name: "", price: "", category: "" });
+    const [formData, setFormData] = useState({ id: "", name: "", price: "", category: "" });
+    const [refresh,setRefresh] = useState(true);
+
+
+    //code to fetch data from the database
+    const fetchData = async () => {
+       try {
+        const response = await fetch (`${API_URL}/menu`);
+        const jsonData = await response.json();
+        setTableData(jsonData);
+       } catch (error) {
+        console.log(error.message);
+       }
+    }
+
+    //using fetch data 
+    useEffect(() => {
+        if(refresh)
+        {
+            fetchData();
+            setRefresh(false);
+        }
+    });
 
     // Open modal for actions
     const openModal = (type, rowIndex = null) => {
+        const item = tableData[rowIndex];
         setModalType(type);
-        setSelectedRow(rowIndex);
 
         if (type === "edit" && rowIndex !== null) {
+            setSelectedRow(item.id);
             setFormData({
-                name: tableData[rowIndex][0],
-                price: tableData[rowIndex][1],
-                category: tableData[rowIndex][2],
+                name: tableData[rowIndex].name,
+                price: tableData[rowIndex].price,
+                category: tableData[rowIndex].category,
             });
         } else if (type === "delete" && rowIndex !== null) {
+            setSelectedRow(item.id);
             setFormData({
-                name: tableData[rowIndex][0],
-                price: tableData[rowIndex][1],
-                category: tableData[rowIndex][2],
+                id: tableData[rowIndex].id,
+                name: tableData[rowIndex].name,
+                price: tableData[rowIndex].price,
+                category: tableData[rowIndex].category,
             });
         } else {
             setFormData({ name: "", price: "", category: "" });
@@ -56,6 +77,7 @@ const Menu = () => {
         setIsModalOpen(true);
     };
 
+    //close modal
     const closeModal = () => {
         setIsModalOpen(false);
         setModalType(null);
@@ -68,20 +90,55 @@ const Menu = () => {
     };
 
     // Handle form submission for add/edit
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         if (modalType === "add") {
-            setTableData([...tableData, [formData.name, formData.price, formData.category]]);
+            try {
+                const respone = await fetch(`${API_URL}/menu`,{
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        name: formData.name,
+                        price: formData.price,
+                        category: formData.category
+                    })
+                })
+            } catch (error) {
+                console.log(error.message);
+            }
+            setRefresh(true);
         } else if (modalType === "edit" && selectedRow !== null) {
-            const updatedData = [...tableData];
-            updatedData[selectedRow] = [formData.name, formData.price, formData.category];
-            setTableData(updatedData);
+            try {
+                const response = await fetch(`${API_URL}/menu/${selectedRow}`,{
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ 
+                        name: formData.name,
+                        price: formData.price,
+                        category: formData.category
+                     }),
+                });
+                setRefresh(true);
+            } catch (error) {
+                console.log(error.message);
+            }
         }
         closeModal();
     };
 
     // Handle delete confirmation
-    const handleDeleteConfirm = () => {
-        setTableData(tableData.filter((_, index) => index !== selectedRow));
+    const handleDeleteConfirm = async (id) => {
+        try {
+            const response = await fetch(`${API_URL}/menu/${id}`,{
+                method: "DELETE"
+            });
+            setRefresh(true);
+        } catch (error) {
+            console.log(error.message);
+        }
         closeModal();
     };
 
@@ -106,9 +163,10 @@ const Menu = () => {
                 <tbody>
                     {tableData.map((row, rowIndex) => (
                         <tr key={rowIndex} className="border border-gray-700 hover:bg-gray-800">
-                            {row.map((cell, cellIndex) => (
-                                <td key={cellIndex} className="border border-gray-700 p-3">{cell}</td>
-                            ))}
+                        {Object.keys(row).filter(field => field != "created_at").map((field, cellIndex) => (
+                            <td key={cellIndex} className="border border-gray-700 p-3">{row[field]}
+                            </td>
+                        ))}
                             <td className="border border-gray-700 p-3">
                                 <button
                                     className="bg-green-500 px-4 py-2 rounded mr-2"
@@ -138,7 +196,7 @@ const Menu = () => {
                         </p>
                         <div className="flex justify-end gap-2 mt-4">
                             <button onClick={closeModal} className="bg-gray-600 px-4 py-2 rounded">Cancel</button>
-                            <button onClick={handleDeleteConfirm} className="bg-red-600 px-4 py-2 rounded">Delete</button>
+                            <button onClick={() => handleDeleteConfirm(formData.id)} className="bg-red-600 px-4 py-2 rounded">Delete</button>
                         </div>
                     </>
                 ) : (

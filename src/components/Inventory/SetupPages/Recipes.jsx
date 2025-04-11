@@ -15,7 +15,7 @@ const Modal = ({ isOpen, onClose, children }) => {
 };
 
 const Recipes = () => {
-    const tableHeader = ["id", "name", "Cost", "Sale Price", "Profitability", "Ingredients", "Track Consumption?", "Actions"];
+    const tableHeader = ["id", "name", "Cost", "Sale Price", "Profitability", "Track Consumption?", "Actions"];
     // const initialTableData = [
     //     { id: "1" ,name: "Sugar", cost: "120", salePrice: "150", profitability: "30%", ingredients: "Sugar, Flour", trackConsumption: "✔" },
     //     { id: "2" ,name: "Flour", cost: "80", salePrice: "100", profitability: "20%", ingredients: "Sugar, Flour", trackConsumption: "✔" },
@@ -25,6 +25,7 @@ const Recipes = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalType, setModalType] = useState(null); // 'add' or 'edit'
     const [selectedRow, setSelectedRow] = useState(null);
+    const [refresh,setRefresh] = useState(true);
     const [formData, setFormData] = useState({
         id: "",
         name: "",
@@ -48,7 +49,11 @@ const Recipes = () => {
     }
 
     useEffect(() =>{
-        fetchData();
+        if(refresh)
+        {
+            fetchData();
+            setRefresh(false);
+        }
     });
 
     // Open modal for actions
@@ -63,19 +68,27 @@ const Recipes = () => {
                 cost: tableData[rowIndex].cost,
                 salePrice: tableData[rowIndex].salePrice,
                 profitability: tableData[rowIndex].profitability,
-                ingredients: tableData[rowIndex].ingredients,
-                trackConsumption: tableData[rowIndex].trackConsumption,
+                trackConsumption: !!tableData[rowIndex].trackConsumption,
+            });
+        } else if(type ==="delete" && rowIndex !== null) {
+            setFormData({
+                id: tableData[rowIndex].id,
+                name: tableData[rowIndex].name,
+                cost: tableData[rowIndex].cost,
+                salePrice: tableData[rowIndex].salePrice,
+                profitability: tableData[rowIndex].profitability,
+                trackConsumption: !!tableData[rowIndex].trackConsumption,
             });
         } else {
-            setFormData({
-                id: "",
-                name: "",
-                cost: "",
-                salePrice: "",
-                profitability: "",
-                ingredients: "",
-                trackConsumption: "",
-            });
+            // setFormData({
+            //     id: "",
+            //     name: "",
+            //     cost: "",
+            //     salePrice: "",
+            //     profitability: "",
+            //     ingredients: "",
+            //     trackConsumption: "",
+            // })
         }
 
         setIsModalOpen(true);
@@ -93,20 +106,59 @@ const Recipes = () => {
     };
 
     // Handle form submission for add/edit
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         if (modalType === "add") {
-            setTableData([...tableData, formData]);
+            try {
+                const respone = await fetch(`${API_URL}/recipe`,{
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        name: formData.name,
+                        cost: formData.cost,
+                        salePrice: formData.salePrice,
+                        profitability: Number(formData.salePrice) - Number(formData.cost),
+                        trackConsumption: !!formData.trackConsumption,
+                    })
+                });
+            } catch (error) {
+                console.log(error.message);
+            }
+            setRefresh(true);
         } else if (modalType === "edit" && selectedRow !== null) {
-            const updatedData = [...tableData];
-            updatedData[selectedRow] = formData;
-            setTableData(updatedData);
+            try {
+                const response = await fetch(`${API_URL}/recipe/${formData.id}`,{
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        name: formData.name,
+                        cost: formData.cost,
+                        salePrice: formData.salePrice,
+                        profitability: Number(formData.salePrice) - Number(formData.cost),
+                        trackConsumption: !!formData.trackConsumption,
+                    })
+                });
+                setRefresh(true);
+            } catch (error) {
+                console.log(error.message);
+            }
         }
         closeModal();
-    };
+    }
 
     // Handle delete confirmation
-    const handleDeleteConfirm = (rowIndex) => {
-        setTableData(tableData.filter((_, index) => index !== rowIndex));
+    const handleDeleteConfirm = async() => {
+        try {
+            const response = await fetch(`${API_URL}/recipe/${formData.id}`,{
+                method: "DELETE"
+            });
+            setRefresh(true);
+        } catch (error) {
+            console.log(error.message);
+        }
         closeModal();
     };
 
@@ -129,11 +181,15 @@ const Recipes = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {tableData.map((row, rowIndex) => (
+                {tableData.map((row, rowIndex) => (
                         <tr key={rowIndex} className="border border-gray-700 hover:bg-gray-800">
-                            {Object.values(row).map((cell, cellIndex) => (
-                                <td key={cellIndex} className="border border-gray-700 p-3">{cell}</td>
-                            ))}
+                        {Object.keys(row).filter(field => field !== "created_at").map((field, cellIndex) => (
+                            <td key={cellIndex} className="border border-gray-700 p-3">
+                                {field === "trackConsumption"
+                                    ? (row[field] ? "✔️" : "❌")
+                                    : row[field]}
+                            </td>
+                        ))}
                             <td className="border border-gray-700 p-3">
                                 <button
                                     className="bg-green-500 px-4 py-2 rounded mr-2"
@@ -143,7 +199,7 @@ const Recipes = () => {
                                 </button>
                                 <button
                                     className="bg-red-500 px-4 py-2 rounded"
-                                    onClick={() => handleDeleteConfirm(rowIndex)}
+                                    onClick={() => openModal("delete", rowIndex)}
                                 >
                                     Delete
                                 </button>
@@ -163,7 +219,7 @@ const Recipes = () => {
                         </p>
                         <div className="flex justify-end gap-2 mt-4">
                             <button onClick={closeModal} className="bg-gray-600 px-4 py-2 rounded">Cancel</button>
-                            <button onClick={() => handleDeleteConfirm(selectedRow)} className="bg-red-600 px-4 py-2 rounded">Delete</button>
+                            <button onClick={handleDeleteConfirm} className="bg-red-600 px-4 py-2 rounded">Delete</button>
                         </div>
                     </>
                 ) : (
@@ -172,14 +228,6 @@ const Recipes = () => {
                             {modalType === "add" ? "Add New Recipe" : "Edit Recipe"}
                         </h2>
                         <form className="space-y-4">
-                            <input
-                                name="id"
-                                type="number"
-                                className="w-full p-2 bg-gray-700 rounded"
-                                placeholder="id"
-                                value={formData.id}
-                                onChange={handleInputChange}
-                            />
                             <input
                                 name="name"
                                 type="text"
@@ -204,30 +252,21 @@ const Recipes = () => {
                                 value={formData.salePrice}
                                 onChange={handleInputChange}
                             />
-                            <input
-                                name="profitability"
-                                type="text"
-                                className="w-full p-2 bg-gray-700 rounded"
-                                placeholder="Profitability"
-                                value={formData.profitability}
-                                onChange={handleInputChange}
-                            />
-                            <input
-                                name="ingredients"
-                                type="text"
-                                className="w-full p-2 bg-gray-700 rounded"
-                                placeholder="Ingredients"
-                                value={formData.ingredients}
-                                onChange={handleInputChange}
-                            />
-                            <input
-                                name="trackConsumption"
-                                type="text"
-                                className="w-full p-2 bg-gray-700 rounded"
-                                placeholder="Track Consumption?"
-                                value={formData.trackConsumption}
-                                onChange={handleInputChange}
-                            />
+                            <div className="flex items-center space-x-2">
+                                <input
+                                    id="trackConsumption"
+                                    name="trackConsumption"
+                                    type="checkbox"
+                                    checked={formData.trackConsumption}
+                                    onChange={(e) =>
+                                    setFormData((prev) => ({
+                                        ...prev,
+                                        trackConsumption: e.target.checked,
+                                    }))
+                                    }
+                                />
+                                <label htmlFor="trackConsumption">Track Consumption?</label>
+                            </div>
                             <div className="flex justify-end gap-2">
                                 <button type="button" onClick={closeModal} className="bg-gray-600 px-4 py-2 rounded">Cancel</button>
                                 <button type="button" onClick={handleSubmit} className="bg-green-600 px-4 py-2 rounded">Save</button>

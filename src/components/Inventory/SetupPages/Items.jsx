@@ -4,8 +4,8 @@ import { API_URL } from "../../../config";
 
 
 const Items = () => {
-    const itemHeaders = ["ID", "Name", "Barcode","Item Code","Price","Description", "Category", "Item Status", "Re-order level", "Actions"];
-    const [itemData, setSupplierData] = useState([]);
+    const itemHeaders = ["ID", "Name", "Barcode","Item Code","Price","Description", "Category", "Item Status", "Re-order level", "Item Modifiers", "Item Symbols","Actions"];
+    const [itemData, setItemData] = useState([]);
     const [refresh,setRefresh] = useState(true);
 
     //fetching data from the database
@@ -14,7 +14,7 @@ const Items = () => {
         try {
             const response = await fetch(`${API_URL}/items`);
             const jsonData = await response.json();
-            setSupplierData(jsonData);
+            setItemData(jsonData);
         } catch (error) {
             console.log(error.message);
         }
@@ -31,7 +31,7 @@ const Items = () => {
 
     // Toggle edit mode for a row
     const handleEditToggle = (index) => {
-        setSupplierData((prevData) =>
+        setItemData((prevData) =>
             prevData.map((item, i) =>
                 i === index ? { ...item, isEditing: !item.isEditing } : item
             )
@@ -40,7 +40,7 @@ const Items = () => {
 
     // Handle input change
     const handleInputChange = (index, field, value) => {
-        setSupplierData((prevData) =>
+        setItemData((prevData) =>
             prevData.map((item, i) =>
                 i === index ? { ...item, [field]: value } : item
             )
@@ -48,48 +48,59 @@ const Items = () => {
     };
 
     // Save edited item
-    const handleSave = async (index) => {
-       const item = itemData[index];
-       try {
-        if(item.id != "")
-        {
-            const response = await fetch(`${API_URL}/items/${item.id}`,{
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ 
-                    name: item.name,
-                    email:item.email,
-                    phone:item.phone,
-                    address1: item.address1,
-                    address2: item.address2
-                 }),
-            });
-            
-            if (!response.ok) throw new Error("Failed to create item.");
-        }
-        else
-        {
-            const response = await fetch(`${API_URL}/items`,{
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ 
-                    name: item.name,
-                    email:item.email,
-                    phone:item.phone,
-                    address1: item.address1,
-                    address2: item.address2
-                 }),
-            });
-        }
-        setRefresh(true);
-       } catch (error) {
-        console.log(error.message);
-       }
+    const cleanInteger = (value) => {
+        if (value === "") return null;
+        const parsed = parseInt(value);
+        return isNaN(parsed) ? null : parsed;
     };
+    
+    const cleanFloat = (value) => {
+        if (value === "") return null;
+        const parsed = parseFloat(value);
+        return isNaN(parsed) ? null : parsed;
+    };
+    
+    const handleSave = async (index) => {
+        const item = itemData[index];
+    
+        const payload = {
+            name: item.name,
+            barcode: item.barcode,
+            item_code: item.item_code,
+            price: cleanFloat(item.price),
+            description: item.description || null,
+            category_id: cleanInteger(item.category_id),
+            item_status: item.item_status || null,
+            reorder_level: cleanInteger(item.reorder_level),
+            item_modifier: item.item_modifier || null,
+            item_symbol: item.item_symbol || null,
+        };
+    
+        try {
+            console.log("Saving item:", payload);
+    
+            const response = await fetch(
+                item.id !== "" ? `${API_URL}/items/${item.id}` : `${API_URL}/items`,
+                {
+                    method: item.id !== "" ? "PUT" : "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(payload),
+                }
+            );
+    
+            const resultText = await response.text();
+            console.log("Response:", response.status, resultText);
+    
+            if (!response.ok) throw new Error("Failed to save item.");
+            setRefresh(true);
+        } catch (error) {
+            console.error("Save error:", error.message);
+        }
+    };
+    
+    
 
     // Delete an item
     const handleDelete = async (index) => {
@@ -105,15 +116,21 @@ const Items = () => {
     };
 
     const handleAddNew = () => {
-        const newSupplier = {
-            id: "", 
+        const newItem = {
+            id: "",
             name: "",
-            email:"",
-            phone:"",
-            address1: "",
-            address2: "",
-            isEditing: true };
-        setSupplierData([...itemData, newSupplier]);
+            barcode: "",
+            item_code: "",
+            price: "",
+            description: "",
+            category: "",
+            item_status: "",
+            reorder_level: "",
+            item_modifier: "",
+            item_symbol: "",
+            isEditing: true
+        };
+        setItemData([...itemData, newItem]);
     };
 
 
@@ -123,7 +140,7 @@ const Items = () => {
                 <Link to="/inventory" className="text-xl border p-2 rounded">
                     <span className="text-xl">⇐</span>
                 </Link>
-                <h1 className="text-3xl font-bold text-gray-100">Suppliers</h1>
+                <h1 className="text-3xl font-bold text-gray-100">Items</h1>
                 <button
                     className="bg-green-500 px-4 py-2 rounded"
                     onClick={handleAddNew}

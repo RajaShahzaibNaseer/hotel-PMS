@@ -1,23 +1,36 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const StockRequests = () => {
   const [activeTab, setActiveTab] = useState(0);
   const [editingIndex, setEditingIndex] = useState(null);
   const [isAddingNew, setIsAddingNew] = useState(false);
+  const [refresh,setRefresh] = useState(true);
   
   // New form state
   const [newOrderForm, setNewOrderForm] = useState({
-    srno: "",
-    item: "",
-    stock: "",
-    supplier: "",
-    price: "",
-    unit: "",
+    id: "",
+    item_id: "",
+    stock_on_hand: "",
+    price_per_unit: "",
+    unit_value: "",
     quantity: "",
-    deliverTo: "",
-    total: ""
-  });
+    destination: "",
+    total: "",
+    status: ""
+    });
   
+  const fetchData = async () => {
+    const response = await fetch(`${API_URL}/stockrequests`);
+    const jsonData = await response.json();
+    setNewOrders(jsonData);
+  }
+
+  useEffect(() => {
+     if(refresh){
+      fetchData();
+      setRefresh(false);
+     }
+  });
   // Table data states
   const [newOrders, setNewOrders] = useState([
     { srno: "1", item: "Sugar", stock: "50", supplier: "ABC Supplies", price: "120", unit: "Kg", quantity: "20", deliverTo: "Store A", total: "2400" },
@@ -194,11 +207,11 @@ const StockRequests = () => {
                 <h3 className="text-xl mb-3">Add New Purchase Order</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-sm mb-1">Item</label>
+                    <label className="block text-sm mb-1">Item ID</label>
                     <input
                       type="text"
                       name="item"
-                      value={newOrderForm.item}
+                      value={newOrderForm.item_id}
                       onChange={handleFormChange}
                       className="w-full p-2 bg-gray-700 rounded"
                     />
@@ -208,39 +221,29 @@ const StockRequests = () => {
                     <input
                       type="text"
                       name="stock"
-                      value={newOrderForm.stock}
+                      value={newOrderForm.stock_on_hand}
                       onChange={handleFormChange}
                       className="w-full p-2 bg-gray-700 rounded"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm mb-1">Supplier</label>
+                    <label className="block text-sm mb-1">Price Per Unit</label>
                     <input
                       type="text"
                       name="supplier"
-                      value={newOrderForm.supplier}
+                      value={newOrderForm.price_per_unit}
                       onChange={handleFormChange}
                       className="w-full p-2 bg-gray-700 rounded"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm mb-1">Price per Unit</label>
+                    <label className="block text-sm mb-1">Unit Value</label>
                     <input
                       type="text"
                       name="price"
-                      value={newOrderForm.price}
+                      value={newOrderForm.unit_value}
                       onChange={handleFormChange}
                       onBlur={calculateTotal}
-                      className="w-full p-2 bg-gray-700 rounded"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm mb-1">Unit</label>
-                    <input
-                      type="text"
-                      name="unit"
-                      value={newOrderForm.unit}
-                      onChange={handleFormChange}
                       className="w-full p-2 bg-gray-700 rounded"
                     />
                   </div>
@@ -248,32 +251,21 @@ const StockRequests = () => {
                     <label className="block text-sm mb-1">Quantity</label>
                     <input
                       type="text"
-                      name="quantity"
+                      name="unit"
                       value={newOrderForm.quantity}
+                      onChange={handleFormChange}
+                      className="w-full p-2 bg-gray-700 rounded"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm mb-1">Destination</label>
+                    <input
+                      type="text"
+                      name="quantity"
+                      value={newOrderForm.destination}
                       onChange={handleFormChange}
                       onBlur={calculateTotal}
                       className="w-full p-2 bg-gray-700 rounded"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm mb-1">Deliver To</label>
-                    <input
-                      type="text"
-                      name="deliverTo"
-                      value={newOrderForm.deliverTo}
-                      onChange={handleFormChange}
-                      className="w-full p-2 bg-gray-700 rounded"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm mb-1">Total</label>
-                    <input
-                      type="text"
-                      name="total"
-                      value={newOrderForm.total}
-                      onChange={handleFormChange}
-                      className="w-full p-2 bg-gray-700 rounded"
-                      readOnly
                     />
                   </div>
                 </div>
@@ -301,19 +293,16 @@ const StockRequests = () => {
                     <th className="p-2 border border-gray-700">Sr. No.</th>
                     <th className="p-2 border border-gray-700">Item</th>
                     <th className="p-2 border border-gray-700">Stock</th>
-                    <th className="p-2 border border-gray-700">Supplier</th>
                     <th className="p-2 border border-gray-700">Price</th>
-                    <th className="p-2 border border-gray-700">Unit</th>
                     <th className="p-2 border border-gray-700">Quantity</th>
                     <th className="p-2 border border-gray-700">Deliver To</th>
-                    <th className="p-2 border border-gray-700">Total</th>
                     <th className="p-2 border border-gray-700">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {newOrders.map((order, index) => (
                     <tr key={index} className="hover:bg-gray-800">
-                      <td className="p-2 border border-gray-700">{order.srno}</td>
+                      <td className="p-2 border border-gray-700">{order.id}</td>
                       
                       {editingIndex === index ? (
                         // Editable row
@@ -322,7 +311,7 @@ const StockRequests = () => {
                             <input
                               type="text"
                               name="item"
-                              value={order.item}
+                              value={order.item_id}
                               onChange={(e) => handleEditChange(e, index)}
                               className="w-full p-1 bg-gray-700 rounded"
                             />
@@ -331,7 +320,7 @@ const StockRequests = () => {
                             <input
                               type="text"
                               name="stock"
-                              value={order.stock}
+                              value={order.stock_on_hand}
                               onChange={(e) => handleEditChange(e, index)}
                               className="w-full p-1 bg-gray-700 rounded"
                             />
@@ -339,8 +328,8 @@ const StockRequests = () => {
                           <td className="p-2 border border-gray-700">
                             <input
                               type="text"
-                              name="supplier"
-                              value={order.supplier}
+                              name="price_per_unit"
+                              value={order.price_per_unit}
                               onChange={(e) => handleEditChange(e, index)}
                               className="w-full p-1 bg-gray-700 rounded"
                             />
@@ -348,17 +337,8 @@ const StockRequests = () => {
                           <td className="p-2 border border-gray-700">
                             <input
                               type="text"
-                              name="price"
-                              value={order.price}
-                              onChange={(e) => handleEditChange(e, index)}
-                              className="w-full p-1 bg-gray-700 rounded"
-                            />
-                          </td>
-                          <td className="p-2 border border-gray-700">
-                            <input
-                              type="text"
-                              name="unit"
-                              value={order.unit}
+                              name="unit_value"
+                              value={order.unit_value}
                               onChange={(e) => handleEditChange(e, index)}
                               className="w-full p-1 bg-gray-700 rounded"
                             />
@@ -375,17 +355,8 @@ const StockRequests = () => {
                           <td className="p-2 border border-gray-700">
                             <input
                               type="text"
-                              name="deliverTo"
-                              value={order.deliverTo}
-                              onChange={(e) => handleEditChange(e, index)}
-                              className="w-full p-1 bg-gray-700 rounded"
-                            />
-                          </td>
-                          <td className="p-2 border border-gray-700">
-                            <input
-                              type="text"
-                              name="total"
-                              value={order.total}
+                              name="destination"
+                              value={order.destination}
                               onChange={(e) => handleEditChange(e, index)}
                               className="w-full p-1 bg-gray-700 rounded"
                             />
@@ -394,17 +365,14 @@ const StockRequests = () => {
                       ) : (
                         // View mode
                         <>
-                          <td className="p-2 border border-gray-700">{order.item}</td>
-                          <td className="p-2 border border-gray-700">{order.stock}</td>
-                          <td className="p-2 border border-gray-700">{order.supplier}</td>
-                          <td className="p-2 border border-gray-700">{order.price}</td>
-                          <td className="p-2 border border-gray-700">{order.unit}</td>
+                          <td className="p-2 border border-gray-700">{order.item_id}</td>
+                          <td className="p-2 border border-gray-700">{order.stock_on_hand}</td>
+                          <td className="p-2 border border-gray-700">{order.price_per_unit}</td>
+                          <td className="p-2 border border-gray-700">{order.unit_value}</td>
                           <td className="p-2 border border-gray-700">{order.quantity}</td>
-                          <td className="p-2 border border-gray-700">{order.deliverTo}</td>
-                          <td className="p-2 border border-gray-700">{order.total}</td>
+                          <td className="p-2 border border-gray-700">{order.destination}</td>
                         </>
                       )}
-                      
                       <td className="p-2 border border-gray-700">
                         {editingIndex === index ? (
                           <div className="flex flex-col gap-1">

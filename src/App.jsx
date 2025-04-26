@@ -74,13 +74,13 @@ const App = () => {
 
       <Route path="/inventory" element={<Inventory />} />
 
-      <Route path="/stock_on_hand" element={<StockOnHand />} />
+      <Route path="/stock_on_hand" element={<StockOnHand />} /> - Integrated
       <Route path="/view_consignment" element={<ViewConsignment />} />
 
       <Route path="/stock_requests" element={<StockRequests />} /> - Integrated
       <Route path="/stock_transfer" element={<StockTransfer />} />
       <Route path="/stock_takes" element={<StockTakes />} />
-      <Route path="/purchase_orders" element={<PurchaseOrders />} />
+      <Route path="/purchase_orders" element={<PurchaseOrders />} /> - Integrated
 
       <Route path="/setup" element={<Setup />} />
       <Route path="/recipes" element={<Recipes />} /> - Integrated

@@ -1,48 +1,91 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { API_URL } from "../../config";
 
 const PurchaseOrders = () => {
   const [activeTab, setActiveTab] = useState(0);
   const [editingIndex, setEditingIndex] = useState(null);
   const [isAddingNew, setIsAddingNew] = useState(false);
-  
+  const [refresh, setRefresh] = useState(false); // Initialize to false, set to true when needed
+
   // New form state
   const [newOrderForm, setNewOrderForm] = useState({
-    id: "",
-    item: "",
-    stock: "",
-    supplier: "",
-    price: "",
-    unit: "",
+    item_id: "",
+    stock_on_hand: "",
+    supplier_id: "",
+    price_per_unit: "",
+    unit_value: "",
     quantity: "",
-    deliverTo: "",
-    total: ""
+    deliver_to: "",
+    total: "0.00", // Initialize total as a string
   });
-  
+
+  const mergeJson = (stockData, itemsData, suppliersData) => {
+    return stockData.map((stockItem) => {
+      const matchedItem = itemsData.find((item) => item.id === stockItem.item_id);
+      const matchedSupplier = suppliersData.find(
+        (supplier) => supplier.id === stockItem.supplier_id
+      );
+
+      return {
+        ...stockItem,
+        item_name: matchedItem?.name || "Unknown",
+        item_price: matchedItem?.price || 0,
+        item_barcode: matchedItem?.barcode || "",
+        item_description: matchedItem?.description || "",
+        item_reorder_level: matchedItem?.reorder_level || 0,
+        supplier_name: matchedSupplier?.name || "Unknown",
+        supplier_email: matchedSupplier?.email || "",
+        supplier_phone: matchedSupplier?.phone || "",
+        supplier_address_1: matchedSupplier?.address_1 || "",
+        supplier_address_2: matchedSupplier?.address_2 || "",
+      };
+    });
+  };
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch(`${API_URL}/purchase-orders`);
+      const jsonData = await response.json();
+
+      const itemsResponse = await fetch(`${API_URL}/items`);
+      const itemsData = await itemsResponse.json();
+
+      const suppliersResponse = await fetch(`${API_URL}/suppliers`);
+      const suppliersData = await suppliersResponse.json();
+
+      const mergedData = mergeJson(jsonData, itemsData, suppliersData);
+
+      setNewOrders(mergedData);
+      setSentOrders(mergedData);
+      setReceivedOrders(mergedData);
+      console.log(mergedData)
+    } catch (error) {
+      console.error("Failed to fetch stock data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    if (refresh) {
+      fetchData();
+      setRefresh(false);
+    }
+  }, [refresh]);
+
   // Table data states
-  const [newOrders, setNewOrders] = useState([
-    { id: "1", item: "Sugar", stock: "50", supplier: "ABC Supplies", price: "120", unit: "Kg", quantity: "20", deliverTo: "Store A", total: "2400" },
-    { id: "2", item: "Flour", stock: "30", supplier: "XYZ Traders", price: "80", unit: "Kg", quantity: "15", deliverTo: "Store B", total: "1200" },
-    { id: "3", item: "Salt", stock: "40", supplier: "XYZ Traders", price: "60", unit: "Kg", quantity: "10", deliverTo: "Store C", total: "600" }
-  ]);
-
-  const [sentOrders, setSentOrders] = useState([
-    { orderNo: "#123", item: "Sugar", createdBy: "John Doe", sentBy: "John Doe", orderedBy: "John Doe", dueDate: "2023-06-20", total: "1200" },
-    { orderNo: "#456", item: "Flour", createdBy: "Jane Smith", sentBy: "Jane Smith", orderedBy: "Jane Smith", dueDate: "2023-06-21", total: "800" },
-    { orderNo: "#789", item: "Salt", createdBy: "Bob Johnson", sentBy: "Bob Johnson", orderedBy: "Bob Johnson", dueDate: "2023-06-22", total: "600" }
-  ]);
-
-  const [receivedOrders, setReceivedOrders] = useState([
-    { orderNo: "#123", invRefNo: "#456", item: "Sugar", createdBy: "John Doe", orderedBy: "John Doe", dueDate: "2023-06-20", receivedDate: "2023-06-22", total: "1200" },
-    { orderNo: "#456", invRefNo: "#789", item: "Flour", createdBy: "Jane Smith", orderedBy: "Jane Smith", dueDate: "2023-06-21", receivedDate: "2023-06-23", total: "800" },
-    { orderNo: "#789", invRefNo: "#123", item: "Salt", createdBy: "Bob Johnson", orderedBy: "Bob Johnson", dueDate: "2023-06-22", receivedDate: "2023-06-24", total: "600" }
-  ]);
+  const [newOrders, setNewOrders] = useState([]);
+  const [sentOrders, setSentOrders] = useState([]);
+  const [receivedOrders, setReceivedOrders] = useState([]);
 
   // Handle form input change
   const handleFormChange = (e) => {
     const { name, value } = e.target;
     setNewOrderForm({
       ...newOrderForm,
-      [name]: value
+      [name]: value,
     });
   };
 
@@ -52,7 +95,18 @@ const PurchaseOrders = () => {
     const updatedOrders = [...newOrders];
     updatedOrders[index] = {
       ...updatedOrders[index],
-      [name]: value
+      [name]: value,
+      // Recalculate total if price or quantity changes
+      ...(name === "price_per_unit" || name === "quantity"
+        ? {
+            total: (
+              parseFloat(
+                name === "price_per_unit" ? value : updatedOrders[index].price_per_unit
+              ) *
+              parseFloat(name === "quantity" ? value : updatedOrders[index].quantity)
+            ).toFixed(2),
+          }
+        : {}),
     };
     setNewOrders(updatedOrders);
   };
@@ -64,91 +118,119 @@ const PurchaseOrders = () => {
   };
 
   // Save edited item
-  const handleSaveEdit = (index) => {
-    setEditingIndex(null);
-    // Backend integration - send the updated item to your API
-    // Example: api.updateOrder(newOrders[index])
-    //   .then(() => console.log("Order updated"))
-    //   .catch(error => console.error("Error updating order:", error));
+  const handleSaveEdit = async (index) => {
+    try {
+      const orderToUpdate = newOrders[index];
+      const response = await fetch(`${API_URL}/purchase-orders/${orderToUpdate.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          item_id: orderToUpdate.item_id,
+          stock_on_hand: orderToUpdate.stock_on_hand,
+          supplier_id: orderToUpdate.supplier_id,
+          price_per_unit: orderToUpdate.price_per_unit,
+          unit_value: orderToUpdate.unit_value,
+          quantity: orderToUpdate.quantity,
+          deliver_to: orderToUpdate.deliver_to,
+          total: orderToUpdate.total,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update order');
+      }
+
+      if (!response.ok) throw new Error("Failed to update order");
+
+      setEditingIndex(null);
+      setRefresh(true);
+    } catch (error) {
+      console.error("Error updating order:", error);
+    }
   };
 
   // Cancel editing
   const handleCancelEdit = () => {
     setEditingIndex(null);
-    // Optionally revert changes by re-fetching data from backend
+    setRefresh(true); // Refresh to get original data
   };
 
   // Add new order
-  const handleAddNewOrder = () => {
-    // Generate a new ID (in a real app, the backend would handle this)
-    const newId = String(newOrders.length + 1);
-    
-    // Calculate total if not provided
-    const total = newOrderForm.total || 
-      (parseInt(newOrderForm.price || 0) * parseInt(newOrderForm.quantity || 0)).toString();
-    
-    const newOrder = {
-      ...newOrderForm,
-      id: newId,
-      total
-    };
-    
-    setNewOrders([...newOrders, newOrder]);
-    
-    // Reset form and exit add mode
-    setNewOrderForm({
-      id: "",
-      item: "",
-      stock: "",
-      supplier: "",
-      price: "",
-      unit: "",
-      quantity: "",
-      deliverTo: "",
-      total: ""
-    });
-    setIsAddingNew(false);
-    
-    // Backend integration - send the new order to your API
-    // Example: api.createOrder(newOrder)
-    //   .then(response => console.log("Order created", response))
-    //   .catch(error => console.error("Error creating order:", error));
+  const handleAddNewOrder = async () => {
+    try {
+      const newOrderToSend = {
+        item_id: parseInt(newOrderForm.item_id) || null,
+        stock_on_hand: parseInt(newOrderForm.stock_on_hand) || 0,
+        supplier_id: parseInt(newOrderForm.supplier_id) || null,
+        price_per_unit: parseFloat(newOrderForm.price_per_unit || 0),
+        unit_value: newOrderForm.unit_value || "",
+        quantity: parseInt(newOrderForm.quantity) || 0,
+        deliver_to: newOrderForm.deliver_to || "",
+        total: parseFloat(newOrderForm.total || 0), // Use the calculated total from state
+      };
+
+      const response = await fetch(`${API_URL}/purchase-orders/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newOrderToSend),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to add new order");
+      }
+
+      // After successfully adding, trigger a refresh to fetch updated data
+      setIsAddingNew(false);
+      setRefresh(true);
+      // Reset form immediately after initiating the save
+      setNewOrderForm({
+        item_id: "",
+        supplier_id: "",
+        stock_on_hand: "",
+        price_per_unit: "",
+        unit_value: "",
+        quantity: "",
+        deliver_to: "",
+        total: "0.00",
+      });
+    } catch (error) {
+      console.error("Error adding new order:", error);
+    }
   };
 
   // Delete an item
-  const handleDeleteItem = (index, tabType) => {
+  const handleDeleteItem = async (id, tabType) => {
+    console.log(id);
     if (window.confirm("Are you sure you want to delete this item?")) {
-      if (tabType === 0) {
-        const orderToDelete = newOrders[index];
-        setNewOrders(newOrders.filter((_, i) => i !== index));
-        
-        // Backend integration - send delete request
-        // Example: api.deleteOrder(orderToDelete.id)
-        //   .then(() => console.log("Order deleted"))
-        //   .catch(error => console.error("Error deleting order:", error));
-      } else if (tabType === 1) {
-        const orderToDelete = sentOrders[index];
-        setSentOrders(sentOrders.filter((_, i) => i !== index));
-        
-        // Example: api.deleteOrder(orderToDelete.orderNo)
-      } else {
-        const orderToDelete = receivedOrders[index];
-        setReceivedOrders(receivedOrders.filter((_, i) => i !== index));
-        
-        // Example: api.deleteOrder(orderToDelete.orderNo)
+      try {
+        const response = await fetch(`${API_URL}/purchase-orders/${id}`, {
+          method: "DELETE",
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to delete order');
+        }
+
+        setRefresh(true);
+      } catch (error) {
+        console.error("Error deleting order:", error);
       }
     }
   };
 
   // Calculate total automatically
   const calculateTotal = () => {
-    const price = parseFloat(newOrderForm.price) || 0;
+    const price = parseFloat(newOrderForm.price_per_unit) || 0;
     const quantity = parseFloat(newOrderForm.quantity) || 0;
     const total = (price * quantity).toFixed(2);
-    
+
     setNewOrderForm({
       ...newOrderForm,
-      total
+      total,
     });
   };
 
@@ -197,8 +279,8 @@ const PurchaseOrders = () => {
                     <label className="block text-sm mb-1">Item</label>
                     <input
                       type="text"
-                      name="item"
-                      value={newOrderForm.item}
+                      name="item_id"
+                      value={newOrderForm.item_id}
                       onChange={handleFormChange}
                       className="w-full p-2 bg-gray-700 rounded"
                     />
@@ -207,8 +289,8 @@ const PurchaseOrders = () => {
                     <label className="block text-sm mb-1">Stock on Hand</label>
                     <input
                       type="text"
-                      name="stock"
-                      value={newOrderForm.stock}
+                      name="stock_on_hand"
+                      value={newOrderForm.stock_on_hand}
                       onChange={handleFormChange}
                       className="w-full p-2 bg-gray-700 rounded"
                     />
@@ -217,8 +299,8 @@ const PurchaseOrders = () => {
                     <label className="block text-sm mb-1">Supplier</label>
                     <input
                       type="text"
-                      name="supplier"
-                      value={newOrderForm.supplier}
+                      name="supplier_id"
+                      value={newOrderForm.supplier_id}
                       onChange={handleFormChange}
                       className="w-full p-2 bg-gray-700 rounded"
                     />
@@ -227,8 +309,8 @@ const PurchaseOrders = () => {
                     <label className="block text-sm mb-1">Price per Unit</label>
                     <input
                       type="text"
-                      name="price"
-                      value={newOrderForm.price}
+                      name="price_per_unit"
+                      value={newOrderForm.price_per_unit}
                       onChange={handleFormChange}
                       onBlur={calculateTotal}
                       className="w-full p-2 bg-gray-700 rounded"
@@ -238,8 +320,8 @@ const PurchaseOrders = () => {
                     <label className="block text-sm mb-1">Unit</label>
                     <input
                       type="text"
-                      name="unit"
-                      value={newOrderForm.unit}
+                      name="unit_value"
+                      value={newOrderForm.unit_value}
                       onChange={handleFormChange}
                       className="w-full p-2 bg-gray-700 rounded"
                     />
@@ -259,8 +341,8 @@ const PurchaseOrders = () => {
                     <label className="block text-sm mb-1">Deliver To</label>
                     <input
                       type="text"
-                      name="deliverTo"
-                      value={newOrderForm.deliverTo}
+                      name="deliver_to"
+                      value={newOrderForm.deliver_to}
                       onChange={handleFormChange}
                       className="w-full p-2 bg-gray-700 rounded"
                     />
@@ -321,8 +403,8 @@ const PurchaseOrders = () => {
                           <td className="p-2 border border-gray-700">
                             <input
                               type="text"
-                              name="item"
-                              value={order.item}
+                              name="item_name"
+                              value={order.item_name}
                               onChange={(e) => handleEditChange(e, index)}
                               className="w-full p-1 bg-gray-700 rounded"
                             />
@@ -330,8 +412,8 @@ const PurchaseOrders = () => {
                           <td className="p-2 border border-gray-700">
                             <input
                               type="text"
-                              name="stock"
-                              value={order.stock}
+                              name="stock_on_hand"
+                              value={order.stock_on_hand}
                               onChange={(e) => handleEditChange(e, index)}
                               className="w-full p-1 bg-gray-700 rounded"
                             />
@@ -339,8 +421,8 @@ const PurchaseOrders = () => {
                           <td className="p-2 border border-gray-700">
                             <input
                               type="text"
-                              name="supplier"
-                              value={order.supplier}
+                              name="supplier_name"
+                              value={order.supplier_name}
                               onChange={(e) => handleEditChange(e, index)}
                               className="w-full p-1 bg-gray-700 rounded"
                             />
@@ -348,8 +430,8 @@ const PurchaseOrders = () => {
                           <td className="p-2 border border-gray-700">
                             <input
                               type="text"
-                              name="price"
-                              value={order.price}
+                              name="item_price"
+                              value={order.item_price}
                               onChange={(e) => handleEditChange(e, index)}
                               className="w-full p-1 bg-gray-700 rounded"
                             />
@@ -357,8 +439,8 @@ const PurchaseOrders = () => {
                           <td className="p-2 border border-gray-700">
                             <input
                               type="text"
-                              name="unit"
-                              value={order.unit}
+                              name="unit_value"
+                              value={order.unit_value}
                               onChange={(e) => handleEditChange(e, index)}
                               className="w-full p-1 bg-gray-700 rounded"
                             />
@@ -375,8 +457,8 @@ const PurchaseOrders = () => {
                           <td className="p-2 border border-gray-700">
                             <input
                               type="text"
-                              name="deliverTo"
-                              value={order.deliverTo}
+                              name="deliver_to"
+                              value={order.deliver_to}
                               onChange={(e) => handleEditChange(e, index)}
                               className="w-full p-1 bg-gray-700 rounded"
                             />
@@ -394,13 +476,13 @@ const PurchaseOrders = () => {
                       ) : (
                         // View mode
                         <>
-                          <td className="p-2 border border-gray-700">{order.item}</td>
-                          <td className="p-2 border border-gray-700">{order.stock}</td>
-                          <td className="p-2 border border-gray-700">{order.supplier}</td>
-                          <td className="p-2 border border-gray-700">{order.price}</td>
-                          <td className="p-2 border border-gray-700">{order.unit}</td>
+                          <td className="p-2 border border-gray-700">{order.item_name}</td>
+                          <td className="p-2 border border-gray-700">{order.stock_on_hand}</td>
+                          <td className="p-2 border border-gray-700">{order.supplier_name}</td>
+                          <td className="p-2 border border-gray-700">{order.item_price}</td>
+                          <td className="p-2 border border-gray-700">{order.unit_value}</td>
                           <td className="p-2 border border-gray-700">{order.quantity}</td>
-                          <td className="p-2 border border-gray-700">{order.deliverTo}</td>
+                          <td className="p-2 border border-gray-700">{order.deliver_to}</td>
                           <td className="p-2 border border-gray-700">{order.total}</td>
                         </>
                       )}
@@ -430,7 +512,7 @@ const PurchaseOrders = () => {
                               Edit
                             </button>
                             <button
-                              onClick={() => handleDeleteItem(index, 0)}
+                              onClick={() => handleDeleteItem(order.id, 0)}
                               className="bg-red-500 px-2 py-1 rounded"
                             >
                               Delete
@@ -464,8 +546,8 @@ const PurchaseOrders = () => {
               <tbody>
                 {sentOrders.map((order, index) => (
                   <tr key={index} className="hover:bg-gray-800">
-                    <td className="p-2 border border-gray-700">{order.orderNo}</td>
-                    <td className="p-2 border border-gray-700">{order.item}</td>
+                    <td className="p-2 border border-gray-700">{order.id}</td>
+                    <td className="p-2 border border-gray-700">{order.item_name}</td>
                     <td className="p-2 border border-gray-700">{order.createdBy}</td>
                     <td className="p-2 border border-gray-700">{order.sentBy}</td>
                     <td className="p-2 border border-gray-700">{order.orderedBy}</td>
@@ -483,7 +565,7 @@ const PurchaseOrders = () => {
                           Re-Send
                         </button>
                         <button 
-                          onClick={() => handleDeleteItem(index, 1)}
+                          onClick={() => handleDeleteItem(order.id, 1)}
                           className="bg-red-500 px-2 py-1 rounded"
                         >
                           Delete
@@ -516,9 +598,9 @@ const PurchaseOrders = () => {
               <tbody>
                 {receivedOrders.map((order, index) => (
                   <tr key={index} className="hover:bg-gray-800">
-                    <td className="p-2 border border-gray-700">{order.orderNo}</td>
+                    <td className="p-2 border border-gray-700">{order.id}</td>
                     <td className="p-2 border border-gray-700">{order.invRefNo}</td>
-                    <td className="p-2 border border-gray-700">{order.item}</td>
+                    <td className="p-2 border border-gray-700">{order.item_name}</td>
                     <td className="p-2 border border-gray-700">{order.createdBy}</td>
                     <td className="p-2 border border-gray-700">{order.orderedBy}</td>
                     <td className="p-2 border border-gray-700">{order.dueDate}</td>

@@ -45,7 +45,6 @@ const StockRequests = () => {
       }
       const itemsData = await itemsResponse.json();
       const mergedData = mergeJson(jsonData, itemsData);
-      console.log(mergedData)
 
       const openItems = mergedData.filter(item => item.status === "Open");
       const sentItems = mergedData.filter(item => item.status === "Sent");

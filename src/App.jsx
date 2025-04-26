@@ -78,7 +78,7 @@ const App = () => {
       <Route path="/view_consignment" element={<ViewConsignment />} />
 
       <Route path="/stock_requests" element={<StockRequests />} /> - Integrated
-      <Route path="/stock_transfer" element={<StockTransfer />} />
+      <Route path="/stock_transfer" element={<StockTransfer />} /> - Integrated (Ambiguous Button Function)
       <Route path="/stock_takes" element={<StockTakes />} />
       <Route path="/purchase_orders" element={<PurchaseOrders />} /> - Integrated
 

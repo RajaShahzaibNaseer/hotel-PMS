@@ -58,7 +58,6 @@ const PurchaseOrders = () => {
       setNewOrders(mergedData);
       setSentOrders(mergedData);
       setReceivedOrders(mergedData);
-      console.log(mergedData)
     } catch (error) {
       console.error("Failed to fetch stock data:", error);
     }

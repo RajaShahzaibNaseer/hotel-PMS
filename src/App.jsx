@@ -77,21 +77,21 @@ const App = () => {
       <Route path="/stock_on_hand" element={<StockOnHand />} />
       <Route path="/view_consignment" element={<ViewConsignment />} />
 
-      <Route path="/stock_requests" element={<StockRequests />} />
+      <Route path="/stock_requests" element={<StockRequests />} /> - Integrated
       <Route path="/stock_transfer" element={<StockTransfer />} />
       <Route path="/stock_takes" element={<StockTakes />} />
       <Route path="/purchase_orders" element={<PurchaseOrders />} />
 
       <Route path="/setup" element={<Setup />} />
-      <Route path="/recipes" element={<Recipes />} />
-      <Route path="/menu" element={<Menu/>} />
-      <Route path="/ingredients" element={<Ingredients />} />
-      <Route path="/finished_goods" element={<FinishedGoods />} />
-      <Route path="/suppliers" element={<Suppliers />} />
-      <Route path="/settings" element={<Settings />} />
-      <Route path="/measurement_units" element={<Measurements />} />
-      <Route path="/categories" element={<Categories/>} />
-      <Route path="/items" element={<Items></Items>} />
+      <Route path="/recipes" element={<Recipes />} /> - Integrated
+      <Route path="/menu" element={<Menu/>} /> - Integrated
+      <Route path="/ingredients" element={<Ingredients />} /> - Integrated
+      <Route path="/finished_goods" element={<FinishedGoods />} /> - Integrated
+      <Route path="/suppliers" element={<Suppliers />} /> - Integrated
+      <Route path="/settings" element={<Settings />} /> - Integrated
+      <Route path="/measurement_units" element={<Measurements />} /> - Integrated
+      <Route path="/categories" element={<Categories/>} /> - Integrated
+      <Route path="/items" element={<Items></Items>} /> - Integrated
     </Routes>
   );
 };

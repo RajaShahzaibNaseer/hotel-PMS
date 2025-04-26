@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { API_URL } from "../../config";
 
 const StockRequests = () => {
   const [activeTab, setActiveTab] = useState(0);
@@ -19,10 +20,34 @@ const StockRequests = () => {
     status: ""
     });
   
+
+  const mergeJson = (jsonData, itemsData) => {
+    return jsonData.map(item => {
+      const matchedItem = itemsData.find(i => i.id === item.item_id);
+      return {
+        ...item,
+        item_name: matchedItem?.name || 'Unknown',
+        item_price: matchedItem?.price || 0,
+        item_description: matchedItem?.description || '',
+        item_reorder_level: matchedItem?.reorder_level || 0
+      };
+    });
+  };
   const fetchData = async () => {
-    const response = await fetch(`${API_URL}/stockrequests`);
+    const response = await fetch(`${API_URL}/stockrequest`);
     const jsonData = await response.json();
-    setNewOrders(jsonData);
+    
+    const itemsResponse = await fetch(`${API_URL}/items`);
+    const itemsData = await itemsResponse.json();
+    const mergedData = mergeJson(jsonData, itemsData);
+    console.log(mergedData)
+
+    const openItems = mergedData.filter(item => item.status === "Open");
+    const sentItems = mergedData.filter(item => item.status === "Sent");
+    const receivedItems = mergedData.filter(item => item.status === "Received");
+    setNewOrders(openItems);
+    setSentOrders(sentItems);
+    setReceivedOrders(receivedItems);
   }
 
   useEffect(() => {
@@ -33,21 +58,21 @@ const StockRequests = () => {
   });
   // Table data states
   const [newOrders, setNewOrders] = useState([
-    { srno: "1", item: "Sugar", stock: "50", supplier: "ABC Supplies", price: "120", unit: "Kg", quantity: "20", deliverTo: "Store A", total: "2400" },
-    { srno: "2", item: "Flour", stock: "30", supplier: "XYZ Traders", price: "80", unit: "Kg", quantity: "15", deliverTo: "Store B", total: "1200" },
-    { srno: "3", item: "Salt", stock: "40", supplier: "XYZ Traders", price: "60", unit: "Kg", quantity: "10", deliverTo: "Store C", total: "600" }
+    // { srno: "1", item: "Sugar", stock: "50", supplier: "ABC Supplies", price: "120", unit: "Kg", quantity: "20", deliverTo: "Store A", total: "2400" },
+    // { srno: "2", item: "Flour", stock: "30", supplier: "XYZ Traders", price: "80", unit: "Kg", quantity: "15", deliverTo: "Store B", total: "1200" },
+    // { srno: "3", item: "Salt", stock: "40", supplier: "XYZ Traders", price: "60", unit: "Kg", quantity: "10", deliverTo: "Store C", total: "600" }
   ]);
 
   const [sentOrders, setSentOrders] = useState([
-    { srno: "#123", invRefNo: "#456", item: "Sugar", createdBy: "John Doe", sentBy: "John Doe", orderedBy: "John Doe", dueDate: "2023-06-20", total: "1200" },
-    { srno: "#456", invRefNo: "#789", item: "Flour", createdBy: "Jane Smith", sentBy: "Jane Smith", orderedBy: "Jane Smith", dueDate: "2023-06-21", total: "800" },
-    { srno: "#789", invRefNo: "#123", item: "Salt", createdBy: "Bob Johnson", sentBy: "Bob Johnson", orderedBy: "Bob Johnson", dueDate: "2023-06-22", total: "600" }
+    // { srno: "#123", invRefNo: "#456", item: "Sugar", createdBy: "John Doe",  sentBy: "John Doe", orderedBy: "John Doe", dueDate: "2023-06-20", total: "1200" },
+    // { srno: "#456", invRefNo: "#789", item: "Flour", createdBy: "Jane Smith", sentBy: "Jane Smith", orderedBy: "Jane Smith", dueDate: "2023-06-21", total: "800" },
+    // { srno: "#789", invRefNo: "#123", item: "Salt", createdBy: "Bob Johnson", sentBy: "Bob Johnson", orderedBy: "Bob Johnson", dueDate: "2023-06-22", total: "600" }
   ]);
 
   const [receivedOrders, setReceivedOrders] = useState([
-    { srno: "#123", invRefNo: "#456", item: "Sugar", createdBy: "John Doe", orderedBy: "John Doe", dueDate: "2023-06-20", receivedDate: "2023-06-22", total: "1200" },
-    { srno: "#456", invRefNo: "#789", item: "Flour", createdBy: "Jane Smith", orderedBy: "Jane Smith", dueDate: "2023-06-21", receivedDate: "2023-06-23", total: "800" },
-    { srno: "#789", invRefNo: "#123", item: "Salt", createdBy: "Bob Johnson", orderedBy: "Bob Johnson", dueDate: "2023-06-22", receivedDate: "2023-06-24", total: "600" }
+    // { srno: "#123", invRefNo: "#456", item: "Sugar", createdBy: "John Doe", orderedBy: "John Doe", dueDate: "2023-06-20", receivedDate: "2023-06-22", total: "1200" },
+    // { srno: "#456", invRefNo: "#789", item: "Flour", createdBy: "Jane Smith", orderedBy: "Jane Smith", dueDate: "2023-06-21", receivedDate: "2023-06-23", total: "800" },
+    // { srno: "#789", invRefNo: "#123", item: "Salt", createdBy: "Bob Johnson", orderedBy: "Bob Johnson", dueDate: "2023-06-22", receivedDate: "2023-06-24", total: "600" }
   ]);
 
   // Handle form input change
@@ -73,23 +98,54 @@ const StockRequests = () => {
   // Start editing an item
   const handleEditItem = (index) => {
     setEditingIndex(index);
-    // Here you would fetch the latest data from backend if needed
   };
+  
 
   // Save edited item
-  const handleSaveEdit = (index) => {
-    setEditingIndex(null);
-    // Backend integration - send the updated item to your API
-    // Example: api.updateOrder(newOrders[index])
-    //   .then(() => console.log("Order updated"))
-    //   .catch(error => console.error("Error updating order:", error));
+  const handleSaveEdit = async (index) => {
+    try {
+      const orderToUpdate = newOrders[index];
+      
+      // Prepare the updated data
+      const updatedData = {
+        ...orderToUpdate,
+        total: (parseFloat(orderToUpdate.price_per_unit || 0) * parseFloat(orderToUpdate.quantity || 0))
+      };
+  
+      // Send PUT request to update the order
+      const response = await fetch(`${API_URL}/stockrequest/${orderToUpdate.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedData)
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to update order');
+      }
+  
+      // Update local state only after successful API call
+      const updatedOrders = [...newOrders];
+      updatedOrders[index] = updatedData;
+      setNewOrders(updatedOrders);
+      
+      setEditingIndex(null);
+      setRefresh(true); // Refresh data to ensure consistency
+    } catch (error) {
+      console.error("Error updating order:", error);
+      // Optionally show error to user
+    }
   };
+  
 
   // Cancel editing
   const handleCancelEdit = () => {
     setEditingIndex(null);
-    // Optionally revert changes by re-fetching data from backend
+    // Re-fetch data to discard any changes
+    setRefresh(true);
   };
+  
 
   // Add new order
   const handleAddNewOrder = () => {
@@ -311,7 +367,7 @@ const StockRequests = () => {
                             <input
                               type="text"
                               name="item"
-                              value={order.item_id}
+                              value={order.item_name}
                               onChange={(e) => handleEditChange(e, index)}
                               className="w-full p-1 bg-gray-700 rounded"
                             />
@@ -334,7 +390,7 @@ const StockRequests = () => {
                               className="w-full p-1 bg-gray-700 rounded"
                             />
                           </td>
-                          <td className="p-2 border border-gray-700">
+                          {/* <td className="p-2 border border-gray-700">
                             <input
                               type="text"
                               name="unit_value"
@@ -342,7 +398,7 @@ const StockRequests = () => {
                               onChange={(e) => handleEditChange(e, index)}
                               className="w-full p-1 bg-gray-700 rounded"
                             />
-                          </td>
+                          </td> */}
                           <td className="p-2 border border-gray-700">
                             <input
                               type="text"
@@ -365,10 +421,10 @@ const StockRequests = () => {
                       ) : (
                         // View mode
                         <>
-                          <td className="p-2 border border-gray-700">{order.item_id}</td>
+                          <td className="p-2 border border-gray-700">{order.item_name}</td>
                           <td className="p-2 border border-gray-700">{order.stock_on_hand}</td>
                           <td className="p-2 border border-gray-700">{order.price_per_unit}</td>
-                          <td className="p-2 border border-gray-700">{order.unit_value}</td>
+                          {/* <td className="p-2 border border-gray-700">{order.unit_value}</td> */}
                           <td className="p-2 border border-gray-700">{order.quantity}</td>
                           <td className="p-2 border border-gray-700">{order.destination}</td>
                         </>
@@ -432,8 +488,8 @@ const StockRequests = () => {
               <tbody>
                 {sentOrders.map((order, index) => (
                   <tr key={index} className="hover:bg-gray-800">
-                    <td className="p-2 border border-gray-700">{order.srno}</td>
-                    <td className="p-2 border border-gray-700">{order.item}</td>
+                    <td className="p-2 border border-gray-700">{order.id}</td>
+                    <td className="p-2 border border-gray-700">{order.item_name}</td>
                     <td className="p-2 border border-gray-700">{order.createdBy}</td>
                     <td className="p-2 border border-gray-700">{order.sentBy}</td>
                     <td className="p-2 border border-gray-700">{order.orderedBy}</td>
@@ -484,9 +540,9 @@ const StockRequests = () => {
               <tbody>
                 {receivedOrders.map((order, index) => (
                   <tr key={index} className="hover:bg-gray-800">
-                    <td className="p-2 border border-gray-700">{order.srno}</td>
+                    <td className="p-2 border border-gray-700">{order.id}</td>
                     <td className="p-2 border border-gray-700">{order.invRefNo}</td>
-                    <td className="p-2 border border-gray-700">{order.item}</td>
+                    <td className="p-2 border border-gray-700">{order.item_name}</td>
                     <td className="p-2 border border-gray-700">{order.createdBy}</td>
                     <td className="p-2 border border-gray-700">{order.orderedBy}</td>
                     <td className="p-2 border border-gray-700">{order.dueDate}</td>

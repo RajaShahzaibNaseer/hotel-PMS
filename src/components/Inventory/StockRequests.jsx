@@ -5,11 +5,10 @@ const StockRequests = () => {
   const [activeTab, setActiveTab] = useState(0);
   const [editingIndex, setEditingIndex] = useState(null);
   const [isAddingNew, setIsAddingNew] = useState(false);
-  const [refresh,setRefresh] = useState(true);
-  
+  const [refresh, setRefresh] = useState(true);
+
   // New form state
   const [newOrderForm, setNewOrderForm] = useState({
-    id: "",
     item_id: "",
     stock_on_hand: "",
     price_per_unit: "",
@@ -17,9 +16,8 @@ const StockRequests = () => {
     quantity: "",
     destination: "",
     total: "",
-    status: ""
-    });
-  
+    status: "Open",
+  });
 
   const mergeJson = (jsonData, itemsData) => {
     return jsonData.map(item => {
@@ -34,46 +32,44 @@ const StockRequests = () => {
     });
   };
   const fetchData = async () => {
-    const response = await fetch(`${API_URL}/stockrequest`);
-    const jsonData = await response.json();
-    
-    const itemsResponse = await fetch(`${API_URL}/items`);
-    const itemsData = await itemsResponse.json();
-    const mergedData = mergeJson(jsonData, itemsData);
-    console.log(mergedData)
+    try {
+      const response = await fetch(`${API_URL}/stockrequest`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const jsonData = await response.json();
 
-    const openItems = mergedData.filter(item => item.status === "Open");
-    const sentItems = mergedData.filter(item => item.status === "Sent");
-    const receivedItems = mergedData.filter(item => item.status === "Received");
-    setNewOrders(openItems);
-    setSentOrders(sentItems);
-    setReceivedOrders(receivedItems);
+      const itemsResponse = await fetch(`${API_URL}/items`);
+      if (!itemsResponse.ok) {
+        throw new Error(`HTTP error! status: ${itemsResponse.status}`);
+      }
+      const itemsData = await itemsResponse.json();
+      const mergedData = mergeJson(jsonData, itemsData);
+      console.log(mergedData)
+
+      const openItems = mergedData.filter(item => item.status === "Open");
+      const sentItems = mergedData.filter(item => item.status === "Sent");
+      const receivedItems = mergedData.filter(item => item.status === "Received");
+      setNewOrders(openItems);
+      setSentOrders(sentItems);
+      setReceivedOrders(receivedItems);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      // Optionally display an error message to the user
+    }
   }
 
   useEffect(() => {
-     if(refresh){
+    if (refresh) {
       fetchData();
       setRefresh(false);
-     }
-  });
+    }
+  }, [refresh]);
+
   // Table data states
-  const [newOrders, setNewOrders] = useState([
-    // { srno: "1", item: "Sugar", stock: "50", supplier: "ABC Supplies", price: "120", unit: "Kg", quantity: "20", deliverTo: "Store A", total: "2400" },
-    // { srno: "2", item: "Flour", stock: "30", supplier: "XYZ Traders", price: "80", unit: "Kg", quantity: "15", deliverTo: "Store B", total: "1200" },
-    // { srno: "3", item: "Salt", stock: "40", supplier: "XYZ Traders", price: "60", unit: "Kg", quantity: "10", deliverTo: "Store C", total: "600" }
-  ]);
-
-  const [sentOrders, setSentOrders] = useState([
-    // { srno: "#123", invRefNo: "#456", item: "Sugar", createdBy: "John Doe",  sentBy: "John Doe", orderedBy: "John Doe", dueDate: "2023-06-20", total: "1200" },
-    // { srno: "#456", invRefNo: "#789", item: "Flour", createdBy: "Jane Smith", sentBy: "Jane Smith", orderedBy: "Jane Smith", dueDate: "2023-06-21", total: "800" },
-    // { srno: "#789", invRefNo: "#123", item: "Salt", createdBy: "Bob Johnson", sentBy: "Bob Johnson", orderedBy: "Bob Johnson", dueDate: "2023-06-22", total: "600" }
-  ]);
-
-  const [receivedOrders, setReceivedOrders] = useState([
-    // { srno: "#123", invRefNo: "#456", item: "Sugar", createdBy: "John Doe", orderedBy: "John Doe", dueDate: "2023-06-20", receivedDate: "2023-06-22", total: "1200" },
-    // { srno: "#456", invRefNo: "#789", item: "Flour", createdBy: "Jane Smith", orderedBy: "Jane Smith", dueDate: "2023-06-21", receivedDate: "2023-06-23", total: "800" },
-    // { srno: "#789", invRefNo: "#123", item: "Salt", createdBy: "Bob Johnson", orderedBy: "Bob Johnson", dueDate: "2023-06-22", receivedDate: "2023-06-24", total: "600" }
-  ]);
+  const [newOrders, setNewOrders] = useState([]);
+  const [sentOrders, setSentOrders] = useState([]);
+  const [receivedOrders, setReceivedOrders] = useState([]);
 
   // Handle form input change
   const handleFormChange = (e) => {
@@ -99,37 +95,39 @@ const StockRequests = () => {
   const handleEditItem = (index) => {
     setEditingIndex(index);
   };
-  
+
 
   // Save edited item
   const handleSaveEdit = async (index) => {
     try {
       const orderToUpdate = newOrders[index];
-      
+
       // Prepare the updated data
       const updatedData = {
         ...orderToUpdate,
         total: (parseFloat(orderToUpdate.price_per_unit || 0) * parseFloat(orderToUpdate.quantity || 0))
       };
-  
+
       // Send PUT request to update the order
       const response = await fetch(`${API_URL}/stockrequest/${orderToUpdate.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(updatedData)
+        body: JSON.stringify(
+          { stock_on_hand: updatedData.stock_on_hand, price_per_unit: updatedData.price_per_unit, quantity: updatedData.quantity, destination: updatedData.destination }
+        )
       });
-  
+
       if (!response.ok) {
         throw new Error('Failed to update order');
       }
-  
+
       // Update local state only after successful API call
       const updatedOrders = [...newOrders];
       updatedOrders[index] = updatedData;
       setNewOrders(updatedOrders);
-      
+
       setEditingIndex(null);
       setRefresh(true); // Refresh data to ensure consistency
     } catch (error) {
@@ -137,7 +135,7 @@ const StockRequests = () => {
       // Optionally show error to user
     }
   };
-  
+
 
   // Cancel editing
   const handleCancelEdit = () => {
@@ -145,76 +143,84 @@ const StockRequests = () => {
     // Re-fetch data to discard any changes
     setRefresh(true);
   };
-  
+
 
   // Add new order
-  const handleAddNewOrder = () => {
-    // Generate a new ID (in a real app, the backend would handle this)
-    const newSrNo = String(newOrders.length + 1);
-    
-    // Calculate total if not provided
-    const total = newOrderForm.total || 
-      (parseInt(newOrderForm.price || 0) * parseInt(newOrderForm.quantity || 0)).toString();
-    
-    const newOrder = {
-      ...newOrderForm,
-      srno: newSrNo,
-      total
-    };
-    
-    setNewOrders([...newOrders, newOrder]);
-    
-    // Reset form and exit add mode
-    setNewOrderForm({
-      srno: "",
-      item: "",
-      stock: "",
-      supplier: "",
-      price: "",
-      unit: "",
-      quantity: "",
-      deliverTo: "",
-      total: ""
-    });
-    setIsAddingNew(false);
-    
-    // Backend integration - send the new order to your API
-    // Example: api.createOrder(newOrder)
-    //   .then(response => console.log("Order created", response))
-    //   .catch(error => console.error("Error creating order:", error));
+  const handleAddNewOrder = async () => {
+    try {
+      // Calculate total if not provided
+      const total = newOrderForm.total ||
+        (parseFloat(newOrderForm.price_per_unit || 0) * parseFloat(newOrderForm.quantity || 0)).toFixed(2);
+
+      const newOrderToSend = {
+        ...newOrderForm,
+        total: parseFloat(total), // Ensure total is a number
+      };
+
+      const response = await fetch(`${API_URL}/stockrequest`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newOrderToSend),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to add new order');
+      }
+
+      // Reset form and exit add mode
+      setNewOrderForm({
+        item_id: "",
+        stock_on_hand: "",
+        price_per_unit: "",
+        unit_value: "",
+        quantity: "",
+        destination: "",
+        total: "",
+        status: "Open",
+      });
+      setIsAddingNew(false);
+      setRefresh(true); // Refresh data to show the new order
+    } catch (error) {
+      console.error("Error adding new order:", error);
+      // Optionally display an error message to the user
+    }
   };
 
   // Delete an item
-  const handleDeleteItem = (index, tabType) => {
+  const handleDeleteItem = async (id, tabType) => {
     if (window.confirm("Are you sure you want to delete this item?")) {
-      if (tabType === 0) {
-        const orderToDelete = newOrders[index];
-        setNewOrders(newOrders.filter((_, i) => i !== index));
-        
-        // Backend integration - send delete request
-        // Example: api.deleteOrder(orderToDelete.id)
-        //   .then(() => console.log("Order deleted"))
-        //   .catch(error => console.error("Error deleting order:", error));
-      } else if (tabType === 1) {
-        const orderToDelete = sentOrders[index];
-        setSentOrders(sentOrders.filter((_, i) => i !== index));
-        
-        // Example: api.deleteOrder(orderToDelete.orderNo)
-      } else {
-        const orderToDelete = receivedOrders[index];
-        setReceivedOrders(receivedOrders.filter((_, i) => i !== index));
-        
-        // Example: api.deleteOrder(orderToDelete.orderNo)
+      try {
+        const response = await fetch(`${API_URL}/stockrequest/${id}`, {
+          method: 'DELETE',
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to delete order');
+        }
+
+        // Update local state after successful deletion
+        if (tabType === 0) {
+          setNewOrders(newOrders.filter(order => order.id !== id));
+        } else if (tabType === 1) {
+          setSentOrders(sentOrders.filter(order => order.id !== id));
+        } else {
+          setReceivedOrders(receivedOrders.filter(order => order.id !== id));
+        }
+      } catch (error) {
+        console.error("Error deleting order:", error);
+        // Optionally display an error message to the user
       }
     }
   };
 
   // Calculate total automatically
   const calculateTotal = () => {
-    const price = parseFloat(newOrderForm.price) || 0;
+    const price = parseFloat(newOrderForm.price_per_unit) || 0;
     const quantity = parseFloat(newOrderForm.quantity) || 0;
     const total = (price * quantity).toFixed(2);
-    
+
     setNewOrderForm({
       ...newOrderForm,
       total
@@ -266,7 +272,7 @@ const StockRequests = () => {
                     <label className="block text-sm mb-1">Item ID</label>
                     <input
                       type="text"
-                      name="item"
+                      name="item_id"
                       value={newOrderForm.item_id}
                       onChange={handleFormChange}
                       className="w-full p-2 bg-gray-700 rounded"
@@ -276,7 +282,7 @@ const StockRequests = () => {
                     <label className="block text-sm mb-1">Stock on Hand</label>
                     <input
                       type="text"
-                      name="stock"
+                      name="stock_on_hand"
                       value={newOrderForm.stock_on_hand}
                       onChange={handleFormChange}
                       className="w-full p-2 bg-gray-700 rounded"
@@ -286,7 +292,7 @@ const StockRequests = () => {
                     <label className="block text-sm mb-1">Price Per Unit</label>
                     <input
                       type="text"
-                      name="supplier"
+                      name="price_per_unit"
                       value={newOrderForm.price_per_unit}
                       onChange={handleFormChange}
                       className="w-full p-2 bg-gray-700 rounded"
@@ -296,7 +302,7 @@ const StockRequests = () => {
                     <label className="block text-sm mb-1">Unit Value</label>
                     <input
                       type="text"
-                      name="price"
+                      name="unit_value"
                       value={newOrderForm.unit_value}
                       onChange={handleFormChange}
                       onBlur={calculateTotal}
@@ -307,7 +313,7 @@ const StockRequests = () => {
                     <label className="block text-sm mb-1">Quantity</label>
                     <input
                       type="text"
-                      name="unit"
+                      name="quantity"
                       value={newOrderForm.quantity}
                       onChange={handleFormChange}
                       className="w-full p-2 bg-gray-700 rounded"
@@ -317,10 +323,9 @@ const StockRequests = () => {
                     <label className="block text-sm mb-1">Destination</label>
                     <input
                       type="text"
-                      name="quantity"
+                      name="destination"
                       value={newOrderForm.destination}
                       onChange={handleFormChange}
-                      onBlur={calculateTotal}
                       className="w-full p-2 bg-gray-700 rounded"
                     />
                   </div>

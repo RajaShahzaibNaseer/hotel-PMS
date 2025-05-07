@@ -16,6 +16,7 @@ const PurchaseOrders = () => {
     unit_value: "",
     quantity: "",
     deliver_to: "",
+    status:"",
     total: "0.00", // Initialize total as a string
   });
 
@@ -55,9 +56,9 @@ const PurchaseOrders = () => {
 
       const mergedData = mergeJson(jsonData, itemsData, suppliersData);
 
-      setNewOrders(mergedData);
-      setSentOrders(mergedData);
-      setReceivedOrders(mergedData);
+      setNewOrders(mergedData.filter(order => order.status === "open"));
+      setSentOrders(mergedData.filter(order => order.status === "sent"));
+      setReceivedOrders(mergedData.filter(order => order.status === "received"));
     } catch (error) {
       console.error("Failed to fetch stock data:", error);
     }
@@ -110,6 +111,54 @@ const PurchaseOrders = () => {
     setNewOrders(updatedOrders);
   };
 
+  const handleSendItem = async (id) => {
+    try {
+      console.log(id)
+      const response = await fetch(`${API_URL}/purchase-orders/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          status: "sent",
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update order');
+      }
+
+      if (!response.ok) throw new Error("Failed to update order");
+      setRefresh(true)
+    } catch (error) {
+      console.error("Error updating order:", error);
+    }
+  };
+
+  const handleReceiveItem = async (id) => {
+    try {
+      console.log(id)
+      const response = await fetch(`${API_URL}/purchase-orders/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          status: "received",
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update order');
+      }
+
+      if (!response.ok) throw new Error("Failed to update order");
+      setRefresh(true)
+    } catch (error) {
+      console.error("Error updating order:", error);
+    }
+  };
+
   // Start editing an item
   const handleEditItem = (index) => {
     setEditingIndex(index);
@@ -133,6 +182,7 @@ const PurchaseOrders = () => {
           unit_value: orderToUpdate.unit_value,
           quantity: orderToUpdate.quantity,
           deliver_to: orderToUpdate.deliver_to,
+          status: orderToUpdate.status,
           total: orderToUpdate.total,
         }),
       });
@@ -167,6 +217,7 @@ const PurchaseOrders = () => {
         unit_value: newOrderForm.unit_value || "",
         quantity: parseInt(newOrderForm.quantity) || 0,
         deliver_to: newOrderForm.deliver_to || "",
+        status: newOrderForm.status || "open",
         total: parseFloat(newOrderForm.total || 0), // Use the calculated total from state
       };
 
@@ -194,6 +245,7 @@ const PurchaseOrders = () => {
         unit_value: "",
         quantity: "",
         deliver_to: "",
+        status: "open",
         total: "0.00",
       });
     } catch (error) {
@@ -388,6 +440,7 @@ const PurchaseOrders = () => {
                     <th className="p-2 border border-gray-700">Quantity</th>
                     <th className="p-2 border border-gray-700">Deliver To</th>
                     <th className="p-2 border border-gray-700">Total</th>
+                    <th className="p-2 border border-gray-700">Status</th>
                     <th className="p-2 border border-gray-700">Actions</th>
                   </tr>
                 </thead>
@@ -483,6 +536,7 @@ const PurchaseOrders = () => {
                           <td className="p-2 border border-gray-700">{order.quantity}</td>
                           <td className="p-2 border border-gray-700">{order.deliver_to}</td>
                           <td className="p-2 border border-gray-700">{order.total}</td>
+                          <td className="p-2 border border-gray-700">{order.status}</td>
                         </>
                       )}
                       
@@ -504,6 +558,12 @@ const PurchaseOrders = () => {
                           </div>
                         ) : (
                           <div className="flex flex-col gap-1">
+                            <button
+                              onClick={() => handleSendItem(order.id)}
+                              className="bg-blue-500 px-2 py-1 rounded mb-1"
+                            >
+                              Send
+                            </button>
                             <button
                               onClick={() => handleEditItem(index)}
                               className="bg-green-500 px-2 py-1 rounded mb-1"
@@ -557,7 +617,8 @@ const PurchaseOrders = () => {
                         <button className="bg-blue-500 px-2 py-1 rounded mb-1">
                           Open
                         </button>
-                        <button className="bg-green-500 px-2 py-1 rounded mb-1">
+                        <button className="bg-green-500 px-2 py-1 rounded mb-1"
+                        onClick={() => handleReceiveItem(order.id)}>
                           Receive
                         </button>
                         <button className="bg-yellow-500 px-2 py-1 rounded mb-1">

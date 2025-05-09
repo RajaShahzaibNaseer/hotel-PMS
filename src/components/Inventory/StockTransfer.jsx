@@ -316,17 +316,31 @@ const StockTransfer = () => {
                             ? "bg-blue-500 hover:bg-blue-600"
                             : "bg-green-500 hover:bg-green-600"
                         }`}
-                        onClick={() => {
-                          if (transfer.closing_balance === 0) {
-                            // Handle "Open" action
-                            console.log("Open transfer:", transfer.id);
-                          } else {
-                            // Handle "Receive" action
-                            console.log("Receive transfer:", transfer.id);
+                        onClick={async () => {
+                          try {
+                            console.log(transfer.id);
+                            const response = await fetch(`${API_URL}/stocktransfer/${transfer.id}`, {
+                              method: "PUT",
+                              headers: {
+                                "Content-Type": "application/json",
+                              },
+                              body: JSON.stringify({
+                                status: "recieved",
+                              }),
+                            });
+                      
+                            if (!response.ok) {
+                              throw new Error('Failed to update order');
+                            }
+                      
+                            if (!response.ok) throw new Error("Failed to update order");
+                            setRefresh(true)
+                          } catch (error) {
+                            console.error("Error updating order:", error);
                           }
                         }}
                       >
-                        {transfer.closing_balance === 0 ? "Open" : "Receive"}
+                        {transfer.status === "recieved" ? "Recieved" : "Receive"}
                       </button>
                     </td>
                   </tr>

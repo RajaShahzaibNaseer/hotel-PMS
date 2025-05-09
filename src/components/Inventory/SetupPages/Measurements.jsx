@@ -131,18 +131,9 @@ const Measurements = () => {
                     {measurementData.map((row, rowIndex) => (
                         <tr key={rowIndex} className="border border-gray-700 hover:bg-gray-800 transition-colors">
                         <td className="border border-gray-700 p-3">
-                                {row.isEditing ? (
-                                    <input
-                                        type="number"
-                                        value={row.id}
-                                        onChange={(e) =>
-                                            handleInputChange(rowIndex, e.target.value)
-                                        }
-                                        className="p-2 bg-gray-700 rounded w-full"
-                                    />
-                                ) : (
+                                {
                                     row.id
-                                )}
+                                }
                             </td>
                             <td className="border border-gray-700 p-3">
                                 {row.isEditing ? (

@@ -17,6 +17,7 @@ const PurchaseOrders = () => {
     quantity: "",
     deliver_to: "",
     status:"",
+    dueDate: "",
     total: "0.00", // Initialize total as a string
   });
 
@@ -83,10 +84,33 @@ const PurchaseOrders = () => {
   // Handle form input change
   const handleFormChange = (e) => {
     const { name, value } = e.target;
-    setNewOrderForm({
-      ...newOrderForm,
-      [name]: value,
-    });
+
+    // Handle date input field
+    if (name === "dueDate") {
+      setNewOrderForm({
+        ...newOrderForm,
+        [name]: value,
+      });
+      return;
+    }
+
+    // Automatically calculate total if price_per_unit or quantity changes
+    if (name === "price_per_unit" || name === "quantity") {
+      const price = name === "price_per_unit" ? parseFloat(value) || 0 : parseFloat(newOrderForm.price_per_unit) || 0;
+      const quantity = name === "quantity" ? parseFloat(value) || 0 : parseFloat(newOrderForm.quantity) || 0;
+      const total = (price * quantity).toFixed(2);
+
+      setNewOrderForm({
+        ...newOrderForm,
+        [name]: value,
+        total,
+      });
+    } else {
+      setNewOrderForm({
+        ...newOrderForm,
+        [name]: value,
+      });
+    }
   };
 
   // Handle edit input change
@@ -145,6 +169,7 @@ const PurchaseOrders = () => {
         },
         body: JSON.stringify({
           status: "received",
+          received_date: new Date().toISOString(),
         }),
       });
 
@@ -217,6 +242,8 @@ const PurchaseOrders = () => {
         unit_value: newOrderForm.unit_value || "",
         quantity: parseInt(newOrderForm.quantity) || 0,
         deliver_to: newOrderForm.deliver_to || "",
+        due_date: newOrderForm.dueDate,
+        created_by: "admin",
         status: newOrderForm.status || "open",
         total: parseFloat(newOrderForm.total || 0), // Use the calculated total from state
       };
@@ -311,145 +338,155 @@ const PurchaseOrders = () => {
         </button>
       </div>
 
-      {/* Content */}
-      <div className="mt-4">
-        {activeTab === 0 && (
-          <div>
-            {!isAddingNew ? (
-              <button 
-                onClick={() => setIsAddingNew(true)} 
-                className="bg-green-500 px-4 py-2 rounded hover:bg-green-600 mb-4"
-              >
-                + New Purchase Order
-              </button>
-            ) : (
-              <div className="bg-gray-800 p-4 rounded mb-4">
-                <h3 className="text-xl mb-3">Add New Purchase Order</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  <div>
-                    <label className="block text-sm mb-1">Item</label>
-                    <input
-                      type="text"
-                      name="item_id"
-                      value={newOrderForm.item_id}
-                      onChange={handleFormChange}
-                      className="w-full p-2 bg-gray-700 rounded"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm mb-1">Stock on Hand</label>
-                    <input
-                      type="text"
-                      name="stock_on_hand"
-                      value={newOrderForm.stock_on_hand}
-                      onChange={handleFormChange}
-                      className="w-full p-2 bg-gray-700 rounded"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm mb-1">Supplier</label>
-                    <input
-                      type="text"
-                      name="supplier_id"
-                      value={newOrderForm.supplier_id}
-                      onChange={handleFormChange}
-                      className="w-full p-2 bg-gray-700 rounded"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm mb-1">Price per Unit</label>
-                    <input
-                      type="text"
-                      name="price_per_unit"
-                      value={newOrderForm.price_per_unit}
-                      onChange={handleFormChange}
-                      onBlur={calculateTotal}
-                      className="w-full p-2 bg-gray-700 rounded"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm mb-1">Unit</label>
-                    <input
-                      type="text"
-                      name="unit_value"
-                      value={newOrderForm.unit_value}
-                      onChange={handleFormChange}
-                      className="w-full p-2 bg-gray-700 rounded"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm mb-1">Quantity</label>
-                    <input
-                      type="text"
-                      name="quantity"
-                      value={newOrderForm.quantity}
-                      onChange={handleFormChange}
-                      onBlur={calculateTotal}
-                      className="w-full p-2 bg-gray-700 rounded"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm mb-1">Deliver To</label>
-                    <input
-                      type="text"
-                      name="deliver_to"
-                      value={newOrderForm.deliver_to}
-                      onChange={handleFormChange}
-                      className="w-full p-2 bg-gray-700 rounded"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm mb-1">Total</label>
-                    <input
-                      type="text"
-                      name="total"
-                      value={newOrderForm.total}
-                      onChange={handleFormChange}
-                      className="w-full p-2 bg-gray-700 rounded"
-                      readOnly
-                    />
-                  </div>
-                </div>
-                <div className="flex justify-end mt-4 gap-2">
-                  <button
-                    onClick={() => setIsAddingNew(false)}
-                    className="bg-gray-600 px-4 py-2 rounded"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    onClick={handleAddNewOrder}
-                    className="bg-green-500 px-4 py-2 rounded"
-                  >
-                    Save Order
-                  </button>
-                </div>
+        <div className="mt-4">
+          {activeTab === 0 && (
+            <div>
+          {!isAddingNew ? (
+            <button 
+              onClick={() => setIsAddingNew(true)} 
+              className="bg-green-500 px-4 py-2 rounded hover:bg-green-600 mb-4"
+            >
+              + New Purchase Order
+            </button>
+          ) : (
+            <div className="bg-gray-800 p-4 rounded mb-4">
+              <h3 className="text-xl mb-3">Add New Purchase Order</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div>
+              <label className="block text-sm mb-1">Item</label>
+              <input
+                type="text"
+                name="item_id"
+                value={newOrderForm.item_id}
+                onChange={handleFormChange}
+                className="w-full p-2 bg-gray-700 rounded"
+              />
+            </div>
+            <div>
+              <label className="block text-sm mb-1">Stock on Hand</label>
+              <input
+                type="text"
+                name="stock_on_hand"
+                value={newOrderForm.stock_on_hand}
+                onChange={handleFormChange}
+                className="w-full p-2 bg-gray-700 rounded"
+              />
+            </div>
+            <div>
+              <label className="block text-sm mb-1">Supplier</label>
+              <input
+                type="text"
+                name="supplier_id"
+                value={newOrderForm.supplier_id}
+                onChange={handleFormChange}
+                className="w-full p-2 bg-gray-700 rounded"
+              />
+            </div>
+            <div>
+              <label className="block text-sm mb-1">Price per Unit</label>
+              <input
+                type="text"
+                name="price_per_unit"
+                value={newOrderForm.price_per_unit}
+                onChange={handleFormChange}
+                onBlur={calculateTotal}
+                className="w-full p-2 bg-gray-700 rounded"
+              />
+            </div>
+            <div>
+              <label className="block text-sm mb-1">Unit</label>
+              <input
+                type="text"
+                name="unit_value"
+                value={newOrderForm.unit_value}
+                onChange={handleFormChange}
+                className="w-full p-2 bg-gray-700 rounded"
+              />
+            </div>
+            <div>
+              <label className="block text-sm mb-1">Quantity</label>
+              <input
+                type="text"
+                name="quantity"
+                value={newOrderForm.quantity}
+                onChange={handleFormChange}
+                onBlur={calculateTotal}
+                className="w-full p-2 bg-gray-700 rounded"
+              />
+            </div>
+            <div>
+              <label className="block text-sm mb-1">Deliver To</label>
+              <input
+                type="text"
+                name="deliver_to"
+                value={newOrderForm.deliver_to}
+                onChange={handleFormChange}
+                className="w-full p-2 bg-gray-700 rounded"
+              />
+            </div>
+            <div>
+              <label className="block text-sm mb-1">Total</label>
+              <input
+                type="text"
+                name="total"
+                value={newOrderForm.total}
+                onChange={handleFormChange}
+                className="w-full p-2 bg-gray-700 rounded"
+                readOnly
+              />
+            </div>
+            <div>
+              <label className="block text-sm mb-1">Due Date</label>
+              <input
+                type="date"
+                name="dueDate"
+                value={newOrderForm.dueDate}
+                onChange={handleFormChange}
+                className="w-full p-2 bg-gray-700 rounded"
+              />
+            </div>
               </div>
-            )}
-            
-            <div className="overflow-x-auto">
-              <table className="w-full border border-gray-700">
-                <thead>
-                  <tr className="bg-gray-800">
-                    <th className="p-2 border border-gray-700">ID</th>
-                    <th className="p-2 border border-gray-700">Item</th>
-                    <th className="p-2 border border-gray-700">Stock</th>
-                    <th className="p-2 border border-gray-700">Supplier</th>
-                    <th className="p-2 border border-gray-700">Price</th>
-                    <th className="p-2 border border-gray-700">Unit</th>
-                    <th className="p-2 border border-gray-700">Quantity</th>
-                    <th className="p-2 border border-gray-700">Deliver To</th>
-                    <th className="p-2 border border-gray-700">Total</th>
-                    <th className="p-2 border border-gray-700">Status</th>
-                    <th className="p-2 border border-gray-700">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {newOrders.map((order, index) => (
-                    <tr key={index} className="hover:bg-gray-800">
-                      <td className="p-2 border border-gray-700">{order.id}</td>
-                      
-                      {editingIndex === index ? (
+              <div className="flex justify-end mt-4 gap-2">
+            <button
+              onClick={() => setIsAddingNew(false)}
+              className="bg-gray-600 px-4 py-2 rounded"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleAddNewOrder}
+              className="bg-green-500 px-4 py-2 rounded"
+            >
+              Save Order
+            </button>
+              </div>
+            </div>
+          )}
+          
+          <div className="overflow-x-auto">
+            <table className="w-full border border-gray-700">
+              <thead>
+            <tr className="bg-gray-800">
+              <th className="p-2 border border-gray-700">ID</th>
+              <th className="p-2 border border-gray-700">Item</th>
+              <th className="p-2 border border-gray-700">Stock</th>
+              <th className="p-2 border border-gray-700">Supplier</th>
+              <th className="p-2 border border-gray-700">Price</th>
+              <th className="p-2 border border-gray-700">Unit</th>
+              <th className="p-2 border border-gray-700">Quantity</th>
+              <th className="p-2 border border-gray-700">Deliver To</th>
+              <th className="p-2 border border-gray-700">Due Date</th>
+              <th className="p-2 border border-gray-700">Total</th>
+              <th className="p-2 border border-gray-700">Status</th>
+              <th className="p-2 border border-gray-700">Actions</th>
+            </tr>
+              </thead>
+              <tbody>
+            {newOrders.map((order, index) => (
+              <tr key={index} className="hover:bg-gray-800">
+                <td className="p-2 border border-gray-700">{order.id}</td>
+                
+                {editingIndex === index ? (
                         // Editable row
                         <>
                           <td className="p-2 border border-gray-700">
@@ -517,6 +554,15 @@ const PurchaseOrders = () => {
                           </td>
                           <td className="p-2 border border-gray-700">
                             <input
+                              type="date"
+                              name="due_date"
+                              value={order.due_date}
+                              onChange={(e) => handleEditChange(e, index)}
+                              className="w-full p-1 bg-gray-700 rounded"
+                            />
+                          </td>
+                          <td className="p-2 border border-gray-700">
+                            <input
                               type="text"
                               name="total"
                               value={order.total}
@@ -535,6 +581,7 @@ const PurchaseOrders = () => {
                           <td className="p-2 border border-gray-700">{order.unit_value}</td>
                           <td className="p-2 border border-gray-700">{order.quantity}</td>
                           <td className="p-2 border border-gray-700">{order.deliver_to}</td>
+                          <td className="p-2 border border-gray-700">{new Date(order.due_date).toLocaleDateString("en-US")}</td>
                           <td className="p-2 border border-gray-700">{order.total}</td>
                           <td className="p-2 border border-gray-700">{order.status}</td>
                         </>
@@ -607,22 +654,16 @@ const PurchaseOrders = () => {
                   <tr key={index} className="hover:bg-gray-800">
                     <td className="p-2 border border-gray-700">{order.id}</td>
                     <td className="p-2 border border-gray-700">{order.item_name}</td>
-                    <td className="p-2 border border-gray-700">{order.createdBy}</td>
-                    <td className="p-2 border border-gray-700">{order.sentBy}</td>
-                    <td className="p-2 border border-gray-700">{order.orderedBy}</td>
-                    <td className="p-2 border border-gray-700">{order.dueDate}</td>
+                    <td className="p-2 border border-gray-700">{order.created_by}</td>
+                    <td className="p-2 border border-gray-700">{order.created_by}</td>
+                    <td className="p-2 border border-gray-700">{order.deliver_to}</td>
+                    <td className="p-2 border border-gray-700">{new Date(order.due_date).toLocaleDateString("en-US")}</td>
                     <td className="p-2 border border-gray-700">{order.total}</td>
                     <td className="p-2 border border-gray-700">
                       <div className="flex flex-col gap-1">
-                        <button className="bg-blue-500 px-2 py-1 rounded mb-1">
-                          Open
-                        </button>
                         <button className="bg-green-500 px-2 py-1 rounded mb-1"
                         onClick={() => handleReceiveItem(order.id)}>
                           Receive
-                        </button>
-                        <button className="bg-yellow-500 px-2 py-1 rounded mb-1">
-                          Re-Send
                         </button>
                         <button 
                           onClick={() => handleDeleteItem(order.id, 1)}
@@ -645,32 +686,24 @@ const PurchaseOrders = () => {
               <thead>
                 <tr className="bg-gray-800">
                   <th className="p-2 border border-gray-700">Order No.</th>
-                  <th className="p-2 border border-gray-700">Inv Ref. No.</th>
                   <th className="p-2 border border-gray-700">Item</th>
                   <th className="p-2 border border-gray-700">Created By</th>
                   <th className="p-2 border border-gray-700">Ordered By</th>
                   <th className="p-2 border border-gray-700">Due Date</th>
                   <th className="p-2 border border-gray-700">Received Date</th>
                   <th className="p-2 border border-gray-700">Total</th>
-                  <th className="p-2 border border-gray-700">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {receivedOrders.map((order, index) => (
                   <tr key={index} className="hover:bg-gray-800">
                     <td className="p-2 border border-gray-700">{order.id}</td>
-                    <td className="p-2 border border-gray-700">{order.invRefNo}</td>
                     <td className="p-2 border border-gray-700">{order.item_name}</td>
-                    <td className="p-2 border border-gray-700">{order.createdBy}</td>
-                    <td className="p-2 border border-gray-700">{order.orderedBy}</td>
-                    <td className="p-2 border border-gray-700">{order.dueDate}</td>
-                    <td className="p-2 border border-gray-700">{order.receivedDate}</td>
+                    <td className="p-2 border border-gray-700">{order.created_by}</td>
+                    <td className="p-2 border border-gray-700">{order.deliver_to}</td>
+                    <td className="p-2 border border-gray-700">{new Date(order.due_date).toLocaleDateString("en-US")}</td>
+                    <td className="p-2 border border-gray-700">{new Date(order.received_date).toLocaleDateString("en-US")}</td>
                     <td className="p-2 border border-gray-700">{order.total}</td>
-                    <td className="p-2 border border-gray-700">
-                      <button className="bg-blue-500 px-2 py-1 rounded">
-                        Open
-                      </button>
-                    </td>
                   </tr>
                 ))}
               </tbody>

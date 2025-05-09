@@ -91,6 +91,16 @@ const Ingredients = () => {
 
     const closeModal = () => {
         setIsModalOpen(false);
+        setFormData({
+            id: "",
+            name: "",
+            barcode: "",
+            description: "",
+            category: "",
+            measurementUnits: "",
+            buyingUnits: "",
+            supplier: "",
+        });
         setModalType(null);
     };
 

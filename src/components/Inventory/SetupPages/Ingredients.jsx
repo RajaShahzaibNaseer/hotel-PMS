@@ -28,7 +28,6 @@ const Ingredients = () => {
     const [modalType, setModalType] = useState(null); // 'add', 'edit', or 'delete'
     const [selectedRow, setSelectedRow] = useState(null);
     const [formData, setFormData] = useState({
-        id: "",
         name: "",
         barcode: "",
         description: "",
@@ -62,37 +61,49 @@ const Ingredients = () => {
     const openModal = (type, rowIndex = null) => {
         setModalType(type);
         setSelectedRow(rowIndex);
-        if (type === "edit" && rowIndex !== null) {
-            setFormData({
-                id: tableData[rowIndex].id,
-                name: tableData[rowIndex].name,
-                barcode: tableData[rowIndex].barcode,
-                description: tableData[rowIndex].description,
-                category: tableData[rowIndex].category,
-                measurementUnits: tableData[rowIndex].measurementUnits,
-                buyingUnits: tableData[rowIndex].buyingUnits,
-                supplier: tableData[rowIndex].supplier,
 
-            });
-        } else if(type ==="delete" && rowIndex !== null) {
+        if (type === "edit" && rowIndex !== null) {
+            const row = tableData[rowIndex];
             setFormData({
-                id: tableData[rowIndex].id,
-                name: tableData[rowIndex].name,
-                barcode: tableData[rowIndex].barcode,
-                description: tableData[rowIndex].description,
-                category: tableData[rowIndex].category,
-                measurementUnits: tableData[rowIndex].measurementUnits,
-                buyingUnits: tableData[rowIndex].buyingUnits,
-                supplier: tableData[rowIndex].supplier,
+                name: row.name,
+                barcode: row.barcode,
+                description: row.description,
+                category: row.category,
+                measurementUnits: row.measurementUnits,
+                buyingUnits: row.buyingUnits,
+                supplier: row.supplier,
+            });
+        } else if (type === "delete" && rowIndex !== null) {
+            const row = tableData[rowIndex];
+            setFormData({
+                name: row.name,
+                barcode: row.barcode,
+                description: row.description,
+                category: row.category,
+                measurementUnits: row.measurementUnits,
+                buyingUnits: row.buyingUnits,
+                supplier: row.supplier,
+            });
+        } else if (type === "add") {
+            // ✅ Reset form for "add"
+            setFormData({
+                name: "",
+                barcode: "",
+                description: "",
+                category: "",
+                measurementUnits: "",
+                buyingUnits: "",
+                supplier: "",
             });
         }
+
         setIsModalOpen(true);
     };
+
 
     const closeModal = () => {
         setIsModalOpen(false);
         setFormData({
-            id: "",
             name: "",
             barcode: "",
             description: "",
@@ -111,53 +122,50 @@ const Ingredients = () => {
     };
 
     // Handle form submission for add/edit
-    const handleSubmit = async () => {
-        if (modalType === "add") {
-            try {
-                const respone = await fetch(`${API_URL}/ingredients`,{
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                        id: formData.id,
-                        name: formData.name,
-                        barcode: formData.barcode,
-                        description: formData.description,
-                        category: formData.category,
-                        measurementUnits: formData.measurementUnits,
-                        buyingUnits: formData.buyingUnits,
-                        supplier: formData.supplier,
-                    }),
-                })
-            } catch (error) {
-                console.log(error.message);
+  const handleSubmit = async () => {
+    console.log("Submitting form", formData, modalType); // ✅ Debug log
+
+    if (modalType === "add") {
+        try {
+            const response = await fetch(`${API_URL}/ingredients`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(formData),
+            });
+
+            if (!response.ok) {
+                const errText = await response.text();
+                throw new Error(`Add failed: ${response.status} - ${errText}`);
             }
+
             setRefresh(true);
-        } else if (modalType === "edit" && selectedRow !== null) {
-            try {
-                const response = await fetch(`${API_URL}/ingredients/${formData.id}`,{
-                    method: "PUT",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                        id: formData.id,
-                        name: formData.name,
-                        barcode: formData.barcode,
-                        description: formData.description,
-                        category: formData.category,
-                        measurementUnits: formData.measurementUnits,
-                        buyingUnits: formData.buyingUnits,
-                        supplier: formData.supplier,
-                    }),
-                });
-                setRefresh(true);
-            } catch (error) {
-                console.log(error.message);
-            }
+        } catch (error) {
+            console.error("Add Error:", error.message);
         }
-        closeModal();
+    } else if (modalType === "edit" && selectedRow !== null) {
+        try {
+            const response = await fetch(`${API_URL}/ingredients/${formData.id}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(formData),
+            });
+
+            if (!response.ok) {
+                const errText = await response.text();
+                throw new Error(`Edit failed: ${response.status} - ${errText}`);
+            }
+
+            setRefresh(true);
+        } catch (error) {
+            console.error("Edit Error:", error.message);
+        }
+    }
+
+    closeModal();
     };
 
     // Handle delete confirmation

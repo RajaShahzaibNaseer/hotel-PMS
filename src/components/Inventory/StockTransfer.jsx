@@ -312,7 +312,7 @@ const StockTransfer = () => {
                     <td className="p-2 border border-gray-700">
                       <button
                         className={`px-2 py-1 rounded shadow-lg transition w-full ${
-                          transfer.closing_balance === 0
+                          transfer.status === "unreceived"
                             ? "bg-blue-500 hover:bg-blue-600"
                             : "bg-green-500 hover:bg-green-600"
                         }`}

@@ -28,6 +28,7 @@ const Ingredients = () => {
     const [modalType, setModalType] = useState(null); // 'add', 'edit', or 'delete'
     const [selectedRow, setSelectedRow] = useState(null);
     const [formData, setFormData] = useState({
+        id: "",
         name: "",
         barcode: "",
         description: "",
@@ -65,6 +66,7 @@ const Ingredients = () => {
         if (type === "edit" && rowIndex !== null) {
             const row = tableData[rowIndex];
             setFormData({
+                id: row.id,
                 name: row.name,
                 barcode: row.barcode,
                 description: row.description,
@@ -76,6 +78,7 @@ const Ingredients = () => {
         } else if (type === "delete" && rowIndex !== null) {
             const row = tableData[rowIndex];
             setFormData({
+                id: row.id,
                 name: row.name,
                 barcode: row.barcode,
                 description: row.description,
@@ -170,6 +173,7 @@ const Ingredients = () => {
 
     // Handle delete confirmation
     const handleDeleteConfirm = async () => {
+        console.log(formData.id);
         try {
             const response = await fetch(`${API_URL}/ingredients/${formData.id}`,{
                 method: "DELETE"

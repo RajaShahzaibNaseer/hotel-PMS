@@ -96,6 +96,32 @@ const StockRequests = () => {
     setEditingIndex(index);
   };
 
+  //handle sending an item
+  const handleSendItem = async (id) => {
+    try {
+      const order = newOrders[id].id;
+      console.log(order)
+      const response = await fetch(`${API_URL}/stockrequest/${order}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          status: "Sent",
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update order');
+      }
+
+      if (!response.ok) throw new Error("Failed to update order");
+      setRefresh(true)
+    } catch (error) {
+      console.error("Error updating order:", error);
+    }
+  };
+
 
   // Save edited item
   const handleSaveEdit = async (index) => {
@@ -190,9 +216,10 @@ const StockRequests = () => {
 
   // Delete an item
   const handleDeleteItem = async (id, tabType) => {
+    const orderToDelete = tabType === 0 ? newOrders[id].id : tabType === 1 ? sentOrders[id].id : receivedOrders[id].id;
     if (window.confirm("Are you sure you want to delete this item?")) {
       try {
-        const response = await fetch(`${API_URL}/stockrequest/${id}`, {
+        const response = await fetch(`${API_URL}/stockrequest/${orderToDelete}`, {
           method: 'DELETE',
         });
 
@@ -202,11 +229,11 @@ const StockRequests = () => {
 
         // Update local state after successful deletion
         if (tabType === 0) {
-          setNewOrders(newOrders.filter(order => order.id !== id));
+          setNewOrders(newOrders.filter(order => order.id !== orderToDelete));
         } else if (tabType === 1) {
-          setSentOrders(sentOrders.filter(order => order.id !== id));
+          setSentOrders(sentOrders.filter(order => order.id !== orderToDelete));
         } else {
-          setReceivedOrders(receivedOrders.filter(order => order.id !== id));
+          setReceivedOrders(receivedOrders.filter(order => order.id !== orderToDelete));
         }
       } catch (error) {
         console.error("Error deleting order:", error);
@@ -452,6 +479,12 @@ const StockRequests = () => {
                           </div>
                         ) : (
                           <div className="flex flex-col gap-1">
+                            <button
+                              onClick={() => handleSendItem(index)}
+                              className="bg-yellow-500 px-2 py-1 rounded mb-1"
+                            >
+                              Send
+                            </button>
                             <button
                               onClick={() => handleEditItem(index)}
                               className="bg-green-500 px-2 py-1 rounded mb-1"

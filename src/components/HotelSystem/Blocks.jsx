@@ -29,7 +29,7 @@ const Blocks = () => {
   const deleteBlock = async (id) => {
     try {
       await fetch(`${API_URL}/blocks/${id}`, { method: "DELETE" });
-      setBlocks(blocks.filter((block) => block.blockid !== id));
+      setBlocks(blocks.filter((block) => block.id !== id));
     } catch (error) {
       console.error(error.message);
     }
@@ -68,7 +68,7 @@ const Blocks = () => {
       dataKeys={["id", "blockname"]}
       renderActions={(row) => (
         <button
-          onClick={() => deleteBlock(row.blockid)}
+          onClick={() => deleteBlock(row.id)}
           className="px-4 py-2 bg-red-600 hover:bg-red-500 text-white rounded-md transition"
         >
           Delete

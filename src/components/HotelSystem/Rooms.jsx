@@ -17,7 +17,7 @@ const Rooms = () => {
   const onSubmitForm = async e => {
     e.preventDefault();
     try {
-        const body = { roomnumber, floorid, roomtypeid, roomstatus, roomPrice };
+        const body = { roomnumber, floorid, roomtypeid, roomstatus };
         const response = await fetch(`${API_URL}/rooms`, {
             method: "POST",
             headers: {"Content-Type" : "application/json"},

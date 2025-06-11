@@ -24,7 +24,6 @@ const Groups = () => {
       ...prevData,
       [e.target.name]: e.target.value,
     }));
-    console.log(`${e.target.name}: ${e.target.value}`);
   };
 
   const handleSubmit = async (e) => {
@@ -47,7 +46,7 @@ const Groups = () => {
   return (
     <div className="flex justify-center items-center h-screen bg-gradient-to-br from-[#1e1e1e] to-[#282c34] text-white">
       <form className="bg-[#222] p-8 rounded-[10px] shadow-[0_5px_15px_rgba(0,0,0,0.3)] w-[320px] text-center" onSubmit={handleSubmit}>
-        <h2 className="mb-5 text-xl font-semibold">Agent Data</h2>
+        <h2 className="mb-5 text-xl font-semibold">Group Data</h2>
         <InputField 
           label="Group Name" 
           name="groupName" 

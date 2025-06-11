@@ -43,7 +43,7 @@ const ShowGroups = () => {
   ]
 
   const groupKeys = [
-    "id", "groupname", "associatedwith", "fullname", "email", "phoneno", "created_at"
+    "id", "groupName", "associatedWith", "fullName", "email", "phoneNo", "created_at"
   ]
 
   return (

@@ -66,7 +66,7 @@ const ShowGroups = () => {
                   <td key={key}>{group[key]}</td>
                 ))}
                 <td>
-                  <button onClick={() => deleteGroups(group.id)} type="button">
+                  <button className="bg-red-500 px-2 rounded" onClick={() => deleteGroups(group.id)} type="button">
                     Delete
                   </button>
                 </td>

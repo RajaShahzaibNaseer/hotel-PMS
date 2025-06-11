@@ -49,6 +49,7 @@ const Guests = () => {
     
       const data = await response.json();
       console.log("Server Response:", data);
+      navigate("/guestlist");
     } catch (error) {
       console.error("Error:", error.message);
     }

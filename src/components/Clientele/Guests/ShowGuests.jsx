@@ -44,13 +44,12 @@ const ShowGuests = () => {
     'Special Needs', 'Previous Stays', 'Loyalty Program', 'Association', 'Created At', 'Options'];
 
   const guestKeys = [
-    "id", "full_name", "date_of_birth", "gender", "nationality", "identification_no",
-    "expiry_date", "phone_no", "email", "residential_address", "emergency_contact", 
-    "emergency_phone", "emergency_relationship", "preferred_room_type", "preferred_meal_plan",
-    "special_needs", "previous_stays", "loyalty_program", "association", "created_at"
+    "id", "fullName", "dateOfBirth", "gender", "nationality", "identificationNo",
+    "expiryDate", "phoneNo", "email", "residentialAddress", "emergencyContact", 
+    "emergencyPhone", "emergencyRelationship", "preferredRoomType", "preferredMealPlan",
+    "specialNeeds", "previousStays", "loyaltyProgram", "association", "created_at"
   ];
             
-
   return (
     <div className="min-h-screen p-6 bg-gray-900 text-white">
       <ClienteleHeader dataUrl="/guests" goBack="/clientlist" title={"Guests"} />
@@ -77,7 +76,7 @@ const ShowGuests = () => {
                     </td>
                   ))}
                   <td>
-                    <button onClick={() => deleteGuests(guest.id)}>Delete</button>
+                    <button className="bg-red-500 px-2 py-1 rounded" onClick={() => deleteGuests(guest.id)}>Delete</button>
                   </td>
                 </tr>
               ))

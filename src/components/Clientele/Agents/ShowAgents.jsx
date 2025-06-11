@@ -47,8 +47,19 @@ const ShowAgents = () => {
   ]
 
   const agentKeys = [
-    "id", "agencyname", "agentfullname", "registrationno", "taxidentificationno", "physicaladdress",
-    "agencyemail", "agencyphoneno", "website", "fullname", "designation", "email", "phoneno",
+    "id",
+    "agencyName",
+    "agentFullName",
+    "registrationNo",
+    "taxIdentificationNo",
+    "physicalAddress",
+    "agencyEmail",
+    "agencyPhoneNo",
+    "website",
+    "fullName",
+    "designation",
+    "email",
+    "phoneNo",
     "created_at"
   ]
 
@@ -71,7 +82,7 @@ const ShowAgents = () => {
                   {agentKeys.map((key) => (
                     <td key={key}>{agent[key]}</td>
                   ))}
-                  <td><button onClick={() => deleteAgent(agent.id)}>Delete</button></td>
+                  <td><button className="bg-red-500 px-2 rounded" onClick={() => deleteAgent(agent.id)}>Delete</button></td>
                 </tr>
               ))
               ) : (

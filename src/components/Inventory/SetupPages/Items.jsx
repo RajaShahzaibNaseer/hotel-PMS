@@ -69,7 +69,7 @@ const Items = () => {
             item_code: item.item_code,
             price: cleanFloat(item.price),
             description: item.description || null,
-            category_id: cleanInteger(item.category_id),
+            category_id: cleanInteger(item.category),
             item_status: item.item_status || null,
             reorder_level: cleanInteger(item.reorder_level),
             item_modifier: item.item_modifier || null,

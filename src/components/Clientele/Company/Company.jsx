@@ -55,7 +55,7 @@ const Company = () => {
       <form className="bg-[#222] p-8 rounded-[10px] shadow-[0_5px_15px_rgba(0,0,0,0.3)] 
         w-[320px] text-center" 
         onSubmit={handleSubmit}>
-        <h2>Company Data</h2>
+        <h2 className="text-xl font-bold mb-10">Company Data</h2>
 
         <InputField 
           label="Company Name" 

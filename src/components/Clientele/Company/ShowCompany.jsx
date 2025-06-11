@@ -46,9 +46,9 @@ const ShowCompany = () => {
   ];
 
   const companyKeys = [
-    "id", "companyname", "registrationno", "taxidentificationno", "businesstype", "physicaladdress",
-    "billingaddress", "officephoneno", "officeemail", "website", "fullname", "designation",
-    "email", "phoneno", "created_at",
+    "id", "companyName", "registrationNo", "taxIdentificationNo", "businessType", "physicalAddress",
+    "billingAddress", "officePhoneNo", "officeEmail", "website", "fullName", "designation",
+    "email", "phoneNo", "created_at",
   ];
 
   return (
@@ -67,7 +67,7 @@ const ShowCompany = () => {
           </thead>
 
           {/* Table Body */}
-          <tbody className="text-xs sm:text-sm">
+          <tbody className="text-base sm:text-sm">
             {companies.length > 0 ? (
               companies.map((company) => (
                 <tr key={company.id}>
@@ -75,7 +75,7 @@ const ShowCompany = () => {
                     <td key={key}>{company[key]}</td>
                   ))}
                   <td>
-                    <button onClick={() => deleteCompany(company.id)} type="button">
+                    <button className="bg-red-500 px-2 rounded" onClick={() => deleteCompany(company.id)} type="button">
                       Delete
                     </button>
                   </td>

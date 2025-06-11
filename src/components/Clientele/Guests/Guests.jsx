@@ -61,7 +61,7 @@ const Guests = () => {
   return (
     <div className="flex justify-center items-center bg-gradient-to-br from-[#1e1e1e] to-[#282c34] text-white">
       <form className="bg-[#222] p-8 rounded-s-md shadow-[0_5px_15px_rgba(0,0,0,0.3)] w-[320px] text-center" onSubmit={handleSubmit}>
-        <h2>Guest Data</h2>
+        <h1 className="text-xl font-bold mb-10 ">Guest Data</h1>
 
         <InputField label={"Full Name"} type={'text'} name={'fullName'} value={formData.fullName} onChange={handleChange} required />
         <InputField label={"Date of Birth"} type={'date'} name={'dateOfBirth'} value={formData.dateOfBirth} onChange={handleChange} required />
